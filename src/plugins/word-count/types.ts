@@ -1,4 +1,4 @@
 export interface WordCountPlugin {
-    maxLength?: number;
-    showWordCount?: boolean,
+  maxLength?: number;
+  showWordCount?: boolean;
 }

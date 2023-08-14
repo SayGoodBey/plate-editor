@@ -1,0 +1,11 @@
+{
+  "prettier.configPath": ".prettierrc.cjs",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "eslint.autoFixOnSave": true
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
+}

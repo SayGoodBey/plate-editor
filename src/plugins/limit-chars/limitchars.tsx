@@ -55,8 +55,15 @@ const truncateSlateContent = (editor: Editor, maxLength: number) => {
       console.log('text node');
       const nodeLength = getStringLength(node.text);
       if (truncatedLength + nodeLength >= lengthToTruncate) {
-        const nodeLengthToTruncate = (lengthToTruncate - truncatedLength);
-        console.log('truncate text. text: %s, nodeLength: %s, nodeLengthToTruncate: %s, lengthToTruncate: %s, truncatedLength: %s', node.text, nodeLength, nodeLengthToTruncate, lengthToTruncate, truncatedLength);
+        const nodeLengthToTruncate = lengthToTruncate - truncatedLength;
+        console.log(
+          'truncate text. text: %s, nodeLength: %s, nodeLengthToTruncate: %s, lengthToTruncate: %s, truncatedLength: %s',
+          node.text,
+          nodeLength,
+          nodeLengthToTruncate,
+          lengthToTruncate,
+          truncatedLength,
+        );
         // nodeLength !== node.text.length 说明node.text中有emoji，此时需要用node.text.length作为总长，来计算offset
         if (nodeLength !== node.text.length) {
           console.log('has emoji');
@@ -68,7 +75,12 @@ const truncateSlateContent = (editor: Editor, maxLength: number) => {
             const truncatedText = toArray(node.text).slice(offset).join('');
             // truncatedTextLength表示要被截取的字符的实际字符长度。一个emoji可能占多个实际字符长度
             const truncatedTextLength = truncatedText.length;
-            console.log('delete text. offset: %s, truncatedText: %s, truncatedTextLength: %s', offset, truncatedText, truncatedTextLength);
+            console.log(
+              'delete text. offset: %s, truncatedText: %s, truncatedTextLength: %s',
+              offset,
+              truncatedText,
+              truncatedTextLength,
+            );
             // Transforms.delete方法，需要按照实际字符长度去删除
             Transforms.delete(editor as any, {
               at: { path: nodePath, offset: node.text.length - truncatedTextLength },
@@ -84,7 +96,13 @@ const truncateSlateContent = (editor: Editor, maxLength: number) => {
         truncatedLength = lengthToTruncate;
       } else {
         const removedLength = removeAllEmptyNodes(editor, nodePath);
-        console.log('remove current node. nodeLength: %s, truncatedLength: %s, lengthToTruncate: %s, removedLength: %s', nodeLength, truncatedLength, lengthToTruncate, removedLength);
+        console.log(
+          'remove current node. nodeLength: %s, truncatedLength: %s, lengthToTruncate: %s, removedLength: %s',
+          nodeLength,
+          truncatedLength,
+          lengthToTruncate,
+          removedLength,
+        );
         truncatedLength += removedLength;
       }
     } else {
@@ -107,7 +125,7 @@ export const createLimitCharsPlugin = createPluginFactory({
     truncateSlateContent(editor as Editor, maxLength);
   },
   handlers: {
-    onChange: (editor) => event => {
+    onChange: (editor) => (event) => {
       const { maxLength } = editor.pluginsByKey[PLUGIN_KEY_LIMIT_CHARS].options as LimitCharsPlugin;
       truncateSlateContent(editor as Editor, maxLength);
     },

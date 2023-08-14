@@ -14,7 +14,10 @@ const deserialize = (el: any): any => {
   const nodeNameNew = nodeName.toLowerCase();
   switch (nodeNameNew) {
     case 'body':
-      const childrenBody = Array.from(el.childNodes).map(childEl => deserialize(childEl)).flat().filter(Boolean);
+      const childrenBody = Array.from(el.childNodes)
+        .map((childEl) => deserialize(childEl))
+        .flat()
+        .filter(Boolean);
       return jsx('fragment', {}, childrenBody);
     case 'br':
       return '\n';
@@ -22,10 +25,24 @@ const deserialize = (el: any): any => {
     case 'p':
     case 'a':
       const elementProps = newColor ? { color: newColor } : {};
-      const childrenElement = Array.from(el.childNodes).map(childEl => deserialize(childEl)).flat().filter(Boolean);
-      return jsx('element', { type: nodeNameNew === 'a' ? 'link' : nodeNameNew, url: nodeNameNew === 'a' ? el.getAttribute('href') : undefined, ...elementProps }, childrenElement);
+      const childrenElement = Array.from(el.childNodes)
+        .map((childEl) => deserialize(childEl))
+        .flat()
+        .filter(Boolean);
+      return jsx(
+        'element',
+        {
+          type: nodeNameNew === 'a' ? 'link' : nodeNameNew,
+          url: nodeNameNew === 'a' ? el.getAttribute('href') : undefined,
+          ...elementProps,
+        },
+        childrenElement,
+      );
     case 'span':
-      const childrenSpan = Array.from(el.childNodes).map(childEl => deserialize(childEl)).flat().filter(Boolean);
+      const childrenSpan = Array.from(el.childNodes)
+        .map((childEl) => deserialize(childEl))
+        .flat()
+        .filter(Boolean);
       const spanProps = newColor ? { color: newColor } : {};
       return childrenSpan.length === 1 ? jsx('text', { ...spanProps }, childrenSpan[0]) : childrenSpan;
     default:
@@ -33,7 +50,6 @@ const deserialize = (el: any): any => {
       return jsx('text', { ...textProps }, el.textContent);
   }
 };
-
 
 const HTML_KEY_SERIALIZER = 'HTML_KEY_SERIALIZER';
 

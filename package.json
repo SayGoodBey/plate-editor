@@ -61,6 +61,7 @@
     "@ice/pkg": "^1.0.0",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
     "eslint": "^8.0.0",
+    "prettier": "3.0.1",
     "stylelint": "^15.0.0"
   },
   "peerDependencies": {

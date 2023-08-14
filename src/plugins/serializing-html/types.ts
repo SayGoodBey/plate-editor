@@ -1,3 +1,3 @@
 export interface createHTMLPlugin {
-    onHtmlChange?: any;
+  onHtmlChange?: any;
 }

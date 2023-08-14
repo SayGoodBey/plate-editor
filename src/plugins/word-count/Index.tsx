@@ -11,7 +11,6 @@ const serialize = (nodes: Node[]): string => {
   return nodes.map((n) => Node.string(n)).join('\n');
 };
 
-
 const WordCountElement: FC = (props: any) => {
   const editor = usePlateEditorRef();
   const [value, setValue] = useState<Node[]>([]);

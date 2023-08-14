@@ -7,10 +7,7 @@ sidebar_label: 用法
 ```jsx preview
 import Demo1 from '../examples/Demo1.tsx';
 
-
-export default function App () {
-  return (
-   <Demo1/>
-  )
+export default function App() {
+  return <Demo1 />;
 }
 ```

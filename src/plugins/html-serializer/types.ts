@@ -1,3 +1,3 @@
 export interface createDeserializePlug {
-    initialValue?: any;
+  initialValue?: any;
 }

@@ -1,4 +1,3 @@
-/* eslint-disable prefer-template */
 export const formatHTML = (html: string) => {
   let indent = `
 `;
@@ -9,13 +8,12 @@ export const formatHTML = (html: string) => {
   html = html
     .replace(new RegExp('<pre>((.|\t|\n|\r)+)?</pre>'), (x) => {
       pre.push({ indent: '', tag: x });
-      return '<--TEMPPRE' + i++ + '/-->';
+      return `<--TEMPPRE${i++}/-->`;
     })
     .replace(new RegExp('<[^<>]+>[^<]?', 'g'), (x) => {
       let ret;
-      const tag = new RegExp('<\/?([^\s/>]+)').exec(x)?.[1];
-      const p = new RegExp('<--TEMPPRE(\d+)/-->').exec(x);
-
+      const tag = new RegExp('</?([^s/>]+)').exec(x)?.[1];
+      const p = new RegExp('<--TEMPPRE(d+)/-->').exec(x);
 
       if (p) pre[+p[1]].indent = indent;
 
@@ -44,37 +42,30 @@ export const formatHTML = (html: string) => {
         ret = indent + x;
       else if (x.indexOf('</') < 0) {
         // open tag
-        if (x.charAt(x.length - 1) !== '>') ret =
-            indent +
-            x.substr(0, x.length - 1) +
-            indent +
-            tab +
-            x.substr(x.length - 1, x.length);
+        if (x.charAt(x.length - 1) !== '>')
+          ret = indent + x.substr(0, x.length - 1) + indent + tab + x.substr(x.length - 1, x.length);
         else ret = indent + x;
         !p && (indent += tab);
       } else {
         // close tag
         indent = indent.substr(0, indent.length - 1);
-        if (x.charAt(x.length - 1) !== '>') ret =
-            indent +
-            x.substr(0, x.length - 1) +
-            indent +
-            x.substr(x.length - 1, x.length);
+        if (x.charAt(x.length - 1) !== '>')
+          ret = indent + x.substr(0, x.length - 1) + indent + x.substr(x.length - 1, x.length);
         else ret = indent + x;
       }
       return ret;
     });
 
-  for (i = pre.length; i--;) {
+  for (i = pre.length; i--; ) {
     html = html.replace(
-      '<--TEMPPRE' + i + '/-->',
+      `<--TEMPPRE${i}/-->`,
       pre[i].tag
         .replace(
           '<pre>',
           `<pre>
 `,
         )
-        .replace('</pre>', pre[i].indent + '</pre>'),
+        .replace('</pre>', `${pre[i].indent}</pre>`),
     );
   }
 

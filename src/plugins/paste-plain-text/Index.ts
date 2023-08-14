@@ -1,6 +1,4 @@
-import {
-  createPluginFactory,
-} from '@udecode/plate-common';
+import { createPluginFactory } from '@udecode/plate-common';
 import { Path, Transforms } from 'slate/dist';
 
 export const KEY_PASTE_PLAIN_TEXT = 'paste_plain_text';
@@ -16,7 +14,6 @@ const getValueChild = (value: any, path?: Path) => {
   return child;
 };
 
-
 const createPastePlainTextPlugin = createPluginFactory({
   key: KEY_PASTE_PLAIN_TEXT,
   handlers: {
@@ -25,10 +22,13 @@ const createPastePlainTextPlugin = createPluginFactory({
       const pastedText = event.clipboardData.getData('text/plain');
       event.preventDefault();
       event.stopPropagation();
-      Transforms.insertNodes(editor as any, {
-        ...child,
-        text: pastedText,
-      } as any);
+      Transforms.insertNodes(
+        editor as any,
+        {
+          ...child,
+          text: pastedText,
+        } as any,
+      );
     },
   },
 });
