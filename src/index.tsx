@@ -7,7 +7,7 @@ import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightH
 import { FC, ReactNode, useRef } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
-import { createDeserializePlugin } from '../src/plugins/html-serializer/htmlserializer';
+import { createDeserializePlugin } from './plugins/html-serializer/htmlserializer';
 import { toArray } from 'lodash';
 import { createWordCountPlugin } from './plugins/word-count/Index';
 import { DndProvider } from 'react-dnd';
@@ -25,11 +25,7 @@ const EditorContainer: React.FC<{
   children: ReactNode;
   className?: string;
 }> = ({ className = '', children }) => {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 };
 
 const defaultConfig = {
