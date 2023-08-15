@@ -12,6 +12,7 @@ export default defineConfig({
   //   compileDependencies: true,
   //   formats: ['cjs', 'esm', 'es2017'],
   // },
+  sourceMaps: 'inline',
   transform: {
     formats: ['esm', 'es2017'],
   },

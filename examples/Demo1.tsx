@@ -45,6 +45,14 @@ export default () => {
   const clickWordCount = () => {
     setShowWordCount(!showWordCount);
   };
+  const onLoaded = (element) => {
+    // console.log(element);
+    console.log('e.getBody', element.getBody);
+    console.log('e.setContent', element.setContent);
+    console.log('e.getContent', element.getContent);
+    // element.blur();
+  };
+  const onResizeContent = () => {};
 
   return (
     <>
@@ -57,6 +65,8 @@ export default () => {
         readOnly={readOnly}
         onHtmlChange={onHtmlChange1}
         onChange={onChangeValue}
+        onLoaded={onLoaded}
+        onResizeContent={onResizeContent}
         initialValue={
           '<p style="color: red">12<span style="color: blue">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p>'
         }
