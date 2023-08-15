@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: ['@ice/pkg-plugin-docusaurus'],
   bundle: {
     modes: ['development'],
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
     formats: ['cjs', 'esm', 'es2017'],
   },
 });
