@@ -1,4 +1,4 @@
-import EEOEditor from 'plate-editor';
+import EEOEditor from '../src/index';
 import React, { useState } from 'react';
 
 export default () => {

@@ -5,6 +5,7 @@
   "files": [
     "esm",
     "es2017",
+    "cjs",
     "dist"
   ],
   "main": "esm/index.js",
@@ -12,8 +13,13 @@
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
-      "import":{
-        "default":"./dist/index.esm.es5.production.js"
+      "es2017": {
+        "types": "./es2017/index.d.ts",
+        "default": "./es2017/index.js"
+      },
+      "default": {
+        "types": "./esm/index.d.ts",
+        "default": "./dist/index.cjs.es5.development.js"
       }
     },
     "./es5":{
