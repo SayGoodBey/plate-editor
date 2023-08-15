@@ -53,15 +53,27 @@ const EEOEditor: FC<{
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
 }> = (props: any) => {
+  const elementRef = useRef<any>(null);
   const editorRef = useRef<any>(null);
   console.log('re-render----------------------------------');
   const config = { ...defaultConfig, ...props };
-  const { rootClassName = '', showWordCount, dynamicFontColor, onHtmlChange, initialValue, ...editableProps } = config;
+  const {
+    rootClassName = '',
+    showWordCount,
+    dynamicFontColor,
+    onHtmlChange,
+    initialValue,
+    onLoaded,
+    onResizeContent,
+    ...editableProps
+  } = config;
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
-    const element = editorRef.current.children[0];
-    editableProps.onLoaded(element);
-  }, [editorRef.current]);
+    const element = elementRef.current.children[0];
+    console.log(editorRef.current);
+
+    onLoaded && onLoaded(generateEventHandle(element));
+  }, [elementRef.current]);
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
@@ -101,17 +113,17 @@ const EEOEditor: FC<{
   const onChangeData = (value: any) => {
     const serializedValue = serialize(value);
     const valueLength = toArray(serializedValue).length;
-    const element = editorRef.current.children[0];
-    editableProps?.onChange?.(value, element);
+    const element = elementRef.current.children[0];
+    editableProps?.onChange?.(value, generateEventHandle(element));
     if (editableProps.onLengthChange) {
       editableProps.onLengthChange(valueLength);
     }
   };
 
   return (
-    <div ref={editorRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
-        <PlateProvider plugins={plugins} onChange={onChangeData}>
+        <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps} />
         </PlateProvider>
       </DndProvider>
@@ -121,6 +133,15 @@ const EEOEditor: FC<{
 
 export default EEOEditor;
 
-type Event = {
-  getBody: () => { innerHTML: string; innerText: string };
+const generateEventHandle = (element: any) => {
+  return {
+    getBody: () => element,
+    getContent: () => element.innerHTML,
+    setContent: () => {
+      console.log('不再支持 setContent, 通过修改initialValue来实现');
+    },
+    getDoc() {
+      console.log('应该是不需要再支持了');
+    },
+  };
 };
