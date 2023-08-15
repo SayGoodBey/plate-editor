@@ -1,4 +1,4 @@
-import EEOEditor from 'plate-editor';
+import EEOEditor from '../src/index';
 import React, { useState } from 'react';
 
 export default () => {
@@ -11,11 +11,11 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
 
   const onHtmlChange1 = (a: any) => {
-    console.log(a, '我返回了HTML的数据结构');
+    // console.log(a, '我返回了HTML的数据结构');
   };
 
   const onChangeValue = (b: any) => {
-    console.log(b, '我返回了JSON的数据结构');
+    // console.log(b, '我返回了JSON的数据结构');
   };
 
   const clickColor = (e: any) => {

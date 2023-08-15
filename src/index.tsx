@@ -25,11 +25,7 @@ const EditorContainer: React.FC<{
   children: ReactNode;
   className?: string;
 }> = ({ className = '', children }) => {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 };
 
 const defaultConfig = {
@@ -51,14 +47,21 @@ const EEOEditor: FC<{
   onHtmlChange?: Function;
   onChange?: Function;
   onLengthChange?: Function;
+  onLoaded: (element: any) => void;
+  onResizeContent: () => void;
   showWordCount?: boolean;
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
 }> = (props: any) => {
+  const editorRef = useRef<any>(null);
   console.log('re-render----------------------------------');
   const config = { ...defaultConfig, ...props };
   const { rootClassName = '', showWordCount, dynamicFontColor, onHtmlChange, initialValue, ...editableProps } = config;
-
+  React.useEffect(() => {
+    // FIXME: 是否有可能 children[0] 为null
+    const element = editorRef.current.children[0];
+    editableProps.onLoaded(element);
+  }, [editorRef.current]);
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
@@ -98,21 +101,26 @@ const EEOEditor: FC<{
   const onChangeData = (value: any) => {
     const serializedValue = serialize(value);
     const valueLength = toArray(serializedValue).length;
-    editableProps?.onChange?.(value);
+    const element = editorRef.current.children[0];
+    editableProps?.onChange?.(value, element);
     if (editableProps.onLengthChange) {
       editableProps.onLengthChange(valueLength);
     }
   };
 
   return (
-    <EditorContainer className={`${styles.rootEditor} ${rootClassName}`}>
+    <div ref={editorRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
         <PlateProvider plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps} />
         </PlateProvider>
       </DndProvider>
-    </EditorContainer>
+    </div>
   );
 };
 
 export default EEOEditor;
+
+type Event = {
+  getBody: () => { innerHTML: string; innerText: string };
+};

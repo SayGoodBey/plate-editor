@@ -4,6 +4,7 @@ import { defineConfig } from '@ice/pkg';
 export default defineConfig({
   plugins: ['@ice/pkg-plugin-docusaurus'],
   bundle: {
-    formats: ['esm', 'es2017'],
+    modes: ['development'],
+    formats: ['esm', 'es2017', 'cjs'],
   },
 });

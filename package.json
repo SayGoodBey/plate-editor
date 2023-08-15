@@ -12,18 +12,18 @@
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
-      "import":{
-        "default":"./dist/index.esm.es5.production.js"
+      "import": {
+        "default": "./dist/index.esm.es5.production.js"
       }
     },
-    "./es5":{
-      "import":{
+    "./es5": {
+      "import": {
         "types": "./esm/index.d.ts",
         "default": "./esm/index.js"
       }
     },
-    "./es6":{
-      "import":{
+    "./es6": {
+      "import": {
         "types": "./es2017/index.d.ts",
         "default": "./es2017/index.js"
       }
@@ -60,7 +60,10 @@
     "@udecode/plate-paragraph": "^23.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "slate-hyperscript": "^0.77.0"
+    "slate-history": "^0.93.0",
+    "slate-hyperscript": "^0.77.0",
+    "slate-react": "^0.98.1",
+    "state": "^0.2.0"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",
