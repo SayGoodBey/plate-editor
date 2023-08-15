@@ -1,10 +1,11 @@
 {
   "name": "plate-editor",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "组件功能描述",
   "files": [
     "esm",
     "es2017",
+    "cjs",
     "dist"
   ],
   "main": "esm/index.js",
@@ -12,20 +13,13 @@
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "default": "./dist/index.esm.es5.production.js"
-      }
-    },
-    "./es5": {
-      "import": {
-        "types": "./esm/index.d.ts",
-        "default": "./esm/index.js"
-      }
-    },
-    "./es6": {
-      "import": {
+      "es2017": {
         "types": "./es2017/index.d.ts",
         "default": "./es2017/index.js"
+      },
+      "default": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
       }
     },
     "./*": "./*"
@@ -60,10 +54,10 @@
     "@udecode/plate-paragraph": "^23.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "slate": "^0.94.1",
     "slate-history": "^0.93.0",
     "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.98.1",
-    "state": "^0.2.0"
+    "slate-react": "^0.98.1"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",
