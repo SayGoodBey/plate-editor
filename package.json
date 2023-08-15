@@ -1,6 +1,6 @@
 {
   "name": "plate-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "组件功能描述",
   "files": [
     "esm",
@@ -22,14 +22,14 @@
         "default": "./dist/index.cjs.es5.development.js"
       }
     },
-    "./es5":{
-      "import":{
+    "./es5": {
+      "import": {
         "types": "./esm/index.d.ts",
         "default": "./esm/index.js"
       }
     },
-    "./es6":{
-      "import":{
+    "./es6": {
+      "import": {
         "types": "./es2017/index.d.ts",
         "default": "./es2017/index.js"
       }
