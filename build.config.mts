@@ -9,6 +9,7 @@ export default defineConfig({
       react: 'React',
       'react-dom': 'ReactDOM',
     },
+    compileDependencies: true,
     formats: ['cjs', 'esm', 'es2017'],
   },
 });
