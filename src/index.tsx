@@ -47,8 +47,8 @@ const EEOEditor: FC<{
   onHtmlChange?: Function;
   onChange?: Function;
   onLengthChange?: Function;
-  onLoaded: (element: any) => void;
-  onResizeContent: () => void;
+  onLoaded?: (element: any) => void;
+  onResizeContent?: () => void;
   showWordCount?: boolean;
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
@@ -73,7 +73,7 @@ const EEOEditor: FC<{
     console.log(editorRef.current);
 
     onLoaded && onLoaded(generateEventHandle(element));
-  }, [elementRef.current]);
+  }, []);
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
@@ -142,6 +142,9 @@ const generateEventHandle = (element: any) => {
     },
     getDoc() {
       console.log('应该是不需要再支持了');
+    },
+    on() {
+      console.log('不再支持 on 方法');
     },
   };
 };
