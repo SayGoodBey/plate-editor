@@ -1,6 +1,7 @@
 import { Plate, PlateProvider, createPlugins } from '@udecode/plate-core';
-import { createFontColorPlugin } from '@udecode/plate-font';
-import { Node } from 'slate';
+import { ReactEditor } from 'slate-react';
+import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
+import { Node, Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
@@ -44,11 +45,13 @@ const PlateEditor: FC<{
   maxLength?: number;
   readOnly?: boolean;
   initialValue?: any;
+  fontColor?: string;
+  fontSize?: string;
   onHtmlChange?: Function;
   onChange?: Function;
   onLengthChange?: Function;
-  onLoaded: (element: any) => void;
-  onResizeContent: () => void;
+  onLoaded?: (element: any) => void;
+  onResizeContent?: () => void;
   showWordCount?: boolean;
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
@@ -64,16 +67,20 @@ const PlateEditor: FC<{
     onHtmlChange,
     initialValue,
     onLoaded,
+    fontColor,
+    fontSize,
     onResizeContent,
     ...editableProps
   } = config;
+  console.log('props :>> ', props);
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     console.log(editorRef.current);
 
-    onLoaded && onLoaded(generateEventHandle(element));
-  }, [elementRef.current]);
+    onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
+  }, []);
+
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
@@ -82,7 +89,12 @@ const PlateEditor: FC<{
           initialValue: initialValue,
         },
       }) as any,
-      createFontColorPlugin(),
+      createFontColorPlugin({
+        options: { color: fontColor },
+      }),
+      createFontSizePlugin({
+        options: { fontSize },
+      }),
       createHighlightHTMLPlugin({
         options: {
           onHtmlChange: onHtmlChange,
@@ -114,7 +126,7 @@ const PlateEditor: FC<{
     const serializedValue = serialize(value);
     const valueLength = toArray(serializedValue).length;
     const element = elementRef.current.children[0];
-    editableProps?.onChange?.(value, generateEventHandle(element));
+    editableProps?.onChange?.(value, generateEventHandle(element, editorRef.current));
     if (editableProps.onLengthChange) {
       editableProps.onLengthChange(valueLength);
     }
@@ -123,9 +135,7 @@ const PlateEditor: FC<{
   return (
     <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
-        <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
-          <Plate editableProps={editableProps} />
-        </PlateProvider>
+        <Plate editableProps={editableProps} editorRef={editorRef} plugins={plugins} onChange={onChangeData} />
       </DndProvider>
     </div>
   );
@@ -133,15 +143,25 @@ const PlateEditor: FC<{
 
 export default PlateEditor;
 
-const generateEventHandle = (element: any) => {
+const generateEventHandle = (element: any, editorRef: any) => {
   return {
     getBody: () => element,
     getContent: () => element.innerHTML,
-    setContent: () => {
-      console.log('不再支持 setContent, 通过修改initialValue来实现');
+    setContent: (newValue: string) => {
+      Transforms.insertText(editorRef, newValue, { at: [0, 0] });
+      // console.log('不再支持 setContent, 通过修改initialValue来实现');
     },
     getDoc() {
       console.log('应该是不需要再支持了');
+    },
+    on(key: string, callback: any) {
+      element.addEventListener(key, callback);
+    },
+    blur() {
+      ReactEditor.blur(editorRef);
+    },
+    focus() {
+      ReactEditor.focus(editorRef);
     },
   };
 };
