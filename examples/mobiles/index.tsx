@@ -12,7 +12,7 @@ import { rgbToHex16DomFormatString, textFormat, setRgbTo16 } from './utils';
 let whetherEdit = 0; // 判断用户是否编辑过内容 0 表示false 1 表示true
 const Textarea: React.FC = () => {
   const info = useRef({
-    placeholder: ' ',
+    placeholder: '我是新的富文本编辑器 plate-editor',
     maxLength: 5000,
   } as RichTextProps);
   const [data, setData] = useState(info.current);
@@ -77,7 +77,7 @@ const Textarea: React.FC = () => {
       };
 
       window.quill = {
-        markTeacherColor: '', //标记老师颜色，用于复制粘贴功能使用
+        markTeacherColor: '', // 标记老师颜色，用于复制粘贴功能使用
         pasteBrCount: 0, // 粘贴进来的内容 br 标记统计
 
         // 自己内部使用
@@ -92,9 +92,8 @@ const Textarea: React.FC = () => {
 
         getHtmlContent() {
           return rgbToHex16DomFormatString(
-            textFormat(e.getBody().innerHTML)
-              .replace(/^\n*|\n*$/g, '')
-              .replace('<p><br data-mce-bogus="1"></p>', ''),
+            textFormat(e.getBody().innerHTML).replace(/^\n*|\n*$/g, ''),
+            // .replace('<p><br data-mce-bogus="1"></p>', ''), // TODO: 可以删除了
           );
         },
 
@@ -110,7 +109,7 @@ const Textarea: React.FC = () => {
           if (!color) return;
           return (document.body.style.backgroundColor = color);
         },
-
+        // TODO:待实现
         initHtmlContent(content: string) {
           if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
             content = decode(content);
@@ -120,17 +119,20 @@ const Textarea: React.FC = () => {
           console.log('初始化设置的内容：', content);
           content = textFilter(content);
           e.setContent(content, { format: 'html' });
+          // handle({
+          //   value: content,
+          // });
           whetherEdit = 0;
 
-          // 设置客户端直接设置内容区域后，oldContent 字符统计不更新问题
-          e?.plugins?.wordlimit.onAction({
-            oldContent: e.getContent(),
-          });
+          // // 设置客户端直接设置内容区域后，oldContent 字符统计不更新问题
+          // e?.plugins?.wordlimit.onAction({
+          //   oldContent: e.getContent(),
+          // });
 
           // 重置完内容后给一个统计高度
           window?.lmsWidget?.onEditorHeightChange?.(window?.quill?.getScrollHeight?.());
         },
-
+        // TODO:待实现
         setHtmlContent(content: string) {
           if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
             content = decode(content);
@@ -144,25 +146,16 @@ const Textarea: React.FC = () => {
           e.setContent(content, { format: 'html' });
           whetherEdit = 1;
 
-          // 设置客户端直接设置内容区域后，oldContent 字符统计不更新问题
-          e?.plugins?.wordlimit.onAction({
-            oldContent: e.getContent(),
-          });
+          // // 设置客户端直接设置内容区域后，oldContent 字符统计不更新问题
+          // e?.plugins?.wordlimit.onAction({
+          //   oldContent: e.getContent(),
+          // });
 
           // 重置完内容后给一个统计高度
           window?.lmsWidget?.onEditorHeightChange?.(window?.quill?.getScrollHeight?.());
         },
 
         setPlaceholder(placeholder: string) {
-          e?.getBody()?.setAttribute('aria-placeholder', placeholder);
-          e?.getBody()?.setAttribute('data-mce-placeholder', placeholder);
-
-          const len = textFormat(e?.getBody().innerText).replace(/^\n*|\n*$/g, '').length;
-          if (len) e?.getBody().removeAttribute('data-mce-placeholder');
-
-          const divNode = e?.getDoc().createElement('style');
-          divNode.innerHTML = `.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before{content:'${placeholder}' !important}`;
-          document.head.appendChild(divNode);
           return handle({
             placeholder,
           });
@@ -178,9 +171,6 @@ const Textarea: React.FC = () => {
 
         setMaxLength(len: string | number) {
           if (!len) return;
-          e?.plugins?.wordlimit.onAction({
-            max: len,
-          });
           return handle({
             maxLength: len,
           });
@@ -199,62 +189,21 @@ const Textarea: React.FC = () => {
 
         setShowFontSize(value: boolean | number) {
           return handle({
-            isShowFontSize: !!value,
+            showWordCount: !!value,
           });
         },
 
         setEnded(value: boolean | number) {
-          const ended = !!value;
-          if (ended) window.quill.setPlaceholder('');
           return handle({
-            ended,
+            readOnly: !!value,
           });
         },
 
         setPartialFontColor(value: string) {
           console.log('客户端调用setPartialFontColor，色值为：', value);
           if (!value) return;
-          e.getBody().blur();
-
-          // 标记颜色，用于粘贴文本使用
-          value = value.trim().toLowerCase();
-          window.quill.markTeacherColor = value;
-
-          e.on('beforeinput', ({ inputType, data = '' }: any) => {
-            console.log(inputType);
-
-            if (inputType === 'insertFromComposition' || inputType === 'insertText') {
-              // 联想字符处理
-              const value = window.quill.markTeacherColor;
-              let range = e.selection.getRng().commonAncestorContainer;
-              range = range.nodeName === '#text' ? range.parentNode : range;
-              const { color } = range.style;
-              const rgb = setRgbTo16(color);
-              if (!color || rgb !== value) {
-                console.log('进入联想字符增加');
-                e.execCommand('mceInsertContent', false, `<span style="color: ${value};">${data}</span>`);
-                e?.formatter?.apply('forecolor', { value });
-                return false;
-              }
-            } else if (inputType === 'deleteCompositionText') {
-              let range = e?.selection?.getRng()?.commonAncestorContainer; //获取光标当前位置
-              range = range.nodeName === '#text' ? range?.parentNode : range;
-              const inner = range.innerHTML;
-              if (inner.length === 1 && ['\u200B', '\uFEFF'].includes(inner)) {
-                console.log('删除零宽字符', range);
-                range.remove();
-
-                const node: any = e?.selection?.getRng()?.commonAncestorContainer;
-                if (['\u200B', '\uFEFF'].includes(node?.innerHTML)) {
-                  node?.remove();
-                }
-
-                const prev: any = e?.selection?.getRng()?.commonAncestorContainer?.previousSibling;
-                if (['\u200B', '\uFEFF'].includes(prev?.innerHTML)) {
-                  prev?.remove();
-                }
-              }
-            }
+          handle({
+            dynamicFontColor: value,
           });
         },
 
@@ -278,13 +227,13 @@ const Textarea: React.FC = () => {
         },
 
         setEditorFocus() {
-          e.getBody().focus();
+          e.focus();
           window.quill.setSelectionEnd();
         },
 
         setEditorBlur() {
           console.log('setEditorBlur被调用');
-          e.getBody().blur();
+          e.blur();
         },
 
         keyBoardDidShow() {
@@ -294,7 +243,6 @@ const Textarea: React.FC = () => {
       };
 
       // ios 表示EditorDOM 初始化完成
-      handle({ loaded: true });
       window?.lmsWidget?.onEditorDidLoad?.();
       window?.lmsWidget?.onEditorHeightChange?.(window?.quill?.getScrollHeight?.());
       console.log('TinyMCE 初始化完成！默认高度：', window?.quill?.getScrollHeight?.());
@@ -421,12 +369,21 @@ const Textarea: React.FC = () => {
   }, []);
 
   return (
-    <RichText
-      {...data}
-      onChange={(value?: string, e?: any) => nativeChangeHandle(value, e)}
-      onLoaded={(e) => nativeEditorHandle(e)}
-      onResizeContent={() => nativeResizeContentHandle()}
-    />
+    <>
+      <RichText
+        {...data}
+        onChange={(value?: string, e?: any) => nativeChangeHandle(value, e)}
+        onLoaded={(e) => nativeEditorHandle(e)}
+        onResizeContent={() => nativeResizeContentHandle()}
+      />
+      <button
+        onClick={() => {
+          window.quill.setEditorFocus();
+        }}
+      >
+        focus
+      </button>
+    </>
   );
 };
 
