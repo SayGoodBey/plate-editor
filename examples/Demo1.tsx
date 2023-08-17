@@ -1,4 +1,4 @@
-import EEOEditor from '../src/index';
+import PlateEditor from '../src/index';
 import React, { useState } from 'react';
 
 export default () => {
@@ -56,7 +56,7 @@ export default () => {
 
   return (
     <>
-      <EEOEditor
+      <PlateEditor
         showWordCount={showWordCount}
         dynamicFontColor={dynamicFontColor}
         placeholder={placeholder}

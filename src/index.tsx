@@ -37,7 +37,7 @@ const defaultConfig = {
   },
 };
 
-const EEOEditor: FC<{
+const PlateEditor: FC<{
   placeholder?: string;
   dynamicFontColor?: string;
   autoFocus?: boolean;
@@ -131,7 +131,7 @@ const EEOEditor: FC<{
   );
 };
 
-export default EEOEditor;
+export default PlateEditor;
 
 const generateEventHandle = (element: any) => {
   return {

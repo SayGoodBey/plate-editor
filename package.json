@@ -8,18 +8,13 @@
     "cjs",
     "dist"
   ],
-  "main": "esm/index.js",
-  "module": "esm/index.js",
+  "main": "dist/index.umd.es5.development.js",
+  "module": "dist/index.umd.es5.development.js",
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
-      "es2017": {
-        "types": "./es2017/index.d.ts",
-        "default": "./es2017/index.js"
-      },
       "default": {
-        "types": "./esm/index.d.ts",
-        "default": "./esm/index.js"
+        "default": "./dist/index.umd.es5.development.js"
       }
     },
     "./*": "./*"
