@@ -17,6 +17,7 @@ import { createDndPlugin } from '@udecode/plate-dnd';
 import { plateUI } from './common/plateUI';
 import * as React from 'react';
 import styles from './index.module.css';
+import { FloatingToolbar } from './components/FloatingToolbar';
 
 const serialize = (nodes: Node[]): string => {
   return nodes.map((n) => Node.string(n)).join('\n');
@@ -135,7 +136,15 @@ const PlateEditor: FC<{
   return (
     <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
-        <Plate editableProps={editableProps} editorRef={editorRef} plugins={plugins} onChange={onChangeData} />
+        <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
+          <Plate editableProps={editableProps}>
+            {/* https://platejs.org/docs/components/floating-toolbar */}
+            <FloatingToolbar>
+              <span>xxxxx</span>
+              <span>AAAAA</span>
+            </FloatingToolbar>
+          </Plate>
+        </PlateProvider>
       </DndProvider>
     </div>
   );
