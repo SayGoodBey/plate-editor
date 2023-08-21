@@ -11,5 +11,9 @@ export default defineConfig({
     formats: ['umd'],
     name: 'plateEditor', // 配置 umd 模块导出的名字，通过 `window[name]` 访问
     modes: ['development'],
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
   },
 });

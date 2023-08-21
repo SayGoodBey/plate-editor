@@ -1,6 +1,6 @@
 {
   "name": "plate-editor",
-  "version": "0.1.5",
+  "version": "0.1.8",
   "description": "组件功能描述",
   "files": [
     "esm",
@@ -64,7 +64,8 @@
     "stylelint": "^15.0.0"
   },
   "peerDependencies": {
-    "react": "^17 || ^18"
+    "react": "^17 || ^18",
+    "react-dom": "^17 || ^18"
   },
   "publishConfig": {
     "access": "public"
