@@ -5,7 +5,7 @@ import { Node, Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
-import React, { ReactNode, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { ReactNode, useRef, forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
 import { createDeserializePlugin } from './plugins/html-serializer/htmlserializer';
@@ -57,11 +57,7 @@ interface PlateEditorPropsType {
   rootClassName?: string; // 编辑器根容器类名
 }
 
-interface PropsRef {
-  getWordCountLength?: () => number;
-}
-
-const PlateEditor = forwardRef<PropsRef, PlateEditorPropsType>((props, ref) => {
+const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, ref) => {
   const elementRef = useRef<any>(null);
   const editorRef = useRef<any>(null);
   console.log('re-render----------------------------------');
@@ -82,7 +78,7 @@ const PlateEditor = forwardRef<PropsRef, PlateEditorPropsType>((props, ref) => {
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-    console.log(editorRef.current);
+    console.log(editorRef?.current);
 
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
   }, []);
@@ -139,12 +135,11 @@ const PlateEditor = forwardRef<PropsRef, PlateEditorPropsType>((props, ref) => {
     console.log('value', value);
   };
 
-  const getWordCountLength = () => editorRef.current.getWordCountLength?.();
   useImperativeHandle(
     ref,
     () => {
       return {
-        getWordCountLength,
+        editorRef,
       };
     },
     [],

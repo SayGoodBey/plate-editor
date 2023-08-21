@@ -56,7 +56,7 @@ export default () => {
   const onResizeContent = () => {};
 
   const handleWordCountLength = () => {
-    const length = editorRef.current.getWordCountLength();
+    const length = editorRef.current?.editorRef?.current?.getWordCount?.();
     console.log('length----', length);
   };
 
