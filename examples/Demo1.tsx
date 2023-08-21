@@ -1,5 +1,5 @@
 import PlateEditor from '../src/index';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 export default () => {
   const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
@@ -9,6 +9,7 @@ export default () => {
   const [readOnly, setReadOnly] = useState(false); // 设置是否只读
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
+  const editorRef = useRef<any>();
 
   const onHtmlChange1 = (a: any) => {
     // console.log(a, '我返回了HTML的数据结构');
@@ -54,9 +55,15 @@ export default () => {
   };
   const onResizeContent = () => {};
 
+  const handleWordCountLength = () => {
+    const length = editorRef.current.getWordCountLength();
+    console.log('length----', length);
+  };
+
   return (
     <>
       <PlateEditor
+        ref={editorRef}
         showWordCount={showWordCount}
         dynamicFontColor={dynamicFontColor}
         placeholder={placeholder}
@@ -90,6 +97,7 @@ export default () => {
       <button onClick={clickReadByOnly} style={{ marginRight: '25px', marginTop: '10px' }}>
         设置是否只读
       </button>
+      <button onClick={handleWordCountLength}>获取当前wordCountLength</button>
     </>
   );
 };
