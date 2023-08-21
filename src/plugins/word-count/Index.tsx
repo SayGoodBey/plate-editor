@@ -22,6 +22,7 @@ const WordCountElement: FC = (props: any) => {
     onChange(...args);
     setValue(editor.children);
   };
+  editor.getWordCount = () => valueLength;
 
   useEffect(() => {
     if (!value) return;
