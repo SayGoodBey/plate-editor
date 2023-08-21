@@ -52,11 +52,13 @@ export default () => {
     console.log('e.setContent', element.setContent);
     console.log('e.getContent', element.getContent);
     // element.blur();
+    console.log('editorRef');
+    console.log(editorRef.current);
   };
   const onResizeContent = () => {};
 
   const handleWordCountLength = () => {
-    const length = editorRef.current?.editorRef?.current?.getWordCount?.();
+    const length = editorRef.current?.getWordCount?.();
     console.log('length----', length);
   };
 
