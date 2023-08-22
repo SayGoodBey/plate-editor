@@ -5,7 +5,7 @@ import { Node, Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
-import React, { ReactNode, useRef, forwardRef, useImperativeHandle, useState, useEffect } from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
 import { createDeserializePlugin } from './plugins/html-serializer/htmlserializer';
@@ -17,16 +17,10 @@ import { createDndPlugin } from '@udecode/plate-dnd';
 import { plateUI } from './common/plateUI';
 
 import styles from './index.module.css';
+import { FloatingToolbar } from './components/FloatingToolbar';
 
 const serialize = (nodes: Node[]): string => {
   return nodes.map((n) => Node.string(n)).join('\n');
-};
-
-const EditorContainer: React.FC<{
-  children: ReactNode;
-  className?: string;
-}> = ({ className = '', children }) => {
-  return <div className={className}>{children}</div>;
 };
 
 const defaultConfig = {
@@ -57,9 +51,8 @@ interface PlateEditorPropsType {
   rootClassName?: string; // 编辑器根容器类名
 }
 
-const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, ref) => {
+const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
-  const editorRef = useRef<any>(null);
   console.log('re-render----------------------------------');
   const config = { ...defaultConfig, ...props };
   const {
@@ -78,9 +71,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, ref) => {
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-    console.log(editorRef?.current);
 
-    onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
+    onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
   const plugins = createPlugins(
@@ -128,27 +120,25 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, ref) => {
     const serializedValue = serialize(value);
     const valueLength = toArray(serializedValue).length;
     const element = elementRef.current.children[0];
-    editableProps?.onChange?.(value, generateEventHandle(element, editorRef.current));
+    editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
     if (editableProps.onLengthChange) {
       editableProps.onLengthChange(valueLength);
     }
     console.log('value', value);
   };
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        editorRef,
-      };
-    },
-    [],
-  );
-
   return (
     <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
-        <Plate editableProps={editableProps} editorRef={editorRef} plugins={plugins} onChange={onChangeData} />
+        <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
+          <Plate editableProps={editableProps}>
+            {/* https://platejs.org/docs/components/floating-toolbar */}
+            <FloatingToolbar>
+              <span>xxxxx</span>
+              <span>AAAAA</span>
+            </FloatingToolbar>
+          </Plate>
+        </PlateProvider>
       </DndProvider>
     </div>
   );
