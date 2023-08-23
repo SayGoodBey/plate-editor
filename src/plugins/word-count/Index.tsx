@@ -13,22 +13,18 @@ const serialize = (nodes: Node[]): string => {
 
 const WordCountElement: FC = (props: any) => {
   const editor = usePlateEditorRef();
-  const [value, setValue] = useState<Node[]>([]);
   const [valueLength, setValueLength] = useState(0);
   const { maxLength, showWordCount } = editor.pluginsByKey[PLUGIN_WORD_COUNT].options as WordCountPlugin;
   const { onChange } = editor;
 
   editor.onChange = (...args) => {
-    onChange(...args);
-    setValue(editor.children);
-  };
-  editor.getWordCount = () => valueLength;
+    const stringNode = serialize(editor.children);
+    const { length } = toArray(stringNode);
+    editor.getWordCount = () => length;
+    setValueLength(length);
 
-  useEffect(() => {
-    if (!value) return;
-    const serializedValue = serialize(value);
-    setValueLength(toArray(serializedValue).length);
-  }, [value]);
+    onChange(...args);
+  };
 
   // 当 wordCount 为 true 时才渲染 DOM
   return showWordCount ? (
