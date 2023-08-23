@@ -8,12 +8,12 @@ import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightH
 import React, { useRef, forwardRef, useEffect } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
-import { toArray } from 'lodash';
 import { createWordCountPlugin } from './plugins/word-count/Index';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createDndPlugin } from '@udecode/plate-dnd';
 import { plateUI } from './common/plateUI';
+import { createImagePlugin } from './plugins/image';
 
 import styles from './index.module.css';
 import { FloatingToolbar } from './components/FloatingToolbar';
@@ -77,6 +77,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       //     initialValue: initialValue,
       //   },
       // }) as any,
+      createImagePlugin(),
       createFontColorPlugin({
         options: { color: fontColor },
       }),
