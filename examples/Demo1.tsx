@@ -11,12 +11,16 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
 
-  const onHtmlChange1 = (a: any) => {
+  const onHtmlChange = (a: any) => {
     // console.log(a, '我返回了HTML的数据结构');
+    const length = editorRef.current?.getWordCount?.();
+    console.log('onHtmlChange--', length);
   };
 
   const onChangeValue = (b: any) => {
     // console.log(b, '我返回了JSON的数据结构');
+    // const length = editorRef.current?.getWordCount?.();
+    // console.log('onChangeValue--', length);
   };
 
   const clickColor = (e: any) => {
@@ -72,7 +76,7 @@ export default () => {
         autoFocus
         maxLength={maxLength}
         readOnly={readOnly}
-        onHtmlChange={onHtmlChange1}
+        onHtmlChange={onHtmlChange}
         onChange={onChangeValue}
         onLoaded={onLoaded}
         onResizeContent={onResizeContent}

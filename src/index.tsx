@@ -1,7 +1,7 @@
 import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { ReactEditor } from 'slate-react';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
-import { Node, Transforms } from 'slate';
+import { Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
@@ -17,10 +17,6 @@ import { plateUI } from './common/plateUI';
 
 import styles from './index.module.css';
 import { FloatingToolbar } from './components/FloatingToolbar';
-
-const serialize = (nodes: Node[]): string => {
-  return nodes.map((n) => Node.string(n)).join('\n');
-};
 
 const defaultConfig = {
   maxLength: 2000,
@@ -42,7 +38,6 @@ interface PlateEditorPropsType {
   fontSize?: string;
   onHtmlChange?: Function;
   onChange?: Function;
-  onLengthChange?: Function;
   onLoaded?: (element: any) => void;
   onResizeContent?: () => void;
   showWordCount?: boolean;
@@ -52,7 +47,7 @@ interface PlateEditorPropsType {
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
-  console.log('re-render----------------------------------');
+  console.log('re-render----------------------------------111');
   const config = { ...defaultConfig, ...props };
   const {
     rootClassName = '',
@@ -116,14 +111,9 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   );
 
   const onChangeData = (value: any) => {
-    const serializedValue = serialize(value);
-    const valueLength = toArray(serializedValue).length;
     const element = elementRef.current.children[0];
     console.log(editorRef);
     editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
-    if (editableProps.onLengthChange) {
-      editableProps.onLengthChange(valueLength);
-    }
     console.log('value', value);
   };
   useEffect(() => {

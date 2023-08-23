@@ -16,6 +16,7 @@ const Textarea: React.FC = () => {
     maxLength: 5000,
   } as RichTextProps);
   const [data, setData] = useState(info.current);
+  const editorRef = useRef();
   const editorCursorData = useRef({
     editorCursorPosition: -1, // 用于记录当前光标的位置
     editorCursorPositionTimer: null, //
@@ -209,10 +210,10 @@ const Textarea: React.FC = () => {
 
         setSelectionEnd() {
           if (window.getSelection) {
-            e.getBody().focus(); //解决ff不获取焦点无法定位问题
-            const range = window.getSelection(); //创建range
-            range?.selectAllChildren(e.getBody()); //range 选择obj下所有子内容
-            range?.collapseToEnd(); //光标移至最后
+            e.getBody().focus(); // 解决ff不获取焦点无法定位问题
+            const range = window.getSelection(); // 创建range
+            range?.selectAllChildren(e.getBody()); // range 选择obj下所有子内容
+            range?.collapseToEnd(); // 光标移至最后
           }
         },
 
@@ -220,7 +221,7 @@ const Textarea: React.FC = () => {
         setEditorScrollTop() {
           console.log('setEditorScrollTop调用');
           window.scrollTo(0, 0);
-          const timer = setTimeout(function () {
+          const timer = setTimeout(() => {
             clearTimeout(timer);
             window.scrollTo(0, 0);
           }, 300);
@@ -272,7 +273,7 @@ const Textarea: React.FC = () => {
               window.quill.setEditorScrollTop();
             }
 
-            //发送高度：
+            // 发送高度：
             nativeResizeContentHandle();
           }
         },
@@ -291,7 +292,7 @@ const Textarea: React.FC = () => {
         getEditorCursorPosition(e);
       });
 
-      //针对 ios 旋转设备,android 默认关闭了旋转操作
+      // 针对 ios 旋转设备,android 默认关闭了旋转操作
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
         isPortrait();
       }
@@ -366,15 +367,19 @@ const Textarea: React.FC = () => {
     );
     // 输入内容时，如果光标位置变动，需要通知客户端
     getEditorCursorPosition(e);
+    const length = editorRef.current?.getWordCount?.();
+    console.log('length---', length);
   }, []);
 
   return (
     <>
       <RichText
+        ref={editorRef}
         {...data}
         onChange={(value?: string, e?: any) => nativeChangeHandle(value, e)}
         onLoaded={(e) => nativeEditorHandle(e)}
         onResizeContent={() => nativeResizeContentHandle()}
+        showWordCount
       />
       <button
         onClick={() => {
