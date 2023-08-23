@@ -1,14 +1,13 @@
-import { Plate, PlateProvider, createPlugins } from '@udecode/plate-core';
+import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { ReactEditor } from 'slate-react';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
 import { Node, Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
-import React, { useRef, forwardRef } from 'react';
+import React, { useRef, forwardRef, useEffect } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
-import { createDeserializePlugin } from './plugins/html-serializer/htmlserializer';
 import { toArray } from 'lodash';
 import { createWordCountPlugin } from './plugins/word-count/Index';
 import { DndProvider } from 'react-dnd';
@@ -24,7 +23,7 @@ const serialize = (nodes: Node[]): string => {
 };
 
 const defaultConfig = {
-  maxLength: 100,
+  maxLength: 2000,
   spellCheck: false,
   style: {
     outline: 'none',
@@ -71,18 +70,18 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-
+    console.log(editorRef);
     onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
-      createDeserializePlugin({
-        options: {
-          initialValue: initialValue,
-        },
-      }) as any,
+      // createDeserializePlugin({
+      //   options: {
+      //     initialValue: initialValue,
+      //   },
+      // }) as any,
       createFontColorPlugin({
         options: { color: fontColor },
       }),
@@ -120,12 +119,18 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     const serializedValue = serialize(value);
     const valueLength = toArray(serializedValue).length;
     const element = elementRef.current.children[0];
+    console.log(editorRef);
     editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
     if (editableProps.onLengthChange) {
       editableProps.onLengthChange(valueLength);
     }
     console.log('value', value);
   };
+  useEffect(() => {
+    const document = parseHtmlDocument(initialValue);
+    const fragment = deserializeHtml(editorRef.current, { element: document.body });
+    editorRef.current.insertFragment(fragment);
+  }, []);
 
   return (
     <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
