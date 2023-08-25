@@ -3,7 +3,6 @@ import { defineConfig } from '@ice/pkg';
 // https://pkg.ice.work/reference/config/
 export default defineConfig({
   plugins: ['@ice/pkg-plugin-docusaurus'],
-  sourceMaps: 'inline',
   // transform: {
   //   formats: ['esm', 'es2017'],
   // },

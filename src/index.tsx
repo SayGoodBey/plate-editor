@@ -66,17 +66,16 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     console.log(editorRef);
+    editorRef.current.node([0]);
+    console.log('selected :>> ', editorRef.current.node([0]));
+    console.log(editorRef.current.toDOMNode);
     onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
-      // createDeserializePlugin({
-      //   options: {
-      //     initialValue: initialValue,
-      //   },
-      // }) as any,
+      // createDeserializePlugin(),
       createImagePlugin(),
       createFontColorPlugin({
         options: { color: fontColor },
@@ -113,13 +112,13 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   const onChangeData = (value: any) => {
     const element = elementRef.current.children[0];
-    console.log(editorRef);
     editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
-    console.log('value', value);
   };
   useEffect(() => {
     const document = parseHtmlDocument(initialValue);
+    console.log('document :>> ', document);
     const fragment = deserializeHtml(editorRef.current, { element: document.body });
+    // console.log('fragment :>> ', fragment);
     editorRef.current.insertFragment(fragment);
   }, []);
 
