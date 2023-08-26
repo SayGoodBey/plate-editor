@@ -112,12 +112,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
   };
   useEffect(() => {
-    const document = parseHtmlDocument(initialValue);
-    console.log('document :>> ', document);
-    console.log(editorRef);
-    const fragment = deserializeHtml(editorRef.current, { element: document.body });
-    // console.log('fragment :>> ', fragment);
-    editorRef.current.insertFragment(fragment);
+    if (initialValue) {
+      const document = parseHtmlDocument(initialValue);
+      const fragment = deserializeHtml(editorRef.current, { element: document.body });
+      editorRef.current.insertFragment(fragment);
+    }
   }, []);
 
   return (
