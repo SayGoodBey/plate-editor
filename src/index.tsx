@@ -66,9 +66,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     console.log(editorRef);
-    editorRef.current.node([0]);
-    console.log('selected :>> ', editorRef.current.node([0]));
-    console.log(editorRef.current.toDOMNode);
     onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
@@ -117,13 +114,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   useEffect(() => {
     const document = parseHtmlDocument(initialValue);
     console.log('document :>> ', document);
+    console.log(editorRef);
     const fragment = deserializeHtml(editorRef.current, { element: document.body });
     // console.log('fragment :>> ', fragment);
     editorRef.current.insertFragment(fragment);
   }, []);
 
   return (
-    <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div id="tinymce-editor-wrapper" ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
         <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps}>

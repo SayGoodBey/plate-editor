@@ -53,8 +53,9 @@ export default {
       const tinymceEditorDom = document.getElementById('tinymce-editor');
       if (!tinymceEditorDom) return false;
       const tinymceTextWrapperDom = document.getElementById('tinymce-editor-wrapper');
-      const questionsDoms = tinymceEditorDom?.getElementsByClassName('question');
-      const questionOperations = tinymceTextWrapperDom?.getElementsByClassName('question-operation');
+      const questionsDoms = Array.from(document?.getElementsByClassName('question'));
+      const questionOperations = Array.from(tinymceTextWrapperDom?.getElementsByClassName('question-operation'));
+
       this.questionOperationsDomMap = {};
       questionOperations.forEach((questionOperation) => {
         this.questionOperationsDomMap[questionOperation.getAttribute('data-uuid')] = questionOperation;
@@ -144,10 +145,10 @@ export default {
       questionOperationGroupDiv.onclick = this.questionOperationGroupClickHandler;
       questionOperationGroupDiv.innerHTML = `
           <div class='question-operation-edit'>
-            <i class="iconfont eeo-icon-edit-time"></i><span>${this.$t('batchSelectQuestion.edit')}</span>
+            <i class="iconfont eeo-icon-edit-time"></i><span>${'我是占位文案'}</span>
           </div>
           <div class='question-operation-remove'>
-            <i class="iconfont eeo-icon-delete"></i><span>${this.$t('batchSelectQuestion.remove')}</span>
+            <i class="iconfont eeo-icon-delete"></i><span>${'我是占位文案'}</span>
           </div>
         `;
       questionOperationDiv.appendChild(questionOperationGroupDiv);

@@ -767,7 +767,7 @@ export default {
         rightAnswerLetterArr = questionRightAnswer.map((item) => charList[item - 1] ?? '');
         this.createQuestionHtml(
           'qt_answer',
-          this.$t('batchSelectQuestion.questionAnswer'),
+          '占位文案，请去代码替换', // this.$t('batchSelectQuestion.questionAnswer'),
           rightAnswerLetterArr.join(''),
         );
       } else if (questionType === 3) {
@@ -776,7 +776,7 @@ export default {
         rightAnswerLetterArr = questionRightAnswer.map((item) => charList[item - 1] ?? '');
         this.createQuestionHtml(
           'qt_answer',
-          this.$t('batchSelectQuestion.questionAnswer'),
+          '占位文案，请去代码替换', // this.$t('batchSelectQuestion.questionAnswer'),
           rightAnswerLetterArr.join(''),
         );
       } else if (questionType === 4) {
@@ -784,16 +784,25 @@ export default {
         rightAnswerLetterArr = questionRightAnswer.map((item) => this.removeHTMLTag(item.answerOptionContent.html));
         this.createQuestionHtml(
           'qt_answer',
-          this.$t('batchSelectQuestion.questionAnswer'),
+          '占位文案，请去代码替换', // this.$t('batchSelectQuestion.questionAnswer'),
           rightAnswerLetterArr.join('|'),
         );
       } else if (questionType === 5) {
-        this.createQuestionHtml('qt_answer', this.$t('batchSelectQuestion.questionAnswer'), questionRightAnswer.html);
+        this.createQuestionHtml(
+          'qt_answer',
+          '占位文案，请去代码替换', // this.$t('batchSelectQuestion.questionAnswer'),
+          questionRightAnswer.html,
+        );
       }
     },
     // 根据弹窗数据生成 解析 html
     generateQuestionHtmlAnalysis(analysisObj) {
-      this.createQuestionHtml('qt_analysis', this.$t('batchSelectQuestion.questionAnalysis'), analysisObj.html);
+      this.createQuestionHtml(
+        'qt_analysis',
+        '占位文案，请去代码替换',
+        // this.$t('batchSelectQuestion.questionAnalysis'),
+        analysisObj.html,
+      );
     },
     // 根据弹窗数据生成综合题目html
     generateCompreQuestionHtml(targetQuestionDom, questionInfo, questionType) {

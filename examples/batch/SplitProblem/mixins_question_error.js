@@ -371,22 +371,21 @@ export default {
       // 统计试题数和错误数量
       self.questionNum = questionNum;
       self.errorNum = $('.question.check_error').length;
-      // TODO: 需要解决
-      // self.setQuestionOperation();
-      const tinymceEditorContent = window.tinymce.editors['tinymce-editor']?.getContent();
-      if (tinymceEditorContent) {
-        this.$emit('changeTinyContent', tinymceEditorContent, true);
-      }
+      self.setQuestionOperation();
+      // const tinymceEditorContent = window.tinymce.editors['tinymce-editor']?.getContent();
+      // if (tinymceEditorContent) {
+      //   this.$emit('changeTinyContent', tinymceEditorContent, true);
+      // }
     },
     renderCompreErrorMessage() {
       // 综合题内存在错误
-      const compreSubtopicHasError = this.$t('batchSelectQuestion.compreSubtopicHasError');
+      const compreSubtopicHasError = '综合题内存在错误'; // this.$t('batchSelectQuestion.compreSubtopicHasError');
       // 综合题 大题 需至少添加一个小题
-      const compreSubtopicNoQuestion = this.$t('batchSelectQuestion.compreSubtopicNoQuestion');
+      const compreSubtopicNoQuestion = '综合题 大题 需至少添加一个小题'; // this.$t('batchSelectQuestion.compreSubtopicNoQuestion');
       // 综合题不存在题干
-      const compreSubtopicNoTitle = this.$t('batchSelectQuestion.compreSubtopicNoTitle');
+      const compreSubtopicNoTitle = '综合题不存在题干'; // this.$t('batchSelectQuestion.compreSubtopicNoTitle');
       // 综合题小题数量不能超过50
-      const compreSubtopicNumOverStep = this.$t('batchSelectQuestion.compreSubtopicNumOverStep');
+      const compreSubtopicNumOverStep = '综合题小题数量不能超过50'; // this.$t('batchSelectQuestion.compreSubtopicNumOverStep');
       const compreQuestionDoms = document.querySelectorAll(
         '#tinymce-editor-wrapper #tinymce-editor .question[data-type="6"]',
       );
