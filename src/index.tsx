@@ -72,11 +72,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
-      // createDeserializePlugin({
-      //   options: {
-      //     initialValue: initialValue,
-      //   },
-      // }) as any,
+      // createDeserializePlugin(),
       createImagePlugin(),
       createFontColorPlugin({
         options: { color: fontColor },
@@ -113,9 +109,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   const onChangeData = (value: any) => {
     const element = elementRef.current.children[0];
-    console.log(editorRef);
     editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
-    console.log('value', value);
   };
   useEffect(() => {
     if (initialValue) {
@@ -126,7 +120,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   }, []);
 
   return (
-    <div ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div id="tinymce-editor-wrapper" ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
         <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps}>
