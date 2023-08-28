@@ -1,4 +1,4 @@
-import { createPluginFactory, usePlateEditorRef } from '@udecode/plate-common';
+import { createPluginFactory, getPluginOptions, usePlateEditorState } from '@udecode/plate-common';
 import { Node } from 'slate';
 import { toArray } from 'lodash';
 import { FC, useEffect, useState } from 'react';
@@ -13,9 +13,10 @@ const serialize = (nodes: Node[]): string => {
 };
 
 const WordCountElement: FC = (props: any) => {
-  const editor = usePlateEditorRef();
+  const editor = usePlateEditorState();
+
   const [valueLength, setValueLength] = useState(0);
-  const { maxLength, showWordCount } = editor.pluginsByKey[PLUGIN_WORD_COUNT].options as WordCountPlugin;
+  const { maxLength, showWordCount } = getPluginOptions<WordCountPlugin>(editor, PLUGIN_WORD_COUNT);
   const { onChange } = editor;
 
   editor.onChange = (...args) => {
