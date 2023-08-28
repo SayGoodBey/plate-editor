@@ -371,15 +371,19 @@ const Textarea: React.FC = () => {
     console.log('length---', length);
   }, []);
 
+  const scrollSelectionIntoView = () => {
+    console.log('scrollSelectionIntoView------');
+  };
   return (
     <>
       <RichText
         ref={editorRef}
+        scrollSelectionIntoView={scrollSelectionIntoView}
         {...data}
         onChange={(value?: string, e?: any) => nativeChangeHandle(value, e)}
         onLoaded={(e) => nativeEditorHandle(e)}
-        onResizeContent={() => nativeResizeContentHandle()}
         showWordCount
+        dynamicFontColor="red"
       />
       <button
         onClick={() => {

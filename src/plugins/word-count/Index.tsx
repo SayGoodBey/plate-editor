@@ -4,6 +4,7 @@ import { toArray } from 'lodash';
 import { FC, useEffect, useState } from 'react';
 import { WordCountPlugin } from './types';
 import * as React from 'react';
+import styles from './index.module.less';
 
 const PLUGIN_WORD_COUNT = 'PLUGIN_WORD_COUNT';
 
@@ -25,11 +26,11 @@ const WordCountElement: FC = (props: any) => {
 
     onChange(...args);
   };
-
+  const wordClass = valueLength > maxLength ? styles['warn-color'] : '';
   // 当 wordCount 为 true 时才渲染 DOM
   return showWordCount ? (
-    <div style={{ position: 'absolute', bottom: 10, right: 10, fontSize: '12px' }}>
-      字数: {valueLength} 最大长度{maxLength}
+    <div className={styles['word-count']}>
+      <span className={wordClass}>{valueLength}</span>/{maxLength}
     </div>
   ) : null;
 };
