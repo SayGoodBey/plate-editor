@@ -38,6 +38,7 @@ interface PlateEditorPropsType {
   fontSize?: string;
   onHtmlChange?: Function;
   onChange?: Function;
+  scrollSelectionIntoView?: () => void;
   onLoaded?: (element: any) => void;
   onResizeContent?: () => void;
   showWordCount?: boolean;
@@ -58,6 +59,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onLoaded,
     fontColor,
     fontSize,
+    onChange,
     onResizeContent,
     ...editableProps
   } = config;
@@ -98,19 +100,22 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         },
       }),
       createPastePlainTextPlugin(),
-      createLimitCharsPlugin({
-        options: {
-          maxLength: editableProps.maxLength,
-        },
-      }), // 限制输入长度的插件
+      // TODO: 暂时跟随线上，放开字数限制
+      // createLimitCharsPlugin({
+      //   options: {
+      //     maxLength: editableProps.maxLength,
+      //   },
+      // }),
     ],
     { components: plateUI },
   );
 
   const onChangeData = (value: any) => {
     const element = elementRef.current.children[0];
-    editableProps?.onChange?.(value, generateEventHandle(element, editorRef));
+    onChange?.(value, generateEventHandle(element, editorRef));
+    console.log('value', value);
   };
+
   useEffect(() => {
     if (initialValue) {
       const document = parseHtmlDocument(initialValue);
