@@ -16,7 +16,8 @@ const Textarea: React.FC = () => {
     maxLength: 5000,
   } as RichTextProps);
   const [data, setData] = useState(info.current);
-  const editorRef = useRef();
+  const editorRef = useRef<any>();
+  const [wordCount, setWordCount] = useState(0);
   const editorCursorData = useRef({
     editorCursorPosition: -1, // 用于记录当前光标的位置
     editorCursorPositionTimer: null, //
@@ -368,6 +369,7 @@ const Textarea: React.FC = () => {
     // 输入内容时，如果光标位置变动，需要通知客户端
     getEditorCursorPosition(e);
     const length = editorRef.current?.getWordCount?.();
+    setWordCount(length);
     console.log('length---', length);
   }, []);
 
@@ -382,7 +384,7 @@ const Textarea: React.FC = () => {
         {...data}
         onChange={(value?: string, e?: any) => nativeChangeHandle(value, e)}
         onLoaded={(e) => nativeEditorHandle(e)}
-        showWordCount
+        showWordCount={!!wordCount}
         dynamicFontColor="red"
       />
       <button
