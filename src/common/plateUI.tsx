@@ -4,9 +4,11 @@ import { ELEMENT_IMAGE } from '@udecode/plate-media';
 import ParagraphElement from '../components/ParagraphElement/Index';
 import ImageElement from '../components/ImageElement';
 const BlockElement = (props: any) => {
+  const { attributes, nodeProps, children, element } = props;
+
   return (
-    <div {...props.attributes} className={props.element.className}>
-      {props.children}
+    <div {...attributes} {...nodeProps} className={element.className}>
+      {children}
     </div>
   );
 };

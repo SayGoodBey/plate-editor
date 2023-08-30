@@ -10,12 +10,13 @@ const {
   insertSpliteDOM,
 } = require('./utils.js');
 const getTinymceId = function (editor) {
-  const tinymceId = editor.getParam('id');
-  const tinymceIdBoolean = isString(tinymceId);
-  if (!tinymceIdBoolean) {
-    throw new Error('not found id or unexpected type');
-  }
-  return tinymceId;
+  return 'tinymce-editor';
+  // const tinymceId = editor.getParam('id');
+  // const tinymceIdBoolean = isString(tinymceId);
+  // if (!tinymceIdBoolean) {
+  //   throw new Error('not found id or unexpected type');
+  // }
+  // return tinymceId;
 };
 // 判断手动划题第一个/最后一个元素是不是试题
 const getManualSplitLastQuestion = (editor, content) => {
@@ -196,7 +197,8 @@ const insertNewQuestion = function (editor, content, question_type) {
   if (!lastQuestionsDomsDataUUid && !firstQuestionsDomsDataUUid) {
     html = `<p class="qt_splite"></p>${html}`;
   }
-  editor.execCommand('mceInsertContent', false, html);
+  editor.insertHtmlText(html);
+
   const newHtmlDataUUId = html.match(/<div(.*?)data-uuid="(.*?)"(.*?)?>/)?.[2];
   Promise.resolve().then(() => {
     const targetNewHtmlDOM = document.querySelector(`div.question[data-uuid='${newHtmlDataUUId}']`);
@@ -248,11 +250,11 @@ const getTextSelectionToolbarItems = function (editor) {
   return EditorSettings.getToolbarItems(editor, 'split_question_type', 'bold');
 };
 // 点击上下文toolbar按钮后的处理程序
-const contextToolbarClickHandler = (editor, question_type) => {
+const contextToolbarClickHandler = (editor, question_type, getContent) => {
   window.eeoSensors &&
     window.eeoSensors.track('BatchEditPageOperation', { operation_type: '完成划题' }, 'EnterBatchUploadPage');
-  let getContent = editor.selection.getContent(); // 获取选择的内容，跨行选中会携带标签
-  const errorPromptCallback = getSplitQuestionErrorPromptCallback(editor);
+  const errorPromptCallback = () => {};
+  // const errorPromptCallback = getSplitQuestionErrorPromptCallback(editor);
   if (getContent && errorPromptCallback) {
     // 1.根据选择的内容生成新试题
     // 2.处理受划题影响的试题
@@ -262,6 +264,7 @@ const contextToolbarClickHandler = (editor, question_type) => {
         insertNewQuestion(editor, getContent, question_type);
       })
       .then(() => {
+        // TODO:需要处理 通过原生dom方法操作的适配
         passiveQuestionHandle(editor, getContent);
       })
       .then(() => {
@@ -310,4 +313,4 @@ const manualSplit = function (editor) {
     if (splitQuestionTypeBoolean && errorPromptCallbackBoolean) SelectionToolbars.addToEditor(editor);
   };
 };
-module.exports = manualSplit;
+module.exports = { manualSplit, contextToolbarClickHandler };
