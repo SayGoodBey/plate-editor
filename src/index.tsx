@@ -45,6 +45,7 @@ interface PlateEditorPropsType {
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
   toolbar?: ReactNode;
+  rootId?: string; // 编辑器根容器id
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
@@ -54,6 +55,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const config = { ...defaultConfig, ...props };
   const {
     rootClassName = '',
+    rootId = '',
     showWordCount,
     dynamicFontColor,
     onHtmlChange,
@@ -136,7 +138,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     console.log('失去焦点事件', e);
   };
   return (
-    <div id="tinymce-editor-wrapper" ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
         <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps}>
