@@ -143,7 +143,10 @@ const createDynamicFontColorPlugin = createPluginFactory({
       }
     },
     onPaste: (editor) => (event: any) => {
-      if (!isEnable(editor)) return;
+      // if (!isEnable(editor)) return;
+      console.log(event);
+      console.log(event.clipboardData);
+      console.log(event.clipboardData.files);
       console.log('onPaste', event.clipboardData.getData('text/plain'));
       event.preventDefault();
       event.stopPropagation();
@@ -153,24 +156,24 @@ const createDynamicFontColorPlugin = createPluginFactory({
     },
   },
 
-  withOverrides: (editor) => {
-    const { normalizeNode, onChange } = editor;
+  // withOverrides: (editor) => {
+  //   const { normalizeNode, onChange } = editor;
 
-    // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
-    editor.normalizeNode = (entry) => {
-      if (enableNormalizing) {
-        normalizeNode(entry);
-      }
-    };
+  //   // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
+  //   editor.normalizeNode = (entry) => {
+  //     if (enableNormalizing) {
+  //       normalizeNode(entry);
+  //     }
+  //   };
 
-    editor.onChange = (...args: any[]) => {
-      onChange(...args);
-      setEnableNormalizing(true);
-      // 内容改变后，需要手动执行normalize操作
-      normalizeNode([editor, []]);
-    };
-    return editor;
-  },
+  //   editor.onChange = (...args: any[]) => {
+  //     onChange(...args);
+  //     setEnableNormalizing(true);
+  //     // 内容改变后，需要手动执行normalize操作
+  //     normalizeNode([editor, []]);
+  //   };
+  //   return editor;
+  // },
 });
 
 export { createDynamicFontColorPlugin };

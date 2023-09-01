@@ -49,7 +49,6 @@ interface PlateEditorPropsType {
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
-  console.log('re-render----------------------------------111');
   const config = { ...defaultConfig, ...props };
   const {
     rootClassName = '',
@@ -65,11 +64,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onResizeContent,
     ...editableProps
   } = config;
-  console.log('props :>> ', props);
+
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-    console.log(editorRef);
     onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
@@ -121,11 +119,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     if (initialValue) {
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
-      console.log(fragment);
       editorRef.current.insertFragment(fragment);
+      console.log('fragment :>> ', fragment);
       editorRef.current.insertHtmlText = (text: string) => {
         const result = deserializeHtml(editorRef.current, { element: parseHtmlDocument(text).body });
-        console.log('result :>> ', result);
         editorRef.current.insertFragment(result);
       };
     }
