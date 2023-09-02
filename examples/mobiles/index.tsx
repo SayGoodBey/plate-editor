@@ -211,7 +211,7 @@ const Textarea: React.FC = () => {
 
         setSelectionEnd() {
           if (window.getSelection) {
-            e.getBody().focus(); // 解决ff不获取焦点无法定位问题
+            e.focus(); // 解决ff不获取焦点无法定位问题
             const range = window.getSelection(); // 创建range
             range?.selectAllChildren(e.getBody()); // range 选择obj下所有子内容
             range?.collapseToEnd(); // 光标移至最后
@@ -229,7 +229,7 @@ const Textarea: React.FC = () => {
         },
 
         setEditorFocus() {
-          e.getBody().focus();
+          e.focus();
           window.quill.setSelectionEnd();
         },
 
