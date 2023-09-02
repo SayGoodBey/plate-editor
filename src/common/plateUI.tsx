@@ -4,9 +4,17 @@ import { ELEMENT_IMAGE } from '@udecode/plate-media';
 import ParagraphElement from '../components/ParagraphElement/Index';
 import ImageElement from '../components/ImageElement';
 const BlockElement = (props: any) => {
+  const { attributes, nodeProps, children, element } = props;
+  const elementAttr = Object.entries(element).reduce((acc, [key, value]) => {
+    if (key.startsWith('data-')) {
+      return { ...acc, [key]: value };
+    }
+    return acc;
+  }, {});
+  // 梳理一下这几个属性的关系
   return (
-    <div {...props.attributes} className={props.element.className}>
-      {props.children}
+    <div {...attributes} {...elementAttr} {...nodeProps} className={element.className}>
+      {children}
     </div>
   );
 };
@@ -14,5 +22,5 @@ const BlockElement = (props: any) => {
 export const plateUI = {
   [ELEMENT_PARAGRAPH]: ParagraphElement,
   [ELEMENT_IMAGE]: ImageElement,
-  ['div']: BlockElement,
+  div: BlockElement,
 };

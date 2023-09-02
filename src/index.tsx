@@ -5,7 +5,7 @@ import { Transforms } from 'slate';
 import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
 import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
-import React, { useRef, forwardRef, useEffect } from 'react';
+import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
 import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
 import { createWordCountPlugin } from './plugins/word-count/Index';
@@ -44,11 +44,11 @@ interface PlateEditorPropsType {
   showWordCount?: boolean;
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
+  toolbar?: ReactNode;
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
-  console.log('re-render----------------------------------111');
   const config = { ...defaultConfig, ...props };
   const {
     rootClassName = '',
@@ -60,14 +60,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     fontColor,
     fontSize,
     onChange,
+    toolbar,
     onResizeContent,
     ...editableProps
   } = config;
-  console.log('props :>> ', props);
+
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-    console.log(editorRef);
     onLoaded && onLoaded(generateEventHandle(element, editorRef));
   }, []);
 
@@ -113,7 +113,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const onChangeData = (value: any) => {
     const element = elementRef.current.children[0];
     onChange?.(value, generateEventHandle(element, editorRef));
-    console.log('value', value);
   };
 
   useEffect(() => {
@@ -121,6 +120,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
       editorRef.current.insertFragment(fragment);
+      console.log('fragment :>> ', fragment);
+      editorRef.current.insertHtmlText = (text: string) => {
+        const result = deserializeHtml(editorRef.current, { element: parseHtmlDocument(text).body });
+        editorRef.current.insertFragment(result);
+      };
     }
   }, []);
 
@@ -130,10 +134,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps}>
             {/* https://platejs.org/docs/components/floating-toolbar */}
-            <FloatingToolbar>
-              <span>xxxxx</span>
-              <span>AAAAA</span>
-            </FloatingToolbar>
+            {toolbar && <FloatingToolbar>{toolbar}</FloatingToolbar>}
           </Plate>
         </PlateProvider>
       </DndProvider>

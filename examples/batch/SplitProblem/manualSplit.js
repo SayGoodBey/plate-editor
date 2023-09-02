@@ -1,4 +1,5 @@
 // 手动划题
+const { liftNodes, moveNodes, wrapNodes, insertNodes, removeNodes } = require('@udecode/plate-common');
 const {
   isString,
   isObject,
@@ -9,13 +10,15 @@ const {
   getSplitQuestionErrorPromptCallback,
   insertSpliteDOM,
 } = require('./utils.js');
+const { createFontColorPlugin } = require('@udecode/plate-font');
 const getTinymceId = function (editor) {
-  const tinymceId = editor.getParam('id');
-  const tinymceIdBoolean = isString(tinymceId);
-  if (!tinymceIdBoolean) {
-    throw new Error('not found id or unexpected type');
-  }
-  return tinymceId;
+  return 'tinymce-editor';
+  // const tinymceId = editor.getParam('id');
+  // const tinymceIdBoolean = isString(tinymceId);
+  // if (!tinymceIdBoolean) {
+  //   throw new Error('not found id or unexpected type');
+  // }
+  // return tinymceId;
 };
 // 判断手动划题第一个/最后一个元素是不是试题
 const getManualSplitLastQuestion = (editor, content) => {
@@ -196,12 +199,66 @@ const insertNewQuestion = function (editor, content, question_type) {
   if (!lastQuestionsDomsDataUUid && !firstQuestionsDomsDataUUid) {
     html = `<p class="qt_splite"></p>${html}`;
   }
-  editor.execCommand('mceInsertContent', false, html);
+  console.log('selection :>> ', editor.selection);
+  const at = editor.selection;
+  const [index] = at.focus.path;
+  const [index2] = at.anchor.path;
+  const isCrossQuestion = index !== index2; // 如果跨问题，需要把剩余的 wrapper删除
+
+  insertNodes(
+    editor,
+    {
+      type: 'div',
+      className: 'question',
+      'data-type': question_type,
+      'data-uuid': getUniqueValue(),
+      children: [{ text: '' }],
+    },
+    { at: [index] },
+  );
+  insertNodes(
+    editor,
+    {
+      type: 'p',
+      className: 'qt_sqlite',
+      children: [{ text: '' }],
+    },
+    { at: [index + 1] },
+  );
+  insertNodes(editor, { type: 'div', className: 'questionWraper', children: [{ text: '' }] }, { at: [index, 0] });
+  console.log('selection :>> ', editor.selection);
+  moveNodes(editor, {
+    to: [index, 0, 0],
+  });
+  if (isCrossQuestion) {
+    removeNodes(editor, { at: [index + 2, 0] });
+  }
+  // isCrossQuestion &&
+  //   removeNodes(editor, {
+  //     mode: 'highest',
+  //     match: (node, path) => {
+  //       if (path[0] > index + 2 && path[0] < index2 + 2) {
+  //         console.log(path);
+  //         return true;
+  //       }
+  //       return false;
+  //       // console.log(path, index, index2);
+  //       // const result = path[0] <= Math.max(index, index2) && path[0] > Math.min(index, index2);
+  //       // console.log('result', result);
+  //       // if (result) {
+  //       //   console.log('node :>> ', node);
+  //       // }
+
+  //       // return result;
+  //     },
+  //   });
+  console.log('editor :>> ', editor);
+
   const newHtmlDataUUId = html.match(/<div(.*?)data-uuid="(.*?)"(.*?)?>/)?.[2];
   Promise.resolve().then(() => {
     const targetNewHtmlDOM = document.querySelector(`div.question[data-uuid='${newHtmlDataUUId}']`);
     if (targetNewHtmlDOM) {
-      pullAwayQuestion(editor, targetNewHtmlDOM, content);
+      // pullAwayQuestion(editor, targetNewHtmlDOM, content);
     }
   });
 };
@@ -209,6 +266,8 @@ const insertNewQuestion = function (editor, content, question_type) {
 // 处理受划题影响的试题
 const passiveQuestionHandle = function (editor, content) {
   const { firstQuestionsDomsDataUUid, lastQuestionsDomsDataUUid } = getManualSplitLastQuestion(editor, content);
+  console.log('firstQuestionsDomsDataUUid :>> ', firstQuestionsDomsDataUUid);
+  console.log('lastQuestionsDomsDataUUid :>> ', lastQuestionsDomsDataUUid);
   if (lastQuestionsDomsDataUUid && lastQuestionsDomsDataUUid !== firstQuestionsDomsDataUUid) {
     createPassiveQuestion(editor, lastQuestionsDomsDataUUid);
   }
@@ -217,42 +276,12 @@ const passiveQuestionHandle = function (editor, content) {
   }
 };
 
-const validDefaultOrDie = function (value, predicate) {
-  if (predicate(value)) {
-    return true;
-  }
-  throw new Error("Default value doesn't match requested type.");
-};
-const items = function (value, defaultValue) {
-  if (isArray(value) || isObject(value)) {
-    throw new Error(`expected a string but found: ${value}`);
-  }
-  if (isUndefined(value)) {
-    return defaultValue;
-  }
-  if (isBoolean(value)) {
-    return value === false ? '' : defaultValue;
-  }
-  return value;
-};
-const getToolbarItems = function (predicate) {
-  return function (editor, name, defaultValue) {
-    let value = name in editor.settings ? `${editor.settings[name].join(' ')} ` : defaultValue;
-    validDefaultOrDie(defaultValue, predicate);
-    return items(value, defaultValue);
-  };
-};
-const EditorSettings = { getToolbarItems: getToolbarItems(isString) };
-// 加入上下文toolbar点击按钮
-const getTextSelectionToolbarItems = function (editor) {
-  return EditorSettings.getToolbarItems(editor, 'split_question_type', 'bold');
-};
 // 点击上下文toolbar按钮后的处理程序
-const contextToolbarClickHandler = (editor, question_type) => {
+const contextToolbarClickHandler = (editor, question_type, getContent) => {
   window.eeoSensors &&
     window.eeoSensors.track('BatchEditPageOperation', { operation_type: '完成划题' }, 'EnterBatchUploadPage');
-  let getContent = editor.selection.getContent(); // 获取选择的内容，跨行选中会携带标签
-  const errorPromptCallback = getSplitQuestionErrorPromptCallback(editor);
+  const errorPromptCallback = () => {};
+  // const errorPromptCallback = getSplitQuestionErrorPromptCallback(editor);
   if (getContent && errorPromptCallback) {
     // 1.根据选择的内容生成新试题
     // 2.处理受划题影响的试题
@@ -262,52 +291,17 @@ const contextToolbarClickHandler = (editor, question_type) => {
         insertNewQuestion(editor, getContent, question_type);
       })
       .then(() => {
-        passiveQuestionHandle(editor, getContent);
+        // TODO:需要处理 通过原生dom方法操作的适配
+        // passiveQuestionHandle(editor, getContent);
       })
       .then(() => {
         errorPromptCallback();
       });
   }
 };
-const addContextToolbar = function (editor) {
-  const self = this;
-  editor.ui.registry.addContextToolbar('textselection', {
-    predicate: function () {
-      return !editor.selection.isCollapsed() && self.start_manual_action === 2;
-    },
-    items: Settings.getTextSelectionToolbarItems(editor),
-    position: 'line',
-  });
-};
-// 注册上下文toolbar点击按钮
-const addContextToolbarButton = function (editor) {
-  const splitQuestionType = getSplitQuestionType(editor);
 
-  for (let i = 0; i < splitQuestionType.length; i++) {
-    const question_type = i + 1;
-    editor.ui.registry.addButton(`${splitQuestionType[i]}`, {
-      text: `${splitQuestionType[i]}`,
-      onAction: () => contextToolbarClickHandler(editor, question_type),
-    });
-  }
-};
-let addToEditor$1 = function (editor) {
-  // 注册上下文Toolbar
-  addContextToolbar.call(this, editor);
-  // 注册上下文toolbar点击按钮
-  addContextToolbarButton(editor);
-};
-const Settings = {
-  getTextSelectionToolbarItems: getTextSelectionToolbarItems,
-};
+module.exports = { contextToolbarClickHandler };
 
-const SelectionToolbars = { addToEditor: addToEditor$1, start_manual_action: 0 };
-const manualSplit = function (editor) {
-  return (editorSetup) => {
-    SelectionToolbars.start_manual_action = editorSetup;
-    const splitQuestionTypeBoolean = getSplitQuestionType(editor);
-    const errorPromptCallbackBoolean = getSplitQuestionErrorPromptCallback(editor);
-    if (splitQuestionTypeBoolean && errorPromptCallbackBoolean) SelectionToolbars.addToEditor(editor);
-  };
-};
-module.exports = manualSplit;
+function getUniqueValue() {
+  return `${(Math.random() + Math.random()).toString().slice(2)}-${new Date().getTime()}`;
+}
