@@ -229,7 +229,7 @@ const Textarea: React.FC = () => {
         },
 
         setEditorFocus() {
-          e.focus();
+          e.getBody().focus();
           window.quill.setSelectionEnd();
         },
 
@@ -247,7 +247,7 @@ const Textarea: React.FC = () => {
       // ios 表示EditorDOM 初始化完成
       window?.lmsWidget?.onEditorDidLoad?.();
       window?.lmsWidget?.onEditorHeightChange?.(window?.quill?.getScrollHeight?.());
-      console.log('TinyMCE 初始化完成！默认高度：', window?.quill?.getScrollHeight?.());
+      // console.log('TinyMCE 初始化完成！默认高度：', window?.quill?.getScrollHeight?.());
 
       e?.getBody()?.addEventListener(
         'pointerup',
@@ -258,7 +258,7 @@ const Textarea: React.FC = () => {
             window?.lmsWidget?.onEditorBecomeFirstResponder?.();
             window?.lmsWidget?.onEditorHeightChange?.(height);
             getEditorCursorPosition(e);
-            console.log('获取焦点事件,已发送给ios，高度：', height);
+            // console.log('获取焦点事件,已发送给ios，高度：', height);
           }
         },
         false,
@@ -288,7 +288,7 @@ const Textarea: React.FC = () => {
       });
 
       window.addEventListener('focus', () => {
-        console.log('===== window 获取焦点 ========');
+        // console.log('===== window 获取焦点 ========');
         editorCursorData.current.editorCursorPosition = -1;
         getEditorCursorPosition(e);
       });
@@ -340,7 +340,7 @@ const Textarea: React.FC = () => {
             },
           }),
         );
-        console.log('editorCursorPosition2===========', Math.floor(bottom));
+        // console.log('editorCursorPosition2===========', Math.floor(bottom));
       }
     }, 100);
   }, []);
@@ -370,11 +370,17 @@ const Textarea: React.FC = () => {
     getEditorCursorPosition(e);
     const length = editorRef.current?.getWordCount?.();
     setWordCount(length);
-    console.log('length---', length);
+    // console.log('length---', length);
   }, []);
 
   const scrollSelectionIntoView = () => {
-    console.log('scrollSelectionIntoView------');
+    // console.log('scrollSelectionIntoView------');
+  };
+  const focusHandler = (e) => {
+    console.log('获取焦点事件--', e);
+  };
+  const blurHandler = (e) => {
+    console.log('获取焦点事件--', e);
   };
   return (
     <>
@@ -386,6 +392,8 @@ const Textarea: React.FC = () => {
         onLoaded={(e) => nativeEditorHandle(e)}
         showWordCount={!!wordCount}
         dynamicFontColor="red"
+        onFocus={focusHandler}
+        onBlur={blurHandler}
       />
       <button
         onClick={() => {

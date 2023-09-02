@@ -1,0 +1,25 @@
+@startmindmap
+* plate-editor
+** props
+*** placeholder?:string  占位符
+*** dynamicFontColor?: string ;
+*** autoFocus?: boolean;
+*** maxLength?: number;
+*** readOnly?: boolean;
+*** initialValue?: any;
+*** fontColor?: string;
+*** fontSize?: string;
+*** onHtmlChange?: Function;
+*** onChange?: Function;
+*** scrollSelectionIntoView?: () => void; 自定义滚动到试区，slatejs 默认有滚动方案
+*** onLoaded?: (element: any) => void;
+*** onResizeContent?: () => void;
+*** showWordCount?: boolean;
+*** className?: string;   plate编辑器类名
+*** rootClassName?: string;  编辑器根容器类名
+*** rootId?: string;  编辑器根容器id
+*** onFocus?: React.FocusEventHandler<HTMLDivElement>;  编辑器聚焦事件
+*** onBlur?: React.FocusEventHandler<HTMLDivElement>;   编辑器失焦事件
+** ref
+*** getWordCount 获取当前字数
+@endmindmap

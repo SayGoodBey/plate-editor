@@ -7,7 +7,7 @@ import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
-import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
+import { createPasteHandlePlugin } from './plugins/paste-handle/Index';
 import { createWordCountPlugin } from './plugins/word-count/Index';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -45,6 +45,9 @@ interface PlateEditorPropsType {
   className?: string; // plate编辑器类名
   rootClassName?: string; // 编辑器根容器类名
   toolbar?: ReactNode;
+  rootId?: string; // 编辑器根容器id
+  onFocus?: React.FocusEventHandler<HTMLDivElement>;
+  onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
@@ -52,6 +55,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const config = { ...defaultConfig, ...props };
   const {
     rootClassName = '',
+    rootId = '',
     showWordCount,
     dynamicFontColor,
     onHtmlChange,
@@ -64,7 +68,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onResizeContent,
     ...editableProps
   } = config;
-
+  const uploadImage = () => {
+    return Promise.resolve(
+      'https://img0.baidu.com/it/u=3021883569,1259262591&fm=253&fmt=auto&app=120&f=JPEG?w=1140&h=641',
+    );
+  };
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
@@ -75,7 +83,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     [
       ...basicNodesPlugins,
       // createDeserializePlugin(),
-      createImagePlugin(),
+      createImagePlugin({
+        options: {
+          uploadImage,
+          insertNodesOptions: {
+            nextBlock: false,
+          },
+        },
+      }),
       createFontColorPlugin({
         options: { color: fontColor },
       }),
@@ -99,7 +114,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           dynamicFontColor: dynamicFontColor,
         },
       }),
-      createPastePlainTextPlugin(),
+      createPasteHandlePlugin(),
       // TODO: 暂时跟随线上，放开字数限制
       // createLimitCharsPlugin({
       //   options: {
@@ -127,9 +142,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       };
     }
   }, []);
-
+  const focushandler = (e) => {
+    console.log('focus---', e);
+  };
+  const bulrhandler = (e) => {
+    console.log('失去焦点事件', e);
+  };
   return (
-    <div id="tinymce-editor-wrapper" ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <DndProvider backend={HTML5Backend}>
         <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
           <Plate editableProps={editableProps}>
