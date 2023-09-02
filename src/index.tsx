@@ -7,7 +7,7 @@ import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
 import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
 import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
-import { createPastePlainTextPlugin } from './plugins/paste-plain-text/Index';
+import { createPasteHandlePlugin } from './plugins/paste-handle/Index';
 import { createWordCountPlugin } from './plugins/word-count/Index';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -68,7 +68,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onResizeContent,
     ...editableProps
   } = config;
-
+  const uploadImage = () => {
+    return Promise.resolve(
+      'https://img0.baidu.com/it/u=3021883569,1259262591&fm=253&fmt=auto&app=120&f=JPEG?w=1140&h=641',
+    );
+  };
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
@@ -79,7 +83,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     [
       ...basicNodesPlugins,
       // createDeserializePlugin(),
-      createImagePlugin(),
+      createImagePlugin({
+        options: {
+          uploadImage,
+          insertNodesOptions: {
+            nextBlock: false,
+          },
+        },
+      }),
       createFontColorPlugin({
         options: { color: fontColor },
       }),
@@ -103,7 +114,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           dynamicFontColor: dynamicFontColor,
         },
       }),
-      createPastePlainTextPlugin(),
+      createPasteHandlePlugin(),
       // TODO: 暂时跟随线上，放开字数限制
       // createLimitCharsPlugin({
       //   options: {

@@ -2,7 +2,7 @@ import PlateEditor from '../src/index';
 import React, { useState, useRef } from 'react';
 
 export default () => {
-  const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
+  const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
   const [bgColor, setBgColor] = useState('#fff'); // 设置背景颜色
   const [placeholder, setPlaceholder] = useState(''); // 设置背景颜色
   const [maxLength, setMaxLength] = useState(100); // 设置最大输入长度

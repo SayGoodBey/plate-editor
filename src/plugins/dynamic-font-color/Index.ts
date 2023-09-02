@@ -7,7 +7,7 @@
 
 import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
-import { Path, Transforms, Node } from 'slate/dist';
+import { Path, Transforms } from 'slate/dist';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 
@@ -45,7 +45,7 @@ const setEnableNormalizing = (enable: boolean) => {
  * @param editor
  * @returns
  */
-const isEnable = (editor: PlateEditor) => {
+export const isEnable = (editor: PlateEditor) => {
   const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
   return !!dynamicFontColor;
 };
@@ -59,7 +59,7 @@ const noMetaKey = (event: any) => {
  * @param editor
  * @param color
  */
-const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
+export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
   if (child?.color !== color) {
@@ -136,14 +136,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
         }
       } else if (event.inputType === 'insertCompositionText') {
       }
-    },
-    onPaste: (editor) => (event: any) => {
-      // if (!isEnable(editor)) return;
-      event.preventDefault();
-      event.stopPropagation();
-      const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
-      addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
-      insertText(editor, event.clipboardData.getData('text/plain'));
     },
   },
 
