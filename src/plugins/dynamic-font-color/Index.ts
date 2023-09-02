@@ -61,10 +61,8 @@ const noMetaKey = (event: any) => {
  */
 const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
-  console.log('checkChildColor', editor.children, child?.color, color);
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
   if (child?.color !== color) {
-    console.log('addEmptyTextNodeWithDynamicColor', child?.color, isCollapsed(editor.selection));
     setEnableNormalizing(false);
     Transforms.insertNodes(
       editor as any,
@@ -82,7 +80,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
   handlers: {
     onCompositionStart: (editor) => (event: any) => {
       isComposition = true;
-      console.log('onCompositionStart', isComposition);
       if (!isEnable(editor)) return;
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
       // iOS在英文自动联想时，会触发onCompositionStart事件，此时，需要插入一个空文本节点
@@ -90,7 +87,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
     },
     onCompositionEnd: (editor) => (event: any) => {
       isComposition = false;
-      console.log('onCompositionEnd', isComposition, event.nativeEvent.data);
       // PC上，onCompositionEnd时，新输入的字符串并没有更新到编辑器的value中，因此，需要手动插入
       // 而在iOS上，onCompositionEnd时，新输入的字符串已经更新到编辑器的value中，因此，需要判断是否需要插入
       // const lengthBefore = valueBeforeComposition.length
@@ -103,7 +99,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
     },
     onKeyDown: (editor) => (event: any) => {
       if (!isEnable(editor)) return;
-      console.log('onKeyDown', event.key);
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
       // 当isCollapsed为false时，表示当前有选中的文本，此时，如果直接插入新节点，会导致选中的文本被替换掉
       // event.key.length说明时用户输入了一个字符，需要替换选中的文本，因此，需要插入一个空文本节点
@@ -144,10 +139,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
     },
     onPaste: (editor) => (event: any) => {
       // if (!isEnable(editor)) return;
-      console.log(event);
-      console.log(event.clipboardData);
-      console.log(event.clipboardData.files);
-      console.log('onPaste', event.clipboardData.getData('text/plain'));
       event.preventDefault();
       event.stopPropagation();
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
@@ -156,24 +147,24 @@ const createDynamicFontColorPlugin = createPluginFactory({
     },
   },
 
-  // withOverrides: (editor) => {
-  //   const { normalizeNode, onChange } = editor;
+  withOverrides: (editor) => {
+    const { normalizeNode, onChange } = editor;
 
-  //   // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
-  //   editor.normalizeNode = (entry) => {
-  //     if (enableNormalizing) {
-  //       normalizeNode(entry);
-  //     }
-  //   };
+    // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
+    editor.normalizeNode = (entry) => {
+      if (enableNormalizing) {
+        normalizeNode(entry);
+      }
+    };
 
-  //   editor.onChange = (...args: any[]) => {
-  //     onChange(...args);
-  //     setEnableNormalizing(true);
-  //     // 内容改变后，需要手动执行normalize操作
-  //     normalizeNode([editor, []]);
-  //   };
-  //   return editor;
-  // },
+    editor.onChange = (...args: any[]) => {
+      onChange(...args);
+      setEnableNormalizing(true);
+      // 内容改变后，需要手动执行normalize操作
+      normalizeNode([editor, []]);
+    };
+    return editor;
+  },
 });
 
 export { createDynamicFontColorPlugin };
