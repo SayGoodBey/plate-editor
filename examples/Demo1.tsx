@@ -63,7 +63,11 @@ export default () => {
 
   const handleWordCountLength = () => {
     const length = editorRef.current?.getWordCount?.();
-    console.log('length----', length);
+    // console.log('length----', length);
+  };
+  const handleImageCountLength = () => {
+    const length = editorRef.current?.getImageCount?.();
+    console.log('image--length----', length);
   };
 
   return (
@@ -104,6 +108,7 @@ export default () => {
         设置是否只读
       </button>
       <button onClick={handleWordCountLength}>获取当前wordCountLength</button>
+      <button onClick={handleImageCountLength}>获取当前ImageCountLength</button>
     </>
   );
 };
