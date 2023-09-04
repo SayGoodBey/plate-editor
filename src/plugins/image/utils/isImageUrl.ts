@@ -124,9 +124,11 @@ const imageExtensions = new Set([
 ]);
 
 export const isImageUrl = (url: string) => {
-  if (!isUrl(url)) return false;
+  // if (!isUrl(url)) return false;
 
-  const ext = new URL(url).pathname.split('.').pop() as string;
+  // const ext = new URL(url).pathname.split('.').pop() as string;
 
-  return imageExtensions.has(ext);
+  // return imageExtensions.has(ext);
+  // 暂时不做图片细校验 现在先判定http开头的都是图片链接，
+  return isUrl(url);
 };

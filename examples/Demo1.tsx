@@ -70,6 +70,11 @@ export default () => {
     console.log('image--length----', length);
   };
 
+  // 业务手动插入图片
+  const handleInput = (e) => {
+    editorRef.current?.insertImage?.(e.target.value);
+  };
+
   return (
     <>
       <PlateEditor
@@ -109,6 +114,7 @@ export default () => {
       </button>
       <button onClick={handleWordCountLength}>获取当前wordCountLength</button>
       <button onClick={handleImageCountLength}>获取当前ImageCountLength</button>
+      <input onBlur={handleInput} placeholder="向编辑器插入文本" style={{ marginRight: '25px', marginTop: '10px' }} />
     </>
   );
 };
