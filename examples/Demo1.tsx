@@ -14,7 +14,7 @@ export default () => {
   const onHtmlChange = (a: any) => {
     // console.log(a, '我返回了HTML的数据结构');
     const length = editorRef.current?.getWordCount?.();
-    console.log('onHtmlChange--', length);
+    // console.log('onHtmlChange--', length);
   };
 
   const onChangeValue = (b: any) => {

@@ -5,7 +5,7 @@
  * 因此，插入空文本节点时，需要关闭normalize操作，等用户输入完成后，再开启normalize操作。
  */
 
-import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
+import { createPluginFactory, PlateEditor, insertText, isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
 import { Path, Transforms } from 'slate/dist';
 
@@ -63,6 +63,7 @@ export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: st
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
   if (child?.color !== color) {
+    console.log('run normalize');
     setEnableNormalizing(false);
     Transforms.insertNodes(
       editor as any,
@@ -79,6 +80,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
   key: KEY_DYNAMIC_COLOR,
   handlers: {
     onCompositionStart: (editor) => (event: any) => {
+      console.log('onCompositionStart');
       isComposition = true;
       if (!isEnable(editor)) return;
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
@@ -98,6 +100,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
       // }
     },
     onKeyDown: (editor) => (event: any) => {
+      console.log('onKeyDown');
       if (!isEnable(editor)) return;
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
       // 当isCollapsed为false时，表示当前有选中的文本，此时，如果直接插入新节点，会导致选中的文本被替换掉
@@ -108,12 +111,15 @@ const createDynamicFontColorPlugin = createPluginFactory({
       }
     },
     onDOMBeforeInput: (editor) => (event: any) => {
+      console.log('onDOMBeforeInput', event.inputType);
+
       // isPropagationStopped必须要返回true。没有仔细看slate关于这块的处理，但如果不返回true，在iOS自动联想输入时会有问题
       event.isPropagationStopped = () => false;
       if (!isEnable(editor)) return;
       // console.log('onDOMBeforeInput', event.inputType, event.data, event.data.length)
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
-      let child = getValueChild(editor.children, editor.selection?.anchor.path);
+      // let child = getValueChild(editor.children, editor.selection?.anchor.path);
+
       if (event.inputType === 'insertReplacementText') {
         event.isPropagationStopped = () => true;
         const range = event.getTargetRanges();

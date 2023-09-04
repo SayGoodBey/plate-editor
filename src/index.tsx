@@ -4,7 +4,7 @@ import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
 import {
-  basicNodesPlugins,
+  basicElementsPlugins,
   createImagePlugin,
   createWordCountPlugin,
   createDynamicFontColorPlugin,
@@ -77,7 +77,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   const plugins = createPlugins(
     [
-      ...basicNodesPlugins,
+      ...basicElementsPlugins,
       createImagePlugin({
         options: {
           uploadImage,
