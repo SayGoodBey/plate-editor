@@ -7,13 +7,15 @@ export const withImageEmbed = <V extends Value = Value, E extends PlateEditor<V>
   editor: E,
   plugin: WithPlatePlugin<CustomImagePlugin, V, E>,
 ) => {
+  const {
+    options: { insertNodesOptions },
+  } = plugin;
   const { insertData } = editor;
 
   editor.insertData = (dataTransfer: DataTransfer) => {
     const text = dataTransfer.getData('text/plain');
-
     if (isImageUrl(text)) {
-      insertImage(editor, text);
+      insertImage(editor, text, insertNodesOptions);
       return;
     }
 
