@@ -79,6 +79,7 @@ const BatchDemo = () => {
       <div id="tinymce-editor">
         <PlateEditor
           ref={editorRef}
+          rootId="tinymce-editor-wrapper"
           initialValue={transform}
           onLoaded={renderQuestion}
           toolbar={<Toolbar onItemClick={onItemClick} />}

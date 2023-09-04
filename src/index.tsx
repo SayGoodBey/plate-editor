@@ -1,22 +1,18 @@
-import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
-import { ReactEditor } from 'slate-react';
-import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
-import { Transforms } from 'slate';
-import { basicNodesPlugins } from './plugins/basic-nodes/basicNodesPlugins';
-import { createLimitCharsPlugin } from './plugins/limit-chars/limitchars';
-import { createHighlightHTMLPlugin } from './plugins/serializing-html/HighlightHTML';
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { createDynamicFontColorPlugin } from './plugins/dynamic-font-color/Index';
-import { createPasteHandlePlugin } from './plugins/paste-handle/Index';
-import { createWordCountPlugin } from './plugins/word-count/Index';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { createDndPlugin } from '@udecode/plate-dnd';
-import { plateUI } from './common/plateUI';
-import { createImagePlugin } from './plugins/image';
-
+import { Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
+import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
+import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
+import {
+  basicNodesPlugins,
+  createImagePlugin,
+  createWordCountPlugin,
+  createDynamicFontColorPlugin,
+  createHighlightHTMLPlugin,
+  createPasteHandlePlugin,
+} from './plugins';
+import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
-import { FloatingToolbar } from './components/FloatingToolbar';
 
 const defaultConfig = {
   maxLength: 2000,
@@ -36,7 +32,7 @@ interface PlateEditorPropsType {
   initialValue?: any;
   fontColor?: string;
   fontSize?: string;
-  onHtmlChange?: Function;
+  onHtmlChange?: () => string;
   onChange?: Function;
   scrollSelectionIntoView?: () => void;
   onLoaded?: (element: any) => void;
@@ -76,13 +72,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
-    onLoaded && onLoaded(generateEventHandle(element, editorRef));
+    onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
   }, []);
 
   const plugins = createPlugins(
     [
       ...basicNodesPlugins,
-      // createDeserializePlugin(),
       createImagePlugin({
         options: {
           uploadImage,
@@ -99,7 +94,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       }),
       createHighlightHTMLPlugin({
         options: {
-          onHtmlChange: onHtmlChange,
+          onHtmlChange,
         },
       }), // 返回html格式的插件
       createWordCountPlugin({
@@ -108,26 +103,19 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount: showWordCount,
         },
       }),
-      createDndPlugin({ options: { enableScroller: true } }),
       createDynamicFontColorPlugin({
         options: {
-          dynamicFontColor: dynamicFontColor,
+          dynamicFontColor,
         },
       }),
       createPasteHandlePlugin(),
-      // TODO: 暂时跟随线上，放开字数限制
-      // createLimitCharsPlugin({
-      //   options: {
-      //     maxLength: editableProps.maxLength,
-      //   },
-      // }),
     ],
     { components: plateUI },
   );
 
   const onChangeData = (value: any) => {
-    const element = elementRef.current.children[0];
-    onChange?.(value, generateEventHandle(element, editorRef));
+    const [element] = elementRef.current.children;
+    onChange?.(value, generateEventHandle(element, editorRef.current));
   };
 
   useEffect(() => {
@@ -144,14 +132,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
-      <DndProvider backend={HTML5Backend}>
-        <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
-          <Plate editableProps={editableProps}>
-            {/* https://platejs.org/docs/components/floating-toolbar */}
-            {toolbar && <FloatingToolbar>{toolbar}</FloatingToolbar>}
-          </Plate>
-        </PlateProvider>
-      </DndProvider>
+      <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
+        <Plate editableProps={editableProps}>
+          {/* https://platejs.org/docs/components/floating-toolbar */}
+          {toolbar && <FloatingToolbar>{toolbar}</FloatingToolbar>}
+        </Plate>
+      </PlateProvider>
     </div>
   );
 });

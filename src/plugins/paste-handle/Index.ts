@@ -1,6 +1,6 @@
 import { createPluginFactory, insertText } from '@udecode/plate-common';
 import { Path, Transforms } from 'slate/dist';
-import { isEnable, addEmptyTextNodeWithDynamicColor, KEY_DYNAMIC_COLOR } from '../dynamic-font-color/Index';
+import { isEnable, addEmptyTextNodeWithDynamicColor, KEY_DYNAMIC_COLOR } from '../dynamic-font-color';
 import { DynamicFontColorPlugin } from '../dynamic-font-color/types';
 
 export const KEY_PASTE_HANDLE = 'paste_handle';
