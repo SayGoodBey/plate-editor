@@ -1,5 +1,5 @@
 import { PlateEditor, Value, WithPlatePlugin } from '@udecode/plate-common';
-import type { CustomImagePlugin } from './index';
+import type { CustomImagePlugin } from './type';
 import { insertImage } from './transforms/insertImage';
 import { isImageUrl } from './utils/isImageUrl';
 

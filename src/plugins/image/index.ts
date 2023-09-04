@@ -1,9 +1,7 @@
-import { createPluginFactory, InsertNodesOptions } from '@udecode/plate-common';
-import { ImagePlugin } from '@udecode/plate-media';
+import { createPluginFactory } from '@udecode/plate-common';
+import { CustomImagePlugin } from './type';
 import { withImage } from './withImage';
 export const ELEMENT_IMAGE = 'img';
-
-export type CustomImagePlugin = ImagePlugin & { insertNodesOptions?: InsertNodesOptions };
 
 /**
  * 允许配置图片插入方式 inline or block ,默认是block
