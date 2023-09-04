@@ -32,7 +32,7 @@ interface PlateEditorPropsType {
   initialValue?: any;
   fontColor?: string;
   fontSize?: string;
-  onHtmlChange?: () => string;
+  onHtmlChange?: (html: string) => void;
   onChange?: Function;
   scrollSelectionIntoView?: () => void;
   onLoaded?: (element: any) => void;
