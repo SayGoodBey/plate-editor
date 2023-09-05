@@ -44,6 +44,7 @@ interface PlateEditorPropsType {
   rootId?: string; // 编辑器根容器id
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
+  uploadImage?: (v: string, files: FileList) => Promise<string | ArrayBuffer>;
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
@@ -61,14 +62,15 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     fontSize,
     onChange,
     toolbar,
+    uploadImage,
     onResizeContent,
     ...editableProps
   } = config;
-  const uploadImage = (v, files) => {
-    return Promise.resolve(
-      'https://img0.baidu.com/it/u=3021883569,1259262591&fm=253&fmt=auto&app=120&f=JPEG?w=1140&h=641',
-    );
-  };
+  // const uploadImage = (v, files) => {
+  //   return Promise.resolve(
+  //     'https://img0.baidu.com/it/u=3021883569,1259262591&fm=253&fmt=auto&app=120&f=JPEG?w=1140&h=641',
+  //   );
+  // };
   React.useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
