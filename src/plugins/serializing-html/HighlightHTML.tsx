@@ -71,8 +71,9 @@ export const createHighlightHTMLPlugin = createPluginFactory({
         const nodes = convertArrayToSlateNodes(
           editor.children as { type: string; color: string; children: { text: string; color: string }[] }[],
         );
+        const content = serializeHtmlWithBlock(editor.children);
         const html = serializeHtmlWithColor(nodes);
-        onHtmlChange(html);
+        onHtmlChange(html, content);
       }
 
       onChange();
@@ -81,3 +82,18 @@ export const createHighlightHTMLPlugin = createPluginFactory({
     return editor;
   },
 });
+
+function serializeHtmlWithBlock(nodes: any[]): string {
+  if (!nodes) return '';
+  return nodes
+    .map((node) => {
+      if (node.type === 'p') {
+        return `${serializeHtmlWithBlock(node.children)}/n`;
+      }
+      if (node.text) {
+        return node.text;
+      }
+      return serializeHtmlWithBlock(node.children);
+    })
+    .join('');
+}
