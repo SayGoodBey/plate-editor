@@ -9,6 +9,7 @@ export const insertImage = <V extends Value>(
   options: InsertNodesOptions<V> = {},
 ) => {
   const text = { text: '' };
+
   const image: TImageElement = {
     type: getPluginType(editor, ELEMENT_IMAGE),
     url: url as any,

@@ -17,7 +17,6 @@ export const withImage = <V extends Value = Value, E extends PlateEditor<V> = Pl
   if (!disableUploadInsert) {
     editor = withImageUpload(editor, plugin);
   }
-
   if (!disableEmbedInsert) {
     editor = withImageEmbed(editor, plugin);
   }
