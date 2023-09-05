@@ -48,23 +48,6 @@ export const createHighlightHTMLPlugin = createPluginFactory({
   withOverrides: (editor: PlateEditor) => {
     const { onChange } = editor;
     editor.onChange = () => {
-      // 在调用 onChange 之前先检查所有节点
-      if (editor.children.length === 1 && editor.children[0].children[0].text === '') {
-        // 所有内容都已删除
-        editor.children = [
-          {
-            type: 'p',
-            color: '',
-            children: [
-              {
-                text: '',
-                color: '',
-              },
-            ],
-          },
-        ];
-      }
-
       const { onHtmlChange } = editor.pluginsByKey[PLUGIN_KEY_HIGHLIGHT_HTML].options as createHTMLPlugin;
 
       if (typeof onHtmlChange === 'function') {
