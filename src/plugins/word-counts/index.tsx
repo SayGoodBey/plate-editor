@@ -21,7 +21,7 @@ const WordCountElement: FC = (props: any) => {
   editor.onChange = (...args) => {
     const stringNode = serialize(editor.children);
     const { length } = toArray(stringNode);
-    editor.getWordCount = () => length;
+
     setValueLength(length);
 
     onChange(...args);
@@ -40,5 +40,13 @@ export const createWordCountPlugin = createPluginFactory({
   key: PLUGIN_WORD_COUNT,
   renderAfterEditable: (editableProps: any) => {
     return <WordCountElement {...editableProps} />;
+  },
+  then: (editor) => {
+    editor.getWordCount = () => {
+      const stringNode = serialize(editor.children);
+      const { length } = toArray(stringNode);
+      return length;
+    };
+    return {};
   },
 });

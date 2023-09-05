@@ -14,7 +14,7 @@ export default () => {
   const onHtmlChange = (a: any) => {
     // console.log(a, '我返回了HTML的数据结构');
     const length = editorRef.current?.getWordCount?.();
-    // console.log('onHtmlChange--', length);
+    console.log('onHtmlChange--', length);
   };
 
   const onChangeValue = (b: any) => {
@@ -74,15 +74,20 @@ export default () => {
   const handleInput = (e) => {
     editorRef.current?.insertImage?.(e.target.value);
   };
+  const uploadImage = (v, files) => {
+    return Promise.resolve(
+      'https://img0.baidu.com/it/u=3021883569,1259262591&fm=253&fmt=auto&app=120&f=JPEG?w=1140&h=641',
+    );
+  };
 
-  // '<div><p style="color: red">12<span style="color: blue">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p></div>'
   return (
     <>
       <PlateEditor
         ref={editorRef}
-        showWordCount={showWordCount}
+        showWordCount
         dynamicFontColor={dynamicFontColor}
         placeholder={placeholder}
+        uploadImage={uploadImage}
         autoFocus
         maxLength={maxLength}
         readOnly={readOnly}
