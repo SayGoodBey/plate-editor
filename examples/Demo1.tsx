@@ -11,10 +11,9 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
 
-  const onHtmlChange = (a: any) => {
-    // console.log(a, '我返回了HTML的数据结构');
-    const length = editorRef.current?.getWordCount?.();
-    console.log('onHtmlChange--', length);
+  const onHtmlChange = (html: string, content: string) => {
+    console.log('html :>> ', html);
+    console.log('content :>> ', content);
   };
 
   const onChangeValue = (b: any) => {
