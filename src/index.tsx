@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms } from 'slate';
+import { Transforms, Editor, Node } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -113,7 +113,26 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
 
+  const clear = (editorRef) => {
+    const initialEditorValue: Node[] = [
+      {
+        type: 'paragraph',
+        children: [{ text: '' }],
+      },
+    ];
+    Transforms.removeNodes(editorRef, {
+      at: {
+        anchor: Editor.start(editorRef, []),
+        focus: Editor.end(editorRef, []),
+      },
+      // mode: true,
+    });
+    Transforms.insertNodes(editorRef, initialEditorValue);
+  };
+
+  // initialValue 修改的时候编辑器重新设置初始值
   useEffect(() => {
+    clear(editorRef.current);
     if (initialValue) {
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
@@ -124,7 +143,9 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         editorRef.current.insertFragment(result);
       };
     }
-  }, []);
+
+    editorRef.current.clear = () => clear(editorRef.current);
+  }, [initialValue]);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
