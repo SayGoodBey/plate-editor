@@ -28,6 +28,11 @@ export function getImageCount(nodes: Value) {
   return count;
 }
 
+// 连字符中划线转小驼峰
+function kebabToCamel(str: string) {
+  return str.replace(/-(\w)/g, (_, letter) => letter.toUpperCase());
+}
+
 export function styleStringToObject(styleString: string) {
   const styleObj: Record<string, string> = {};
 
@@ -43,7 +48,7 @@ export function styleStringToObject(styleString: string) {
     const [key, value] = trimmed.split(':');
 
     // 赋值到对象
-    styleObj[key] = value;
+    styleObj[kebabToCamel(key)] = value;
   });
 
   return styleObj;
