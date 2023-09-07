@@ -10,6 +10,9 @@ export default () => {
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
+  const [initialValue, setInitialValue] = useState(
+    '<p style="color: red">12<span style="color: blue">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p>',
+  );
 
   const onHtmlChange = (html: string, content: string) => {
     console.log('html :>> ', html);
@@ -79,6 +82,14 @@ export default () => {
     );
   };
 
+  const handleChangeInitial = () => {
+    setInitialValue('<p>哈哈哈哈</p>');
+  };
+
+  const handleDelete = () => {
+    editorRef.current?.clear();
+  };
+
   return (
     <>
       <PlateEditor
@@ -94,9 +105,7 @@ export default () => {
         onChange={onChangeValue}
         onLoaded={onLoaded}
         onResizeContent={onResizeContent}
-        initialValue={
-          '<p style="color: red">12<span style="color: blue">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p>'
-        }
+        initialValue={initialValue}
       />
       <input onChange={clickColor} placeholder="改变字体颜色" style={{ marginRight: '25px', marginTop: '10px' }} />
       <input onChange={clickPlaceholder} placeholder="设置占位符" style={{ marginRight: '25px', marginTop: '10px' }} />
@@ -120,6 +129,10 @@ export default () => {
       <button onClick={handleWordCountLength}>获取当前wordCountLength</button>
       <button onClick={handleImageCountLength}>获取当前ImageCountLength</button>
       <input onBlur={handleInput} placeholder="向编辑器插入图片" style={{ marginRight: '25px', marginTop: '10px' }} />
+      <button onClick={handleChangeInitial} style={{ marginRight: '25px', marginTop: '10px' }}>
+        change initialValue
+      </button>
+      <button onClick={handleDelete}>清空编辑器内容</button>
     </>
   );
 };
