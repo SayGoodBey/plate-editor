@@ -23,8 +23,29 @@ const BlockElement = (props: any) => {
   );
 };
 
+const SpanElement = (props: any) => {
+  const { attributes, nodeProps = {}, children, element } = props;
+  const elementAttr = Object.entries(element).reduce((acc, [key, value]) => {
+    if (key.startsWith('data-')) {
+      return { ...acc, [key]: value };
+    }
+    return acc;
+  }, {});
+  // 需要重新整理className, nodeProps里面class 属性报错
+  const { class: nodePropsClass = '', ...restNodeProps } = nodeProps;
+  const disposalClassName = Array.from(new Set([element.className, nodePropsClass, props.className])).join(' ');
+
+  // 梳理一下这几个属性的关系
+  return (
+    <span {...attributes} {...elementAttr} {...restNodeProps} className={disposalClassName}>
+      {children}
+    </span>
+  );
+};
+
 export const plateUI = {
   [ELEMENT_PARAGRAPH]: ParagraphElement,
   [ELEMENT_IMAGE]: ImageElement,
   div: BlockElement,
+  span: SpanElement,
 };
