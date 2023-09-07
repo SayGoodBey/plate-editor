@@ -125,7 +125,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         anchor: Editor.start(editorRef, []),
         focus: Editor.end(editorRef, []),
       },
-      // mode: true,
+      mode: 'highest',
     });
     Transforms.insertNodes(editorRef, initialEditorValue);
   };
@@ -134,6 +134,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   useEffect(() => {
     clear(editorRef.current);
     if (initialValue) {
+      console.log('initialValue===', initialValue);
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
       editorRef.current.insertFragment(fragment);
@@ -144,7 +145,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       };
     }
 
-    editorRef.current.clear = () => clear(editorRef.current);
+    // editorRef.current.clear = () => clear(editorRef.current);
   }, [initialValue]);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
