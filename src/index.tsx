@@ -8,9 +8,9 @@ import {
   createImagePlugin,
   createWordCountPlugin,
   createDynamicFontColorPlugin,
-  createHighlightHTMLPlugin,
   createPasteHandlePlugin,
 } from './plugins';
+import { serializeContent, serializeHtml } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -32,7 +32,7 @@ interface PlateEditorPropsType {
   initialValue?: any;
   fontColor?: string;
   fontSize?: string;
-  onHtmlChange?: (html: string) => void;
+  onHtmlChange?: (html: string, content: string) => void;
   onChange?: Function;
   scrollSelectionIntoView?: () => void;
   onLoaded?: (element: any) => void;
@@ -89,11 +89,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       createFontSizePlugin({
         options: { fontSize },
       }),
-      createHighlightHTMLPlugin({
-        options: {
-          onHtmlChange,
-        },
-      }), // 返回html格式的插件
       createWordCountPlugin({
         options: {
           maxLength: editableProps.maxLength,
@@ -113,6 +108,9 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
+    const data = serializeHtml(editorRef.current.children);
+    onHtmlChange &&
+      onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
 
   useEffect(() => {

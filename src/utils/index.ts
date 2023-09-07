@@ -1,4 +1,7 @@
 import { Value } from '@udecode/slate';
+
+export * from './serialize';
+
 export const pick = (props: string[], obj: Record<string, any> = {}) => {
   const newObj: Record<string, any> = {};
   props.forEach((prop) => {
