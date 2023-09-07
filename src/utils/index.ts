@@ -27,3 +27,24 @@ export function getImageCount(nodes: Value) {
 
   return count;
 }
+
+export function styleStringToObject(styleString: string) {
+  const styleObj: Record<string, string> = {};
+
+  // 将样式字符串切割为数组
+  const styles = styleString.split(';');
+
+  // 遍历数组,获取样式键值对
+  styles.forEach((style) => {
+    // 去掉空格
+    const trimmed = style.trim();
+
+    // 分割关键字和值
+    const [key, value] = trimmed.split(':');
+
+    // 赋值到对象
+    styleObj[key] = value;
+  });
+
+  return styleObj;
+}
