@@ -11,7 +11,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p>',
+    '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p><div id="delete" style="color:red">我事要删除的元素</div>',
   );
 
   const onHtmlChange = (html: string, content: string) => {
@@ -86,8 +86,12 @@ export default () => {
     setInitialValue('<p>哈哈哈哈</p>');
   };
 
-  const handleDelete = () => {
+  const handleClear = () => {
     editorRef.current?.clear();
+  };
+
+  const handleDeleteDom = () => {
+    editorRef.current?.deleteDom(['id', 'delete']);
   };
 
   return (
@@ -132,7 +136,12 @@ export default () => {
       <button onClick={handleChangeInitial} style={{ marginRight: '25px', marginTop: '10px' }}>
         change initialValue
       </button>
-      <button onClick={handleDelete}>清空编辑器内容</button>
+      <button onClick={handleClear} style={{ marginRight: '25px', marginTop: '10px' }}>
+        清空编辑器内容
+      </button>
+      <button onClick={handleDeleteDom} style={{ marginRight: '25px', marginTop: '10px' }}>
+        删除指定dom元素
+      </button>
     </>
   );
 };

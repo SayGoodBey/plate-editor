@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms, Editor, Node } from 'slate';
+import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -10,7 +10,7 @@ import {
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
 } from './plugins';
-import { serializeContent, serializeHtml } from './utils';
+import { serializeContent, serializeHtml, clear, deleteDom } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -113,23 +113,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
 
-  const clear = (editorRef) => {
-    const initialEditorValue: Node[] = [
-      {
-        type: 'paragraph',
-        children: [{ text: '' }],
-      },
-    ];
-    Transforms.removeNodes(editorRef, {
-      at: {
-        anchor: Editor.start(editorRef, []),
-        focus: Editor.end(editorRef, []),
-      },
-      mode: 'highest',
-    });
-    Transforms.insertNodes(editorRef, initialEditorValue);
-  };
-
   // initialValue 修改的时候编辑器重新设置初始值
   useEffect(() => {
     clear(editorRef.current);
@@ -144,9 +127,13 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         editorRef.current.insertFragment(result);
       };
     }
-
-    // editorRef.current.clear = () => clear(editorRef.current);
   }, [initialValue]);
+
+  // 对外抛出挂载方法
+  useEffect(() => {
+    editorRef.current.clear = () => clear(editorRef.current); // 清空编辑器内容
+    editorRef.current.deleteDom = (dom) => deleteDom(editorRef.current, dom);
+  }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
