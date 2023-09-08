@@ -27,22 +27,42 @@ function* walkPreOrder(node: Node & { children?: Node[] }): any {
     yield* walkPreOrder(child);
   }
 }
-function locateByKey(editorRef: any, [key, value]: string[]): any {
+
+type deleteDomParamsType = Record<string, string>[];
+
+// TODO: 待优化 缺少缓存
+function locateByKey(editorRef: any, params: deleteDomParamsType): any {
+  const result = [];
   for (let node of walkPreOrder(editorRef)) {
     const { attributes = {} } = node;
-    if (attributes?.[key] === value) {
-      return node;
+
+    if (isPassCondition(attributes, params)) {
+      result.push(node);
     }
   }
-  return null;
+  return result;
 }
-export function deleteDom(editorRef: any, params: string[]) {
-  const nodeByKey = locateByKey(editorRef, params);
 
-  const path = ReactEditor.findPath(editorRef, nodeByKey);
+// node attributes 是否满足条件
+function isPassCondition(attributes: deleteDomParamsType, params: deleteDomParamsType): boolean {
+  let result = true;
+  for (let key in params) {
+    if (attributes?.[key] !== params[key]) {
+      return (result = false);
+    }
+  }
+  return result;
+}
+
+function deleteNode(editorRef: any, node: Node): void {
+  const path = ReactEditor.findPath(editorRef, node);
 
   Transforms.removeNodes(editorRef, {
     at: path,
     voids: true,
   });
+}
+export function deleteDom(editorRef: any, params: deleteDomParamsType) {
+  const nodeArr = locateByKey(editorRef, params).reverse();
+  nodeArr.forEach((node: Node) => deleteNode(editorRef, node));
 }
