@@ -28,10 +28,19 @@ function* walkPreOrder(node: Node & { children?: Node[] }): any {
   }
 }
 
-type deleteDomParamsType = Record<string, string>[];
+enum DeleteMode {
+  Equal = 'equal',
+  Contain = 'contain',
+}
+interface DeleteDomParamsType {
+  [key: string]: {
+    value: string;
+    mode?: DeleteMode;
+  };
+}
 
 // TODO: 待优化 缺少缓存
-function locateByKey(editorRef: any, params: deleteDomParamsType): any {
+function locateByKey(editorRef: any, params: DeleteDomParamsType): any {
   const result = [];
   for (let node of walkPreOrder(editorRef)) {
     const { attributes = {} } = node;
@@ -44,11 +53,19 @@ function locateByKey(editorRef: any, params: deleteDomParamsType): any {
 }
 
 // node attributes 是否满足条件
-function isPassCondition(attributes: deleteDomParamsType, params: deleteDomParamsType): boolean {
+function isPassCondition(attributes: Record<string, string>, params: DeleteDomParamsType): boolean {
   let result = true;
   for (let key in params) {
-    if (attributes?.[key] !== params[key]) {
-      return (result = false);
+    if (!attributes[key]) return (result = false);
+
+    if (params[key]?.mode === DeleteMode.Contain) {
+      if (!attributes[key]?.includes(params[key].value)) {
+        return (result = false);
+      }
+    } else {
+      if (attributes[key] !== params[key].value) {
+        return (result = false);
+      }
     }
   }
   return result;
@@ -62,7 +79,7 @@ function deleteNode(editorRef: any, node: Node): void {
     voids: true,
   });
 }
-export function deleteDom(editorRef: any, params: deleteDomParamsType) {
+export function deleteDom(editorRef: any, params: DeleteDomParamsType) {
   const nodeArr = locateByKey(editorRef, params).reverse();
   nodeArr.forEach((node: Node) => deleteNode(editorRef, node));
 }

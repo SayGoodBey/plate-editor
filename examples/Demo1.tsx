@@ -11,7 +11,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p><div id="delete" style="color:red">我事要删除的元素</div><p>666667777</p><div id="delete" style="color:red">我事要删除的元素2223232322233</div>',
+    '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p><div id="delete" style="color:red">我事要删除的元素</div><p>666667777</p><div id="delete" style="color:red">我事要删除的元素2223232322233</div><div data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</div><div data-uuid="1" class="question" style="color:yellow">0000909090我事要删除的元素2223232322233</div><div data-uuid="2">uuid是2啦啦啦啦啦啦</div>',
   );
 
   const onHtmlChange = (html: string, content: string) => {
@@ -91,7 +91,10 @@ export default () => {
   };
 
   const handleDeleteDom = () => {
-    editorRef.current?.deleteDom({ id: 'delete' });
+    editorRef.current?.deleteDom({ id: { value: 'delete' } });
+  };
+  const handleDeleteDom2 = () => {
+    editorRef.current?.deleteDom({ 'data-uuid': { value: '1' }, class: { value: 'question', mode: 'contain' } });
   };
 
   return (
@@ -141,6 +144,9 @@ export default () => {
       </button>
       <button onClick={handleDeleteDom} style={{ marginRight: '25px', marginTop: '10px' }}>
         删除指定dom元素
+      </button>
+      <button onClick={handleDeleteDom2} style={{ marginRight: '25px', marginTop: '10px' }}>
+        删除指定dom元素2
       </button>
     </>
   );
