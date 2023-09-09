@@ -83,3 +83,8 @@ export function deleteDom(editorRef: any, params: DeleteDomParamsType) {
   const nodeArr = locateByKey(editorRef, params).reverse();
   nodeArr.forEach((node: Node) => deleteNode(editorRef, node));
 }
+
+export function findDomPath(editorRef: any, params: DeleteDomParamsType) {
+  const nodeArr = locateByKey(editorRef, params);
+  return nodeArr.map((node: Node) => ReactEditor.findPath(editorRef, node));
+}

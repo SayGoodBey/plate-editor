@@ -10,7 +10,7 @@ import {
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
 } from './plugins';
-import { serializeContent, serializeHtml, clear, deleteDom } from './utils';
+import { serializeContent, serializeHtml, clear, deleteDom, findDomPath } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -121,7 +121,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
       editorRef.current.insertFragment(fragment);
-      console.log('fragment :>> ', fragment);
+      // console.log('fragment :>> ', fragment);
       editorRef.current.insertHtmlText = (text: string) => {
         const result = deserializeHtml(editorRef.current, { element: parseHtmlDocument(text).body });
         editorRef.current.insertFragment(result);
@@ -132,7 +132,13 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   // 对外抛出挂载方法
   useEffect(() => {
     editorRef.current.clear = () => clear(editorRef.current); // 清空编辑器内容
-    editorRef.current.deleteDom = (dom) => deleteDom(editorRef.current, dom);
+    editorRef.current.deleteDom = (params) => deleteDom(editorRef.current, params); // 删除dom
+
+    editorRef.current.findDomPath = (params) => findDomPath(editorRef.current, params); // 获取dom path
+    editorRef.current.convertHtmlToSlate = (html: string) => {
+      // html string to slate data
+      return deserializeHtml(editorRef.current, { element: parseHtmlDocument(html).body });
+    };
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>

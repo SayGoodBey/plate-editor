@@ -11,7 +11,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<span data-slate-leaf="true"><span data-slate-zero-width="z" data-slate-length="0">﻿</span></span><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">1.</span></span></span><span data-slate-leaf="true"><span data-slate-zero-width="z" data-slate-length="0">﻿</span></span><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">(单选题,0分)下列采用的调查方式正确的是(  )</span></span></span><span data-slate-leaf="true"><span data-slate-zero-width="z" data-slate-length="0">﻿</span></span>',
+    '<p>123<p><p data-uuid="1" id="test" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   );
   // '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p><div id="delete" style="color:red">我事要删除的元素</div><p>666667777</p><div id="delete" style="color:red">我事要删除的元素2223232322233</div><div data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</div><div data-uuid="1">舒服撒了发撒发啦是的</div><div class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</div><div data-uuid="2">uuid是2啦啦啦啦啦啦</div>'
   // '<p>123<p><p data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
@@ -99,6 +99,27 @@ export default () => {
     editorRef.current?.deleteDom({ 'data-uuid': { value: '1' }, class: { value: 'question', mode: 'contain' } });
   };
 
+  const handleFindDomPath = (e) => {
+    const { value } = e.target;
+    if (!value) return;
+    let obj = {};
+    value.split(',').forEach((item) => {
+      const arr = item.split(':');
+      obj[arr[0]] = {
+        value: arr[1],
+        mode: 'contain',
+      };
+    });
+    console.log('obj :>> ', obj);
+    const pathArr = editorRef.current?.findDomPath(obj);
+    console.log('pathArr---', pathArr);
+  };
+  const handleHtmlToSlate = (e) => {
+    const { value } = e.target;
+    const slateData = editorRef.current?.convertHtmlToSlate(value);
+    console.log('slateData---', slateData);
+  };
+
   return (
     <>
       <PlateEditor
@@ -150,6 +171,16 @@ export default () => {
       <button onClick={handleDeleteDom2} style={{ marginRight: '25px', marginTop: '10px' }}>
         删除指定dom元素2
       </button>
+      <input
+        onBlur={handleFindDomPath}
+        placeholder="获取元素path，根据attribute获取"
+        style={{ marginRight: '25px', marginTop: '10px' }}
+      />
+      <input
+        onBlur={handleHtmlToSlate}
+        placeholder="html字符串转slate数据结构"
+        style={{ marginRight: '25px', marginTop: '10px' }}
+      />
     </>
   );
 };
