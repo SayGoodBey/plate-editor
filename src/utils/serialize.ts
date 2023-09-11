@@ -1,3 +1,4 @@
+let emptySpan = /<span .*>(\s|\uFEFF)*<\/span>/g; // 删除空的span标签，可能含有0宽字符
 export function serializeHtml(nodes: any[]): string {
   if (!nodes) return '';
   return nodes
@@ -24,7 +25,9 @@ export function serializeHtml(nodes: any[]): string {
 
       return `<${type} ${color ? `style="color: ${color}"` : ''}>${serializeHtml(children)}</${type}>`;
     })
-    .join('');
+    .join('')
+    .replace(emptySpan, '')
+    .trim();
 }
 
 export function serializeContent(nodes: any[]): string {
