@@ -1,6 +1,6 @@
 import { createPluginFactory, getPluginOptions, usePlateEditorState } from '@udecode/plate-common';
 import { Node } from 'slate';
-import { toArray } from 'lodash';
+import toArray from 'lodash.toarray';
 import { FC, useEffect, useState } from 'react';
 import { WordCountPlugin } from './types';
 import * as React from 'react';
