@@ -1,3 +1,4 @@
+import { deserializeHtml, parseHtmlDocument } from '@udecode/plate-common';
 import { Node, Editor, Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
 // 在ref 上扩展的方法
@@ -87,4 +88,11 @@ export function deleteDom(editorRef: any, params: DeleteDomParamsType) {
 export function findDomPath(editorRef: any, params: DeleteDomParamsType) {
   const nodeArr = locateByKey(editorRef, params);
   return nodeArr.map((node: Node) => ReactEditor.findPath(editorRef, node));
+}
+
+export function replaceDom(editorRef: any, params: DeleteDomParamsType, htmlStr: string) {
+  const replacePath = findDomPath(editorRef, params)[0];
+  const replaceNode = deserializeHtml(editorRef, { element: parseHtmlDocument(htmlStr).body });
+  deleteDom(editorRef, params);
+  editorRef.insertNodes(replaceNode, { at: replacePath });
 }
