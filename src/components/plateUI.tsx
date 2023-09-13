@@ -1,11 +1,12 @@
 import React from 'react';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_IMAGE } from '@udecode/plate-media';
-import { EEOFormulaMQComponent } from '@newbee/formulaEditor';
 
 import ParagraphElement from './ParagraphElement';
 import ImageElement from './ImageElement';
 import { styleStringToObject } from '../utils/index';
+import { FormulaElement } from './MathFormula';
+
 const BlockElement = (props: any) => {
   const { attributes, nodeProps = {}, children, element } = props;
   const elementAttr = Object.entries(element).reduce((acc, [key, value]) => {
@@ -46,10 +47,6 @@ const SpanElement = (props: any) => {
       {children.map((child: any) => (child.props?.text ? parseFormula(child.props.text.text) : child))}
     </span>
   );
-};
-
-const FormulaElement: React.FC<{ content: string }> = ({ content }) => {
-  return <EEOFormulaMQComponent latex={content} editable={false} />;
 };
 
 export const plateUI = {

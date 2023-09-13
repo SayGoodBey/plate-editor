@@ -41,7 +41,6 @@
   ],
   "dependencies": {
     "@ice/jsx-runtime": "^0.2.0",
-    "@newbee/formulaEditor": "^1.1.13",
     "@swc/helpers": "^0.5.1",
     "@udecode/plate-basic-marks": "^23.3.1",
     "@udecode/plate-common": "^23.3.1",
@@ -54,6 +53,7 @@
     "lodash.toarray": "4.4.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "react-mathquill": "1.0.2",
     "slate": "^0.94.1",
     "slate-history": "^0.93.0",
     "slate-hyperscript": "^0.77.0",
