@@ -96,3 +96,17 @@ export function replaceDom(editorRef: any, params: DeleteDomParamsType, htmlStr:
   deleteDom(editorRef, params);
   editorRef.insertNodes(replaceNode, { at: replacePath });
 }
+
+export function getSelectedDOM(editorRef: any) {
+  const { selection } = editorRef;
+  console.log(selection);
+  if (selection) {
+    const domSelection = ReactEditor.toDOMRange(editorRef, selection);
+
+    let div = document.createElement('div');
+    div.appendChild(domSelection.cloneContents());
+
+    return div.innerHTML;
+  }
+  return null;
+}

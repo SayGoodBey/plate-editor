@@ -10,7 +10,7 @@ import {
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
 } from './plugins';
-import { serializeContent, serializeHtml, clear, deleteDom, findDomPath, replaceDom } from './utils';
+import { serializeContent, serializeHtml, clear, deleteDom, findDomPath, replaceDom, getSelectedDOM } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -141,13 +141,15 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       // html string to slate data
       return deserializeHtml(editorRef.current, { element: parseHtmlDocument(html).body });
     };
+    editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
   }, []);
+  console.log('toolbar-----', toolbar);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
         <Plate editableProps={editableProps}>
           {/* https://platejs.org/docs/components/floating-toolbar */}
-          {toolbar && <FloatingToolbar>{toolbar}</FloatingToolbar>}
+          {<FloatingToolbar>{<span>啊啊哈哈</span>}</FloatingToolbar>}
         </Plate>
       </PlateProvider>
     </div>
