@@ -1,30 +1,34 @@
+let emptySpan = /<span .*>(\s|\uFEFF)*<\/span>/g; // 删除空的span标签，可能含有0宽字符
 export function serializeHtml(nodes: any[]): string {
   if (!nodes) return '';
-  return nodes
-    .map((node) => {
-      let { type, color, children, text } = node;
+  return (
+    nodes
+      .map((node) => {
+        let { type, children, text, attributes = {}, url } = node;
+        let attributesStr = '';
+        Object.keys(attributes).forEach((key) => {
+          attributesStr = `${attributesStr} ${key}="${attributes[key]}"`.trim();
+        });
 
-      if (type === 'span' && !text && children) {
-        return serializeHtml(children);
-      }
-      if (!type && !text) {
-        return '';
-      }
-      if (text) {
-        return `<span ${color ? `style="color: ${color}"` : ''}>${text}</span>`;
-      }
-      if (type === 'img') {
-        const { url, alt, width, height } = node;
-        return `<img src="${url}" alt="${alt}" width="${width}" height="${height}" />`;
-      }
+        if (!type && !text) {
+          return '';
+        }
+        if (text) {
+          if (attributesStr) {
+            return `<span ${attributesStr}>${text}</span>`;
+          }
+          return text;
+        }
+        if (type === 'img') {
+          return `<img src="${url}" "/>`;
+        }
 
-      if (type === 'paragraph') {
-        type = 'p';
-      }
-
-      return `<${type} ${color ? `style="color: ${color}"` : ''}>${serializeHtml(children)}</${type}>`;
-    })
-    .join('');
+        return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
+      })
+      .join('')
+      // .replace(emptySpan, '')
+      .trim()
+  );
 }
 
 export function serializeContent(nodes: any[]): string {

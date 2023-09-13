@@ -72,6 +72,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
   }, []);
 
+  const [_, setCount] = React.useState(0);
+
   const plugins = createPlugins(
     [
       ...basicElementsPlugins,
@@ -115,13 +117,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   // initialValue 修改的时候编辑器重新设置初始值
   useEffect(() => {
-    clear(editorRef.current);
     if (initialValue) {
       console.log('initialValue===', initialValue);
       const document = parseHtmlDocument(initialValue);
       const fragment = deserializeHtml(editorRef.current, { element: document.body });
-      editorRef.current.insertFragment(fragment);
-      // console.log('fragment :>> ', fragment);
+      editorRef.current.children = fragment;
+      setCount((count) => count + 1);
       editorRef.current.insertHtmlText = (text: string) => {
         const result = deserializeHtml(editorRef.current, { element: parseHtmlDocument(text).body });
         editorRef.current.insertFragment(result);

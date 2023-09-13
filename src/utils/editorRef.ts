@@ -4,7 +4,7 @@ import { ReactEditor } from 'slate-react';
 export function clear(editorRef: any) {
   const initialEditorValue: Node[] = [
     {
-      type: 'paragraph',
+      type: 'p',
       children: [{ text: '' }],
     },
   ];
