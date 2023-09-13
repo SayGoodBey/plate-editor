@@ -1,9 +1,12 @@
 import React from 'react';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_IMAGE } from '@udecode/plate-media';
+
 import ParagraphElement from './ParagraphElement';
 import ImageElement from './ImageElement';
 import { styleStringToObject } from '../utils/index';
+import { FormulaElement } from './MathFormula';
+
 const BlockElement = (props: any) => {
   const { attributes, nodeProps = {}, children, element } = props;
   const elementAttr = Object.entries(element).reduce((acc, [key, value]) => {
@@ -41,7 +44,7 @@ const SpanElement = (props: any) => {
   const reactStyle = styleStringToObject(nodePropsStyle);
   return (
     <span {...attributes} {...elementAttr} {...restNodeProps} className={disposalClassName} style={reactStyle}>
-      {children}
+      {children.map((child: any) => (child.props?.text ? parseFormula(child.props.text.text) : child))}
     </span>
   );
 };
@@ -52,3 +55,24 @@ export const plateUI = {
   div: BlockElement,
   span: SpanElement,
 };
+
+function parseFormula(content: string) {
+  const regex = /\$(.*?)\$/g;
+  const matches = content.match(regex);
+  const fragment = [];
+  let lastIndex;
+  if (matches) {
+    for (const match of matches) {
+      let endIndex = content.indexOf(match);
+      fragment.push(content.slice(lastIndex, endIndex));
+      fragment.push(<FormulaElement content={match.slice(1, -1)} />);
+      lastIndex = endIndex + match.length;
+    }
+    if (lastIndex < content.length - 1) {
+      fragment.push(content.slice(lastIndex));
+    }
+  } else {
+    fragment.push(content);
+  }
+  return fragment;
+}

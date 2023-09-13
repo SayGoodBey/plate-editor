@@ -1,7 +1,7 @@
 import { createPluginFactory } from '@udecode/plate-common';
 import { Editor, Node, Transforms, Text, Path } from 'slate';
 import { LimitCharsPlugin } from './types';
-import { toArray } from 'lodash';
+import toArray from 'lodash.toarray';
 
 const PLUGIN_KEY_LIMIT_CHARS = 'PLUGIN_KEY_LIMIT_CHARS';
 
