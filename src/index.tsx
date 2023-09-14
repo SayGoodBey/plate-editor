@@ -149,7 +149,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
         <Plate editableProps={editableProps}>
           {/* https://platejs.org/docs/components/floating-toolbar */}
-          {<FloatingToolbar>{<span>啊啊哈哈</span>}</FloatingToolbar>}
+          {toolbar && <FloatingToolbar>{toolbar}</FloatingToolbar>}
         </Plate>
       </PlateProvider>
     </div>
