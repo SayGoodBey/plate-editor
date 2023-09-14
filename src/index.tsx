@@ -81,7 +81,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         options: {
           uploadImage,
           insertNodesOptions: {
-            nextBlock: true,
+            nextBlock: false,
           },
         },
       }),
@@ -142,6 +142,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       return deserializeHtml(editorRef.current, { element: parseHtmlDocument(html).body });
     };
     editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
+    editorRef.current.focus = () => ReactEditor.focus(editorRef.current);
+    editorRef.current.blur = () => ReactEditor.blur(editorRef.current);
   }, []);
   console.log('toolbar-----', toolbar);
   return (

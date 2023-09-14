@@ -192,6 +192,12 @@ export default () => {
         style={{ marginRight: '25px', marginTop: '10px' }}
       />
       <input onBlur={replaceDom} placeholder="html 替换" style={{ marginRight: '25px', marginTop: '10px' }} />
+      <button onClick={() => editorRef.current.focus()} style={{ marginRight: '25px', marginTop: '10px' }}>
+        focus
+      </button>
+      <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
+        blur
+      </button>
     </>
   );
 };
