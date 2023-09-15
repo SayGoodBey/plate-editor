@@ -24,3 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
+
+bundle-es5-stats.html
