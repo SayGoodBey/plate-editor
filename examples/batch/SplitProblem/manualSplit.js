@@ -280,7 +280,7 @@ const passiveQuestionHandle = function (editor, content) {
 const contextToolbarClickHandler = (editor, question_type, getContent) => {
   window.eeoSensors &&
     window.eeoSensors.track('BatchEditPageOperation', { operation_type: '完成划题' }, 'EnterBatchUploadPage');
-  const errorPromptCallback = () => {};
+  const errorPromptCallback = () => { };
   // const errorPromptCallback = getSplitQuestionErrorPromptCallback(editor);
   if (getContent && errorPromptCallback) {
     // 1.根据选择的内容生成新试题
