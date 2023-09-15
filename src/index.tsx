@@ -10,7 +10,7 @@ import {
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
 } from './plugins';
-import { serializeContent, serializeHtml, clear, deleteDom, findDomPath } from './utils';
+import { serializeContent, serializeHtml, clear, deleteDom, findDomPath, replaceDom, getSelectedDOM } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -81,7 +81,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         options: {
           uploadImage,
           insertNodesOptions: {
-            nextBlock: true,
+            nextBlock: false,
           },
         },
       }),
@@ -136,11 +136,16 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.deleteDom = (params) => deleteDom(editorRef.current, params); // 删除dom
 
     editorRef.current.findDomPath = (params) => findDomPath(editorRef.current, params); // 获取dom path
+    editorRef.current.replaceDom = (params, htmlStr) => replaceDom(editorRef.current, params, htmlStr); // 获取dom path
     editorRef.current.convertHtmlToSlate = (html: string) => {
       // html string to slate data
       return deserializeHtml(editorRef.current, { element: parseHtmlDocument(html).body });
     };
+    editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
+    editorRef.current.focus = () => ReactEditor.focus(editorRef.current);
+    editorRef.current.blur = () => ReactEditor.blur(editorRef.current);
   }, []);
+  console.log('toolbar-----', toolbar);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>

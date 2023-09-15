@@ -11,14 +11,20 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<p ><span > </span><span >1.</span><span > </span><span >(单选题,0分)下列采用的调查方式正确的是(  )</span><span > </span></p>',
+    '<img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="alt哈哈" width="50" height="50" /><p style="color:red"><span style="color:blue">aaaa</span></p><p id="jack">我是要被替换的元素</p><p class="c1 c2">测试删除替换</p>',
   );
+  //  '<p class="qt_default 333">2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级(下)期末数学复习试卷(2)</p><p class="qt_default">试题数:20,总分:0</p><div class="question" data-type="1"data-uuid="9087800690433707-1694501106343-2"><div class="questionWraper"><p class="qt_title"><span class="title">1.</span><span class="content">(单选题,0分)下列采用的调查方式正确的是(  )</span></p><p class="key key_A"><span class="title">A.</span><span class="content">某企业招聘,对应聘人员的面试,适合采用抽样调查</span></p><p class="key key_B"><span class="title">B.</span><span class="content">为了解全班同学每周体育锻炼的时间,适合采用抽样调查</span></p><p class="key key_C"><span class="title">C.</span><span class="content">为了解某市初二年级学生每天完成作业的用时量,适合采用普查</span></p><p class="key key_D"><span class="title">D.</span><span class="content">神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查</span></p></div></div><p class="qt_splite"></p>',,
+  // '<p class="qt_default 333">2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级(下)期末数学复习试卷(2)</p><p class="qt_default">试题数:20,总分:0</p><div class="question" data-type="1"data-uuid="9087800690433707-1694501106343-2"><div class="questionWraper"><p class="qt_title"><span class="title">1.</span><span class="content">(单选题,0分)下列采用的调查方式正确的是(  )</span></p><p class="key key_A"><span class="title">A.</span><span class="content">某企业招聘,对应聘人员的面试,适合采用抽样调查</span></p><p class="key key_B"><span class="title">B.</span><span class="content">为了解全班同学每周体育锻炼的时间,适合采用抽样调查</span></p><p class="key key_C"><span class="title">C.</span><span class="content">为了解某市初二年级学生每天完成作业的用时量,适合采用普查</span></p><p class="key key_D"><span class="title">D.</span><span class="content">神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查</span></p></div></div><p class="qt_splite"></p>',
+  // '<p ><span >﻿1.﻿(单选题,0分)下列采用的调查方式正确的是(  )﻿</span></p><img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="undefined" width="undefined" height="undefined" />',
+  // '<p ><span > </span><span >1.</span><span > </span><span >(单选题,0分)下列采用的调查方式正确的是(  )</span><span > </span></p>';
+  // '<p ><span >﻿1.﻿(单选题,0分)下列采用的调查方式正确的是(  )﻿</span></p><img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="undefined" width="undefined" height="undefined" />';
   // '<p style="color: red">12<span style="color: blue;font-size: 18px">AAAA</span><span style="color: green">11111</span><span style="color: yellow">11111</span></p><p style="color: red">wowo<span style="color: blue">3456</span></p><div id="delete" style="color:red">我事要删除的元素</div><p>666667777</p><div id="delete" style="color:red">我事要删除的元素2223232322233</div><div data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</div><div data-uuid="1">舒服撒了发撒发啦是的</div><div class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</div><div data-uuid="2">uuid是2啦啦啦啦啦啦</div>'
   // '<p>123<p><p data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   // '<p>123<p><p data-uuid="1" id="test" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   const onHtmlChange = (html: string, content: string) => {
     console.log('html :>> ', html);
     console.log('content :>> ', content);
+    setInitialValue(html);
   };
 
   const onChangeValue = (b: any) => {
@@ -120,6 +126,10 @@ export default () => {
     console.log('slateData---', slateData);
   };
 
+  const replaceDom = (e) => {
+    const params = { id: { value: 'jack' } };
+    editorRef.current?.replaceDom(params, `<p id="jack">我是要被替换的元素${e.target.value || ''}</p>`);
+  };
   return (
     <>
       <PlateEditor
@@ -181,6 +191,13 @@ export default () => {
         placeholder="html字符串转slate数据结构"
         style={{ marginRight: '25px', marginTop: '10px' }}
       />
+      <input onBlur={replaceDom} placeholder="html 替换" style={{ marginRight: '25px', marginTop: '10px' }} />
+      <button onClick={() => editorRef.current.focus()} style={{ marginRight: '25px', marginTop: '10px' }}>
+        focus
+      </button>
+      <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
+        blur
+      </button>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { PortalBody } from '@udecode/plate-common';
 import { useFloatingToolbar, UseVirtualFloatingOptions } from '@udecode/plate-floating';
+import styles from './index.module.less';
 
 export interface FloatingToolbarProps {
   children: ReactNode;
@@ -32,12 +33,7 @@ export function FloatingToolbar({
 
   return (
     <PortalBody element={portalElement}>
-      <div
-        className="absolute z-50 whitespace-nowrap border bg-popover px-1 opacity-100 shadow-md"
-        ref={refs.setFloating}
-        style={style}
-        {...props}
-      >
+      <div className={styles['float-container']} ref={refs.setFloating} style={style} {...props}>
         {children}
       </div>
     </PortalBody>
