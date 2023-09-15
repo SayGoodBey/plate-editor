@@ -5,9 +5,9 @@
  * 因此，插入空文本节点时，需要关闭normalize操作，等用户输入完成后，再开启normalize操作。
  */
 
-import { createPluginFactory, PlateEditor, insertText, isCollapsed, withoutNormalizing } from '@udecode/plate-common';
+import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
-import { Path, Transforms } from 'slate/dist';
+import { Path, Transforms } from 'slate';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 

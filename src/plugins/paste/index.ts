@@ -1,5 +1,5 @@
 import { createPluginFactory, insertText } from '@udecode/plate-common';
-import { Path, Transforms } from 'slate/dist';
+import { Path, Transforms } from 'slate';
 import { isEnable, addEmptyTextNodeWithDynamicColor, KEY_DYNAMIC_COLOR } from '../dynamic-font-color';
 import { DynamicFontColorPlugin } from '../dynamic-font-color/types';
 import { isImageUrl } from '../image/utils/isImageUrl';
