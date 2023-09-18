@@ -1,5 +1,6 @@
 import PlateEditor from '../src/index';
 import React, { useState, useRef } from 'react';
+import { ReactEditor } from 'slate-react';
 
 export default () => {
   const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
@@ -11,7 +12,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    `<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>`,
+    '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>',
   );
   //     <p style="color:red"><span style="color:blue">aaaa</span></p>
   //  '<p class="qt_default 333">2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级(下)期末数学复习试卷(2)</p><p class="qt_default">试题数:20,总分:0</p><div class="question" data-type="1"data-uuid="9087800690433707-1694501106343-2"><div class="questionWraper"><p class="qt_title"><span class="title">1.</span><span class="content">(单选题,0分)下列采用的调查方式正确的是(  )</span></p><p class="key key_A"><span class="title">A.</span><span class="content">某企业招聘,对应聘人员的面试,适合采用抽样调查</span></p><p class="key key_B"><span class="title">B.</span><span class="content">为了解全班同学每周体育锻炼的时间,适合采用抽样调查</span></p><p class="key key_C"><span class="title">C.</span><span class="content">为了解某市初二年级学生每天完成作业的用时量,适合采用普查</span></p><p class="key key_D"><span class="title">D.</span><span class="content">神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查</span></p></div></div><p class="qt_splite"></p>',,
@@ -144,6 +145,17 @@ export default () => {
     editorRef.current?.setNodes({ attributes: newAttributes }, { at: currentPath });
     console.log('editorRef.current--result', editorRef.current.children);
   };
+  const handleFindNode = () => {
+    const newRef = editorRef.current?.locateByKey({ id: { value: 'id2' } })[0];
+
+    const currentNode = editorRef.current?.locateByKey({ id: { value: 'test2' } }, newRef)[0];
+    console.log('currentNode--', currentNode);
+  };
+  const handleGetNodeDom = () => {
+    const currentNode = editorRef.current?.locateByKey({ id: { value: 'test2' } })[0];
+    const reactDom = ReactEditor.toDOMNode(editorRef.current, currentNode);
+    console.log('reactDom--', reactDom);
+  };
 
   return (
     <>
@@ -213,7 +225,15 @@ export default () => {
       <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
         blur
       </button>
-      <button onClick={handleSetNodes}>setNodes</button>
+      <button onClick={handleSetNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
+        setNodes
+      </button>
+      <button onClick={handleFindNode} style={{ marginRight: '25px', marginTop: '10px' }}>
+        findNodes
+      </button>
+      <button onClick={handleGetNodeDom} style={{ marginRight: '25px', marginTop: '10px' }}>
+        GetNodeDomes
+      </button>
     </>
   );
 };

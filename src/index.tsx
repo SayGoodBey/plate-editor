@@ -157,7 +157,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.focus = () => ReactEditor.focus(editorRef.current);
     editorRef.current.blur = () => ReactEditor.blur(editorRef.current);
     editorRef.current.findPath = (node: Node) => ReactEditor.findPath(editorRef.current, node);
-    editorRef.current.locateByKey = (params) => locateByKey(editorRef.current, params);
+    editorRef.current.locateByKey = (params, nodes) => locateByKey(nodes ?? editorRef.current, params);
+    editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node);
   }, []);
   console.log('toolbar-----', toolbar);
   return (
