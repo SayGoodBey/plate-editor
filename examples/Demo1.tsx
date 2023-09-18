@@ -131,6 +131,20 @@ export default () => {
     const params = { id: { value: 'jack' } };
     editorRef.current?.replaceDom(params, `<p id="jack">我是要被替换的元素${e.target.value || ''}</p>`);
   };
+
+  const handleSetNodes = () => {
+    console.log('editorRef.current--', editorRef.current.children);
+    const currentNode = editorRef.current?.locateByKey({ id: { value: 'test' } })?.[0];
+    const currentPath = editorRef.current.findPath(currentNode);
+    const newAttributes = {
+      ...currentNode.attributes,
+      class: `${currentNode.attributes?.class || ''} set-node-class`,
+    };
+
+    editorRef.current?.setNodes({ attributes: newAttributes }, { at: currentPath });
+    console.log('editorRef.current--result', editorRef.current.children);
+  };
+
   return (
     <>
       <PlateEditor
@@ -199,6 +213,7 @@ export default () => {
       <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
         blur
       </button>
+      <button onClick={handleSetNodes}>setNodes</button>
     </>
   );
 };

@@ -41,7 +41,8 @@ interface DeleteDomParamsType {
 }
 
 // TODO: 待优化 缺少缓存
-function locateByKey(editorRef: any, params: DeleteDomParamsType): any {
+// 根据属性查找node
+export function locateByKey(editorRef: any, params: DeleteDomParamsType): any {
   const result = [];
   for (let node of walkPreOrder(editorRef)) {
     const { attributes = {} } = node;
