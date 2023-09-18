@@ -120,7 +120,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     if (initialValue) {
       console.log('initialValue===', initialValue);
       const document = parseHtmlDocument(initialValue);
-      const fragment = deserializeHtml(editorRef.current, { element: document.body });
+      let fragment = deserializeHtml(editorRef.current, { element: document.body });
+      if (fragment.length === 1 && !fragment[0].type) {
+        fragment = [{ type: 'p', children: fragment }];
+      }
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
       editorRef.current.insertHtmlText = (text: string) => {
