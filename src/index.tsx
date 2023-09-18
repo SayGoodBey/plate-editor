@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms } from 'slate';
+import { Transforms, Node } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -10,7 +10,16 @@ import {
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
 } from './plugins';
-import { serializeContent, serializeHtml, clear, deleteDom, findDomPath, replaceDom, getSelectedDOM } from './utils';
+import {
+  serializeContent,
+  serializeHtml,
+  clear,
+  deleteDom,
+  findDomPath,
+  replaceDom,
+  getSelectedDOM,
+  locateByKey,
+} from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
@@ -144,6 +153,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
     editorRef.current.focus = () => ReactEditor.focus(editorRef.current);
     editorRef.current.blur = () => ReactEditor.blur(editorRef.current);
+    editorRef.current.findPath = (node: Node) => ReactEditor.findPath(editorRef.current, node);
+    editorRef.current.locateByKey = (params) => locateByKey(editorRef.current, params);
   }, []);
   console.log('toolbar-----', toolbar);
   return (

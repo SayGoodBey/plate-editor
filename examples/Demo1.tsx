@@ -11,8 +11,11 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="alt哈哈" width="50" height="50" /><p style="color:red"><span style="color:blue">aaaa</span></p><p id="jack">我是要被替换的元素</p><p class="c1 c2">测试删除替换</p>',
+    '<p id="test">hahaha</p><div><p id="test2">发生就发生的浪费</p><div>',
   );
+  // ('2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级（下）期末数学复习试卷（2）<br />试题数：20，总分：0<br /><br /><br /><br /><br /><br />1.（单选题，0分）下列采用的调查方式正确的是（　　）<br />A.某企业招聘，对应聘人员的面试，适合采用抽样调查<br />B.为了解全班同学每周体育锻炼的时间，适合采用抽样调查<br />C.为了解某市初二年级学生每天完成作业的用时量，适合采用普查<br />D.神舟十二号飞船发射前，工作人员对其各个零部件安全情况的检查，适合采用普查<br /><br />');
+  // '2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级（下）期末数学复习试卷（2）<br />试题数：20，总分：0<br /><br /><br /><br /><br /><br />1.（单选题，0分）下列采用的调查方式正确的是（　　）<br />A.某企业招聘，对应聘人员的面试，适合采用抽样调查<br />B.为了解全班同学每周体育锻炼的时间，适合采用抽样调查<br />C.为了解某市初二年级学生每天完成作业的用时量，适合采用普查<br />D.神舟十二号飞船发射前，工作人员对其各个零部件安全情况的检查，适合采用普查<br /><br />'
+  // '<img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="alt哈哈" width="50" height="50" /><p style="color:red"><span style="color:blue">aaaa</span></p><p id="jack">我是要被替换的元素</p><p class="c1 c2">测试删除替换</p>',
   //  '<p class="qt_default 333">2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级(下)期末数学复习试卷(2)</p><p class="qt_default">试题数:20,总分:0</p><div class="question" data-type="1"data-uuid="9087800690433707-1694501106343-2"><div class="questionWraper"><p class="qt_title"><span class="title">1.</span><span class="content">(单选题,0分)下列采用的调查方式正确的是(  )</span></p><p class="key key_A"><span class="title">A.</span><span class="content">某企业招聘,对应聘人员的面试,适合采用抽样调查</span></p><p class="key key_B"><span class="title">B.</span><span class="content">为了解全班同学每周体育锻炼的时间,适合采用抽样调查</span></p><p class="key key_C"><span class="title">C.</span><span class="content">为了解某市初二年级学生每天完成作业的用时量,适合采用普查</span></p><p class="key key_D"><span class="title">D.</span><span class="content">神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查</span></p></div></div><p class="qt_splite"></p>',,
   // '<p class="qt_default 333">2020-2021学年江西省南昌市红谷滩区凤凰城上海外国语学校七年级(下)期末数学复习试卷(2)</p><p class="qt_default">试题数:20,总分:0</p><div class="question" data-type="1"data-uuid="9087800690433707-1694501106343-2"><div class="questionWraper"><p class="qt_title"><span class="title">1.</span><span class="content">(单选题,0分)下列采用的调查方式正确的是(  )</span></p><p class="key key_A"><span class="title">A.</span><span class="content">某企业招聘,对应聘人员的面试,适合采用抽样调查</span></p><p class="key key_B"><span class="title">B.</span><span class="content">为了解全班同学每周体育锻炼的时间,适合采用抽样调查</span></p><p class="key key_C"><span class="title">C.</span><span class="content">为了解某市初二年级学生每天完成作业的用时量,适合采用普查</span></p><p class="key key_D"><span class="title">D.</span><span class="content">神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查</span></p></div></div><p class="qt_splite"></p>',
   // '<p ><span >﻿1.﻿(单选题,0分)下列采用的调查方式正确的是(  )﻿</span></p><img src="https://wsevlf001.eeo.im/upload/files/file01/20230912/00_06_7b1db11-2403-43e6-a754-101ea5a45c7.png" alt="undefined" width="undefined" height="undefined" />',
@@ -24,7 +27,7 @@ export default () => {
   const onHtmlChange = (html: string, content: string) => {
     console.log('html :>> ', html);
     console.log('content :>> ', content);
-    setInitialValue(html);
+    // setInitialValue(html);
   };
 
   const onChangeValue = (b: any) => {
@@ -130,6 +133,20 @@ export default () => {
     const params = { id: { value: 'jack' } };
     editorRef.current?.replaceDom(params, `<p id="jack">我是要被替换的元素${e.target.value || ''}</p>`);
   };
+
+  const handleSetNodes = () => {
+    console.log('editorRef.current--', editorRef.current.children);
+    const currentNode = editorRef.current?.locateByKey({ id: { value: 'test' } })?.[0];
+    const currentPath = editorRef.current.findPath(currentNode);
+    const newAttributes = {
+      ...currentNode.attributes,
+      class: `${currentNode.attributes?.class || ''} set-node-class`,
+    };
+
+    editorRef.current?.setNodes({ attributes: newAttributes }, { at: currentPath });
+    console.log('editorRef.current--result', editorRef.current.children);
+  };
+
   return (
     <>
       <PlateEditor
@@ -198,6 +215,7 @@ export default () => {
       <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
         blur
       </button>
+      <button onClick={handleSetNodes}>setNodes</button>
     </>
   );
 };
