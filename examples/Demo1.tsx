@@ -1,6 +1,6 @@
 import PlateEditor from '../src/index';
 import React, { useState, useRef } from 'react';
-import { ReactEditor } from 'slate-react';
+import { Node } from 'slate';
 
 export default () => {
   const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
@@ -153,8 +153,10 @@ export default () => {
   };
   const handleGetNodeDom = () => {
     const currentNode = editorRef.current?.locateByKey({ id: { value: 'test2' } })[0];
-    const reactDom = ReactEditor.toDOMNode(editorRef.current, currentNode);
+    const reactDom = editorRef.current.getNodeDom(currentNode);
     console.log('reactDom--', reactDom);
+    console.log('editorRef.current-----', editorRef.current);
+    console.log('text--', editorRef.current?.getNodeText(currentNode));
   };
 
   return (

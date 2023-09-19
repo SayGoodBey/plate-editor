@@ -153,12 +153,13 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       // html string to slate data
       return deserializeHtml(editorRef.current, { element: parseHtmlStr(html).body });
     };
-    editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
+    editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current); // 获取选中的dom
     editorRef.current.focus = () => ReactEditor.focus(editorRef.current);
     editorRef.current.blur = () => ReactEditor.blur(editorRef.current);
     editorRef.current.findPath = (node: Node) => ReactEditor.findPath(editorRef.current, node);
-    editorRef.current.locateByKey = (params, nodes) => locateByKey(nodes ?? editorRef.current, params);
-    editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node);
+    editorRef.current.locateByKey = (params, nodes) => locateByKey(nodes ?? editorRef.current, params); // 查找指定node
+    editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node); // 获取node 对应dom
+    editorRef.current.getNodeText = (node: Node) => Node.string(node);
   }, []);
   console.log('toolbar-----', toolbar);
   return (
