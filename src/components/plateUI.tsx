@@ -44,7 +44,7 @@ const SpanElement = (props: any) => {
   const reactStyle = styleStringToObject(nodePropsStyle);
   return (
     <span {...attributes} {...elementAttr} {...restNodeProps} className={disposalClassName} style={reactStyle}>
-      {children.map((child: any) => (child.props?.text ? parseFormula(child.props.text.text) : child))}
+      {children.map((child: any) => (child.props?.text ? parseFormula(child) : child))}
     </span>
   );
 };
@@ -56,7 +56,8 @@ export const plateUI = {
   span: SpanElement,
 };
 
-function parseFormula(content: string) {
+function parseFormula(child: any) {
+  const content = child.props.text?.text;
   const regex = /\$(.*?)\$/g;
   const matches = content.match(regex);
   const fragment = [];
@@ -72,7 +73,7 @@ function parseFormula(content: string) {
       fragment.push(content.slice(lastIndex));
     }
   } else {
-    fragment.push(content);
+    return child;
   }
   return fragment;
 }
