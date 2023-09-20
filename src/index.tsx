@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
 import { Transforms, Node } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { Plate, PlateProvider, createPlugins, deserializeHtml, parseHtmlDocument } from '@udecode/plate-core';
+import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
 import {
   basicElementsPlugins,
@@ -19,6 +19,7 @@ import {
   replaceDom,
   getSelectedDOM,
   locateByKey,
+  parseHtmlStr,
 } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
@@ -123,20 +124,19 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onHtmlChange &&
       onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
-
   // initialValue 修改的时候编辑器重新设置初始值
+
   useEffect(() => {
     if (initialValue) {
       console.log('initialValue===', initialValue);
-      const document = parseHtmlDocument(initialValue);
-      let fragment = deserializeHtml(editorRef.current, { element: document.body });
+      let fragment = deserializeHtml(editorRef.current, { element: parseHtmlStr(initialValue).body });
       if (fragment.length === 1 && !fragment[0].type) {
         fragment = [{ type: 'p', children: fragment }];
       }
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
       editorRef.current.insertHtmlText = (text: string) => {
-        const result = deserializeHtml(editorRef.current, { element: parseHtmlDocument(text).body });
+        const result = deserializeHtml(editorRef.current, { element: parseHtmlStr(text).body });
         editorRef.current.insertFragment(result);
       };
     }
@@ -151,7 +151,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.replaceDom = (params, htmlStr) => replaceDom(editorRef.current, params, htmlStr); // 获取dom path
     editorRef.current.convertHtmlToSlate = (html: string) => {
       // html string to slate data
-      return deserializeHtml(editorRef.current, { element: parseHtmlDocument(html).body });
+      return deserializeHtml(editorRef.current, { element: parseHtmlStr(html).body });
     };
     editorRef.current.getSelectedDOM = () => getSelectedDOM(editorRef.current);
     editorRef.current.focus = () => ReactEditor.focus(editorRef.current);

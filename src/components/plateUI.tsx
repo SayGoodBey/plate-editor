@@ -44,7 +44,7 @@ const SpanElement = (props: any) => {
   const reactStyle = styleStringToObject(nodePropsStyle);
   return (
     <span {...attributes} {...elementAttr} {...restNodeProps} className={disposalClassName} style={reactStyle}>
-      {children.map((child: any) => (child.props?.text ? parseFormula(child) : child))}
+      {children}
     </span>
   );
 };
@@ -54,26 +54,5 @@ export const plateUI = {
   [ELEMENT_IMAGE]: ImageElement,
   div: BlockElement,
   span: SpanElement,
+  formula: FormulaElement,
 };
-
-function parseFormula(child: any) {
-  const content = child.props.text?.text;
-  const regex = /\$(.*?)\$/g;
-  const matches = content.match(regex);
-  const fragment = [];
-  let lastIndex;
-  if (matches) {
-    for (const match of matches) {
-      let endIndex = content.indexOf(match);
-      fragment.push(content.slice(lastIndex, endIndex));
-      fragment.push(<FormulaElement content={match.slice(1, -1)} />);
-      lastIndex = endIndex + match.length;
-    }
-    if (lastIndex < content.length - 1) {
-      fragment.push(content.slice(lastIndex));
-    }
-  } else {
-    return child;
-  }
-  return fragment;
-}

@@ -3,6 +3,12 @@ import { addStyles, StaticMathField } from 'react-mathquill';
 
 addStyles();
 
-export const FormulaElement: React.FC<{ content: string }> = ({ content }) => {
-  return <StaticMathField>{content}</StaticMathField>;
+export const FormulaElement: React.FC = (props: any) => {
+  const { nodeProps, children } = props;
+  return (
+    <span>
+      <StaticMathField>{nodeProps.content}</StaticMathField>
+      {children}
+    </span>
+  );
 };

@@ -1,3 +1,5 @@
+import { parseHtmlDocument } from '@udecode/plate-common';
+
 let emptySpan = /<span .*>(\s|\uFEFF)*<\/span>/g; // 删除空的span标签，可能含有0宽字符
 export function serializeHtml(nodes: any[]): string {
   if (!nodes) return '';
@@ -22,6 +24,9 @@ export function serializeHtml(nodes: any[]): string {
         if (type === 'img') {
           return `<img src="${url}" "/>`;
         }
+        if (type === 'formula') {
+          return `$${attributes.content}$`;
+        }
 
         return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
       })
@@ -38,10 +43,17 @@ export function serializeContent(nodes: any[]): string {
       if (node.type === 'p') {
         return `${serializeContent(node.children)}/n`;
       }
+      if (node.type === 'formula') {
+        return `$${node.attributes.content}$`;
+      }
       if (node.text) {
         return node.text;
       }
       return serializeContent(node.children);
     })
     .join('');
+}
+
+export function parseHtmlStr(text: string) {
+  return parseHtmlDocument(text.replace(/\$(.*?)\$/g, '<formula content="$1"></formula>'));
 }
