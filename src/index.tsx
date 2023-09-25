@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms, Node } from 'slate';
+import { Transforms, Node, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -160,6 +160,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.locateByKey = (params, nodes) => locateByKey(nodes ?? editorRef.current, params); // 查找指定node
     editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node); // 获取node 对应dom
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
+    editorRef.current.Path = Path;
   }, []);
   console.log('toolbar-----', toolbar);
   return (

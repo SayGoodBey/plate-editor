@@ -159,6 +159,10 @@ export default () => {
     console.log('text--', editorRef.current?.getNodeText(currentNode));
   };
 
+  const handleTestPath = () => {
+    console.log('path', editorRef.current.Path.next([0, 1, 2]));
+  };
+
   return (
     <>
       <PlateEditor
@@ -235,6 +239,9 @@ export default () => {
       </button>
       <button onClick={handleGetNodeDom} style={{ marginRight: '25px', marginTop: '10px' }}>
         GetNodeDomes
+      </button>
+      <button onClick={handleTestPath} style={{ marginRight: '25px', marginTop: '10px' }}>
+        测试调用Path 上的一些方法
       </button>
     </>
   );
