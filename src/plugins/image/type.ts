@@ -1,5 +1,17 @@
-import { InsertNodesOptions } from '@udecode/plate-common';
-import { MediaPlugin } from '@udecode/plate-media';
+import { InsertNodesOptions, TElement } from '@udecode/plate-common';
+
+export interface TImageElement extends TElement {
+  url: string;
+  align?: 'left' | 'center' | 'right';
+}
+
+export interface MediaPlugin {
+  isUrl?: (text: string) => boolean;
+  /**
+   * Transforms the url.
+   */
+  transformUrl?: (url: string) => string;
+}
 
 export interface ImagePlugin extends MediaPlugin {
   /**

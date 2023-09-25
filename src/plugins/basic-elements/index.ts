@@ -1,14 +1,20 @@
-import { createParagraphPlugin, ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { createPlugins } from '@udecode/plate-core';
 import { createPluginFactory } from '@udecode/plate-common';
 const ELEMENT_DIV = 'div';
 const ELEMENT_SPAN = 'span';
 const ELEMENT_FORMULA = 'formula';
+const ELEMENT_PARAGRAPH = 'p';
 
 export const basicElementsPlugins = createPlugins([
-  createParagraphPlugin({
+  createPluginFactory({
+    key: ELEMENT_PARAGRAPH,
+    isElement: true,
     deserializeHtml: {
-      isElement: true,
+      rules: [
+        {
+          validNodeName: 'P',
+        },
+      ],
       getNode(el, node) {
         const attributeNames = el.getAttributeNames();
         const attributes = attributeNames.reduce((acc: any, name: string) => {
@@ -18,7 +24,7 @@ export const basicElementsPlugins = createPlugins([
         return { attributes, className: el.className, type: el.nodeName.toLowerCase() };
       },
     },
-  }),
+  })(),
   createPluginFactory({
     key: ELEMENT_DIV,
     isElement: true,

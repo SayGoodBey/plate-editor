@@ -1,11 +1,12 @@
 import React from 'react';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_IMAGE } from '@udecode/plate-media';
 
 import ParagraphElement from './ParagraphElement';
 import ImageElement from './ImageElement';
 import { styleStringToObject } from '../utils/index';
-import { FormulaElement } from './MathFormula';
+import FormulaElement from './MathFormula';
+
+const ELEMENT_PARAGRAPH = 'p';
+const ELEMENT_IMAGE = 'img';
 
 const BlockElement = (props: any) => {
   const { attributes, nodeProps = {}, children, element } = props;

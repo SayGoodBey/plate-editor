@@ -1,7 +1,7 @@
 import { getPluginType, insertNodes, InsertNodesOptions, PlateEditor, Value } from '@udecode/plate-common';
 
 import { ELEMENT_IMAGE } from '../index';
-import { TImageElement } from '@udecode/plate-media';
+import { TImageElement } from '../type';
 
 export const insertImage = <V extends Value>(
   editor: PlateEditor<V>,
