@@ -61,7 +61,8 @@ function isPassCondition(attributes: Record<string, string>, params: DeleteDomPa
     if (!attributes[key]) return (result = false);
 
     if (params[key]?.mode === DeleteMode.Contain) {
-      if (!attributes[key]?.includes(params[key].value)) {
+      const attrValue = attributes[key].split(' ').filter((item) => item);
+      if (!attrValue?.includes(params[key].value)) {
         return (result = false);
       }
     } else {

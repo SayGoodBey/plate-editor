@@ -220,7 +220,7 @@ const insertNewQuestion = function (editor, content, question_type) {
     editor,
     {
       type: 'p',
-      className: 'qt_sqlite',
+      className: 'qt_spite',
       children: [{ text: '' }],
     },
     { at: [index + 1] },
