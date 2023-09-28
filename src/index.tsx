@@ -136,6 +136,9 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       if (fragment.length === 1 && !fragment[0].type) {
         fragment = [{ type: 'p', children: fragment }];
       }
+      if (fragment[0] && fragment[0]?.type === 'span') {
+        fragment = [{ type: 'p', children: fragment }];
+      }
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
       // editorRef.current.insertHtmlText = (text: string) => {
