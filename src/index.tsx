@@ -129,16 +129,22 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   useEffect(() => {
     if (initialValue) {
       console.log('initialValue===', initialValue);
-      let fragment = deserializeHtml(editorRef.current, { element: parseHtmlStr(initialValue).body });
+      let fragment = deserializeHtml(editorRef.current, {
+        element: parseHtmlStr(initialValue).body,
+        stripWhitespace: false,
+      });
       if (fragment.length === 1 && !fragment[0].type) {
+        fragment = [{ type: 'p', children: fragment }];
+      }
+      if (fragment[0] && fragment[0]?.type === 'span') {
         fragment = [{ type: 'p', children: fragment }];
       }
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
-      editorRef.current.insertHtmlText = (text: string) => {
-        const result = deserializeHtml(editorRef.current, { element: parseHtmlStr(text).body });
-        editorRef.current.insertFragment(result);
-      };
+      // editorRef.current.insertHtmlText = (text: string) => {
+      //   const result = deserializeHtml(editorRef.current, { element: parseHtmlStr(text).body });
+      //   editorRef.current.insertFragment(result);
+      // };
     }
   }, [initialValue]);
 
@@ -162,7 +168,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
   }, []);
-  console.log('toolbar-----', toolbar);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>

@@ -6,12 +6,18 @@ export function serializeHtml(nodes: any[]): string {
   return (
     nodes
       .map((node) => {
-        let { type, children, text, attributes = {}, url } = node;
+        let { type, children, text, attributes = {}, url, color } = node;
         let attributesStr = '';
+        if (text && color) {
+          if (attributes['style']) {
+            attributes['style'] = `${attributes['style']};color:${color};`;
+          } else {
+            attributes['style'] = `color:${color};`;
+          }
+        }
         Object.keys(attributes).forEach((key) => {
           attributesStr = `${attributesStr} ${key}="${attributes[key]}"`.trim();
         });
-
         if (!type && !text) {
           return '';
         }
