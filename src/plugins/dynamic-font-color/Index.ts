@@ -156,7 +156,3 @@ const createDynamicFontColorPlugin = createPluginFactory({
 });
 
 export { createDynamicFontColorPlugin };
-
-// insertZero
-// onChange
-// insertText
