@@ -84,8 +84,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   const [_, setCount] = React.useState(0);
 
-  const pluginsArr = () => {
-    const plugins = [
+  const plugins = createPlugins(
+    [
       ...basicElementsPlugins,
       createImagePlugin({
         options: {
@@ -107,19 +107,15 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount: showWordCount,
         },
       }),
-      dynamicFontColor
-        ? createDynamicFontColorPlugin({
-            options: {
-              dynamicFontColor,
-            },
-          })
-        : undefined,
-
+      createDynamicFontColorPlugin({
+        options: {
+          dynamicFontColor,
+        },
+      }),
       createPasteHandlePlugin(),
-    ];
-    return plugins.filter((item) => item);
-  };
-  const plugins = createPlugins(pluginsArr(), { components: plateUI });
+    ],
+    { components: plateUI },
+  );
 
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
