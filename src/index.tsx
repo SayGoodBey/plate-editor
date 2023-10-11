@@ -189,8 +189,8 @@ export default PlateEditor;
 const generateEventHandle = (element: any, editorRef: any) => {
   return {
     getBody: () => element,
-    getContent: () => serializeHtml(editorRef.current.children),
-    getText: () => serializeContent(editorRef.current.children),
+    getContent: () => serializeHtml(editorRef.children),
+    getText: () => serializeContent(editorRef.children),
     // setContent: (newValue: string) => {
     //   Transforms.insertText(editorRef, newValue, { at: [0, 0] });
     //   // console.log('不再支持 setContent, 通过修改initialValue来实现');
