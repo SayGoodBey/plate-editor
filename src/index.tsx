@@ -84,8 +84,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   const [_, setCount] = React.useState(0);
 
-  const plugins = createPlugins(
-    [
+  const pluginsArr = () => {
+    const plugins = [
       ...basicElementsPlugins,
       createImagePlugin({
         options: {
@@ -107,20 +107,24 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount: showWordCount,
         },
       }),
-      createDynamicFontColorPlugin({
-        options: {
-          dynamicFontColor,
-        },
-      }),
+      dynamicFontColor
+        ? createDynamicFontColorPlugin({
+            options: {
+              dynamicFontColor,
+            },
+          })
+        : undefined,
+
       createPasteHandlePlugin(),
-    ],
-    { components: plateUI },
-  );
+    ];
+    return plugins.filter((item) => item);
+  };
+  const plugins = createPlugins(pluginsArr(), { components: plateUI });
 
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
-    const data = serializeHtml(editorRef.current.children);
+    // const data = serializeHtml(editorRef.current.children);
     onHtmlChange &&
       onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
