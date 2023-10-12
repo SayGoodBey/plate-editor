@@ -148,6 +148,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     }
   }, [initialValue]);
 
+  useEffect(() => {
+    setCount((count) => count + 1);
+  }, [showWordCount]);
+
   // 对外抛出挂载方法
   useEffect(() => {
     editorRef.current.clear = () => clear(editorRef.current); // 清空编辑器内容

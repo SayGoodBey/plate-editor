@@ -168,7 +168,7 @@ export default () => {
     <>
       <PlateEditor
         ref={editorRef}
-        showWordCount
+        showWordCount={showWordCount}
         dynamicFontColor={dynamicFontColor}
         placeholder={placeholder}
         uploadImage={uploadImage}
