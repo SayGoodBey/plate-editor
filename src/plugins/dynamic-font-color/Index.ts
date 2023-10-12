@@ -7,7 +7,7 @@
 
 import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
-import { Path, Transforms } from 'slate';
+import { Path } from 'slate';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 
@@ -28,7 +28,6 @@ const getValueChild = (value: any, path?: Path) => {
   return child;
 };
 
-let isComposition = false;
 let enableNormalizing = true;
 
 /**
@@ -63,16 +62,13 @@ export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: st
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
   if (child?.color !== color) {
-    console.log('run normalize');
+    console.log('insert zero');
     setEnableNormalizing(false);
-    Transforms.insertNodes(
-      editor as any,
-      {
-        ...child,
-        text: '',
-        color: color,
-      } as any,
-    );
+    editor.insertNodes({
+      ...child,
+      text: '',
+      color: color,
+    } as any);
   }
 };
 
@@ -81,23 +77,13 @@ const createDynamicFontColorPlugin = createPluginFactory({
   handlers: {
     onCompositionStart: (editor) => (event: any) => {
       console.log('onCompositionStart');
-      isComposition = true;
       if (!isEnable(editor)) return;
       const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
       // iOS在英文自动联想时，会触发onCompositionStart事件，此时，需要插入一个空文本节点
       addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
     },
     onCompositionEnd: (editor) => (event: any) => {
-      isComposition = false;
-      // PC上，onCompositionEnd时，新输入的字符串并没有更新到编辑器的value中，因此，需要手动插入
-      // 而在iOS上，onCompositionEnd时，新输入的字符串已经更新到编辑器的value中，因此，需要判断是否需要插入
-      // const lengthBefore = valueBeforeComposition.length
-      // const currentValue = serialize(editor.children)
-      // const lengthAfter = currentValue.length
-      // console.log('onCompositionEnd. lengthBefore: %s, lengthAfter: %s, compositionDate: %s', lengthBefore, lengthAfter, event.nativeEvent.data)
-      // if (lengthBefore + event.nativeEvent.data.length !== lengthAfter) {
-      //   insertText(editor, event.nativeEvent.data)
-      // }
+      console.log('onCompositionEnd');
     },
     onKeyDown: (editor) => (event: any) => {
       console.log('onKeyDown');
@@ -124,7 +110,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
         event.isPropagationStopped = () => true;
         const range = event.getTargetRanges();
         // 这部分逻辑，不要修改为先插入空节点，再插入内容的方式。否则在iOS上，输入中文时，光标会有问题
-        Transforms.delete(editor as any, {
+        editor.delete({
           at: {
             path: editor.selection?.anchor.path,
             offset: range[0].startOffset,
@@ -141,6 +127,8 @@ const createDynamicFontColorPlugin = createPluginFactory({
           insertText(editor, event.data);
         }
       } else if (event.inputType === 'insertCompositionText') {
+        console.log('insertCompositionText', event.data);
+        addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
       }
     },
   },
@@ -150,19 +138,25 @@ const createDynamicFontColorPlugin = createPluginFactory({
 
     // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
     editor.normalizeNode = (entry) => {
+      console.log('normalizeNode', enableNormalizing);
       if (enableNormalizing) {
         normalizeNode(entry);
       }
     };
 
     editor.onChange = (...args: any[]) => {
+      console.log('onChange');
       onChange(...args);
       setEnableNormalizing(true);
       // 内容改变后，需要手动执行normalize操作
-      normalizeNode([editor, []]);
+      editor.normalizeNode([editor, []]);
     };
     return editor;
   },
 });
 
 export { createDynamicFontColorPlugin };
+
+// insertZero
+// onChange
+// insertText

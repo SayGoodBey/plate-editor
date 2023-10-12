@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Node } from 'slate';
 
 export default () => {
-  const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
+  const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
   const [bgColor, setBgColor] = useState('#fff'); // 设置背景颜色
   const [placeholder, setPlaceholder] = useState(''); // 设置背景颜色
   const [maxLength, setMaxLength] = useState(100); // 设置最大输入长度
@@ -12,7 +12,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<span  style="color: #232323;">旧版本写的作业、、换行还在不</span><span  style="color: #df3b08;">收拾收拾</span><span  style="color: #232323;"></span><span  style="color: #df3b08;">旧版本的批阅的发生发生的发</span>',
+    '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   );
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'
   //     <p style="color:red"><span style="color:blue">aaaa</span></p>
@@ -25,8 +25,8 @@ export default () => {
   // '<p>123<p><p data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   // '<p>123<p><p data-uuid="1" id="test" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   const onHtmlChange = (html: string, content: string) => {
-    console.log('html :>> ', html);
-    console.log('content :>> ', content);
+    // console.log('html :>> ', html);
+    // console.log('content :>> ', content);
     // setInitialValue(html);
   };
 

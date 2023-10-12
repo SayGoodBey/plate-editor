@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input placeholder="Enter some text" name="name" />
+    <p id="values"></p>
+  </body>
+  <script>
+    const inputElement = document.getElementsByTagName('input')[0];
+    function handleEvent(event) {
+      console.log(event.type, event.data);
+      console.log(event);
+    }
+    inputElement.addEventListener('compositionstart', handleEvent);
+    inputElement.addEventListener('compositionupdate', handleEvent);
+    inputElement.addEventListener('compositionend', handleEvent);
+    inputElement.addEventListener('beforeinput', handleEvent);
+  </script>
+</html>
