@@ -46,7 +46,6 @@ export function locateByKey(editorRef: any, params: DeleteDomParamsType): any {
   const result = [];
   for (let node of walkPreOrder(editorRef)) {
     const { attributes = {} } = node;
-
     if (isPassCondition(attributes, params)) {
       result.push(node);
     }
@@ -56,18 +55,18 @@ export function locateByKey(editorRef: any, params: DeleteDomParamsType): any {
 
 // node attributes 是否满足条件
 function isPassCondition(attributes: Record<string, string>, params: DeleteDomParamsType): boolean {
-  let result = true;
+  let result = false;
   for (let key in params) {
     if (!attributes[key]) return (result = false);
 
     if (params[key]?.mode === DeleteMode.Contain) {
       const attrValue = attributes[key].split(' ').filter((item) => item);
-      if (!attrValue?.includes(params[key].value)) {
-        return (result = false);
+      if (attrValue?.includes(params[key].value)) {
+        return (result = true);
       }
     } else {
-      if (attributes[key] !== params[key].value) {
-        return (result = false);
+      if (attributes[key] === params[key].value) {
+        return (result = true);
       }
     }
   }

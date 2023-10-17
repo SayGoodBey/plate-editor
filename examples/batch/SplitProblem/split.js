@@ -117,8 +117,7 @@ function init(editor, expose) {
         const title = [{ tag: 'title', type: this.question_type }];
         Array.prototype.push.apply(title, this.processInline(m[0]));
 
-        if (m[0].length < block.length)
-          next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
+        if (m[0].length < block.length) next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
         return [title];
       },
       // 这是选项部分
@@ -139,8 +138,7 @@ function init(editor, expose) {
         // 有选项，单选or多选，默认为单选
         this.question_type = 1;
         const key = questionKeysHandler.call(this, m[0]);
-        if (m[0].length < block.length)
-          next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
+        if (m[0].length < block.length) next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
         return [key];
       },
       // 这是答案部分
@@ -167,8 +165,7 @@ function init(editor, expose) {
 
         Array.prototype.push.apply(answer, this.processInline(m[0]));
 
-        if (m[0].length < block.length)
-          next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
+        if (m[0].length < block.length) next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
 
         return [answer];
       },
@@ -184,8 +181,7 @@ function init(editor, expose) {
         const analysis = [{ tag: 'analysis', type: this.question_type }];
         Array.prototype.push.apply(analysis, this.processInline(m[0]));
 
-        if (m[0].length < block.length)
-          next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
+        if (m[0].length < block.length) next.unshift(mk_block(block.substr(m[0].length), block.trailing, block.lineNumber + 2));
 
         return [analysis];
       },
