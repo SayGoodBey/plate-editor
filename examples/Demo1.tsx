@@ -864,6 +864,7 @@ export default () => {
   return (
     <>
       <PlateEditor
+        rootId={'root-id'}
         ref={editorRef}
         showWordCount={showWordCount}
         dynamicFontColor={dynamicFontColor}
