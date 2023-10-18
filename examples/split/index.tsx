@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import { Path, Node } from 'slate';
 import PlateEditor from '../../src/index';
-import { isMinPoint } from './utils';
+import { isMinPoint, isEqual } from './utils';
 import './index.less';
 
 const EeoEditor = () => {
@@ -186,45 +186,76 @@ const EeoEditor = () => {
   })();
   const getMinMaxPoint = () => {
     const { selection } = editorRef.current;
-    const { anchor } = selection;
-    const { focus } = selection;
+    const { anchor, focus } = selection;
     console.log('anchor---focus', anchor, focus);
     let [minPoint, maxPoint] = [anchor, focus].sort((a, b) => (isMinPoint(a, b) ? -1 : 1));
 
     // 调整用户选择锚点位置，锚点位置在split 元素上 前后锚点位置不一样，前后锚点可能落在split元素上了，修正到最近的question上
-    const minNode = editorRef.current.node([minPoint.path[0]]);
-    const maxNode = editorRef.current.node([maxPoint.path[0]]);
+    const minNode = editorRef.current.node(getQuestionWrapPath(minPoint.path));
+    // getQuestionWrapPath(minPoint.path, false);
+    const maxNode = editorRef.current.node(getQuestionWrapPath(maxPoint.path));
+
+    let a = {
+      0: {
+        0: 'split',
+        1: 'question',
+        2: 'split',
+        3: 'question',
+      },
+      1: 'split',
+      2: {
+        0: {
+          0: 'num',
+          1: 'title',
+        },
+        1: 'desc',
+        2: 'A',
+        3: 'B',
+      },
+      3: 'split',
+      4: {
+        0: {
+          0: 'num',
+          1: 'title',
+        },
+        1: 'desc',
+        2: 'A',
+        3: 'B',
+      },
+    };
+    // [1,2] [1,3]
+    // [2] [3]
 
     // min point 在元素上 ++
     if (isElementNodeByClass(minNode, 'qt_split')) {
-      const firstChild = editorRef.current.first([+minPoint.path[0] + 1]);
       minPoint = {
-        path: firstChild[1],
+        path: nextPath(getQuestionWrapPath(minPoint.path), 1),
         offset: 0,
       };
     }
 
     if (isElementNodeByClass(maxNode, 'qt_split')) {
-      const lastChild = editorRef.current.last([maxPoint.path[0] - 1]);
+      const lastChild = editorRef.current.last(prevPath(getQuestionWrapPath(maxPoint.path), 1));
       const lastChildOffset = lastChild[0].text.length;
       maxPoint = {
         path: lastChild[1],
         offset: lastChildOffset,
       };
     }
-    getQuestionWrapLevelPath(minPoint.path);
     return [minPoint, maxPoint];
   };
   // 选区前还有内容
   const getData = () => {
     const [minPoint, maxPoint] = minMaxPoint.current;
-    // 在同一个题内
-    const isCrossQuestion = minPoint.path[0] !== maxPoint.path[0];
-
-    // 是否跨多个问题 1，-----，5
-    const isCrossMultiQuestion = maxPoint.path[0] - minPoint.path[0] > 1;
+    // 不在同一个题内
+    const isCrossQuestion = !isEqual(getQuestionWrapPath(minPoint.path), getQuestionWrapPath(maxPoint.path));
 
     // 判断除选区外，前后受影响的试题是否还有内容， 比较锚点跟各自试题最后锚点位置，min start>split |  max:split<end 证明还有剩余试题内容
+
+    const minPointQuestionPath = getQuestionWrapPath(minPoint.path);
+    const minPointQuestionNode = editorRef.current.node(minPointQuestionPath);
+    const startMinPath = minPointQuestionNode.children.filter((item) => item.text !== '')[0];
+
     const firstChild = editorRef.current.first([minPoint.path[0]]);
     const startMinPoint = {
       path: firstChild[1],
@@ -260,7 +291,6 @@ const EeoEditor = () => {
       newAnchor,
       newFocus,
       isCrossQuestion,
-      isCrossMultiQuestion,
       endMaxPoint,
     };
   };
@@ -374,7 +404,7 @@ const EeoEditor = () => {
     if (n < 0) {
       return [];
     }
-    return arr.slice(0, n);
+    return path.slice(0, n);
   };
 
   // 获取path的后n项path
@@ -392,11 +422,21 @@ const EeoEditor = () => {
   };
 
   // 获取question 层级的path
-  const getQuestionWrapLevelPath = (path) => {
+  const getQuestionWrapPath = (path, isRoot = false) => {
     console.log('editorRef.current.children---------', editorRef.current);
     const node = editorRef.current.getNodeByPath([path[0]]);
-
     console.log('node--------', node);
+    const questionType = node?.attributes?.['data-type'] || 0;
+    const [first, second] = path;
+    if (isRoot) {
+      return [first];
+    }
+    if (Number(questionType) === 6) {
+      // 综合题
+      return [first, second];
+    } else {
+      return [first];
+    }
   };
 
   return (
