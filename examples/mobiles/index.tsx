@@ -91,7 +91,9 @@ const Textarea: React.FC = () => {
         getText() {
           return textFormat(e.getBody().innerText).replace(/^\n*|\n*$/g, '');
         },
-
+        getTextLength() {
+          return e.getWordCount();
+        },
         getHtmlContent() {
           return rgbToHex16DomFormatString(
             textFormat(e.getBody().innerHTML).replace(/^\n*|\n*$/g, ''),

@@ -208,5 +208,8 @@ const generateEventHandle = (element: any, editorRef: any) => {
     focus() {
       ReactEditor.focus(editorRef);
     },
+    getWordCount() {
+      return editorRef.getWordCount();
+    },
   };
 };
