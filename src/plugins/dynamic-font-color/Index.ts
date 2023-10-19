@@ -139,14 +139,14 @@ const createDynamicFontColorPlugin = createPluginFactory({
 
     // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
     editor.normalizeNode = (entry) => {
-      // console.log('normalizeNode', enableNormalizing);
+      console.log('normalizeNode', enableNormalizing);
       if (enableNormalizing) {
         normalizeNode(entry);
       }
     };
 
     editor.onChange = (...args: any[]) => {
-      // console.log('onChange');
+      console.log('onChange');
       onChange(...args);
       setEnableNormalizing(true);
       // 内容改变后，需要手动执行normalize操作
