@@ -32,9 +32,9 @@ const defaultConfig = {
     color: '',
   },
   renderPlaceholder: ({ attributes, children }) => (
-    <span {...attributes} style={{ color: '#b1b1b1', position: 'absolute' }}>
+    <p {...attributes} style={{ color: '#b1b1b1', position: 'absolute', 'pointer-events': 'none' }}>
       {children}
-    </span>
+    </p>
   ),
 };
 
