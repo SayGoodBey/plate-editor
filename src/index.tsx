@@ -31,6 +31,11 @@ const defaultConfig = {
     outline: 'none',
     color: '',
   },
+  renderPlaceholder: ({ attributes, children }) => (
+    <span {...attributes} style={{ color: '#b1b1b1', position: 'absolute' }}>
+      {children}
+    </span>
+  ),
 };
 
 interface PlateEditorPropsType {
@@ -60,7 +65,7 @@ interface PlateEditorPropsType {
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
   const config = { ...defaultConfig, ...props };
-  const {
+  let {
     rootClassName = '',
     rootId = '',
     showWordCount,
