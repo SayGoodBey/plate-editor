@@ -60,8 +60,9 @@ const noMetaKey = (event: any) => {
  */
 export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
+  const isEmpty = editor.string([]) === '';
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
-  if (child?.color !== color) {
+  if (child?.color !== color || isEmpty) {
     console.log('insert zero');
     setEnableNormalizing(false);
     editor.insertNodes({
