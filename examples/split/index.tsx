@@ -424,7 +424,7 @@ const EeoEditor = () => {
   // 获取question 层级的path
   const getQuestionWrapPath = (path, isRoot = false) => {
     console.log('editorRef.current.children---------', editorRef.current);
-    const node = editorRef.current.getNodeByPath([path[0]]);
+    const node = editorRef.current.node([path[0]]);
     console.log('node--------', node);
     const questionType = node?.attributes?.['data-type'] || 0;
     const [first, second] = path;

@@ -853,12 +853,6 @@ export default () => {
     console.log(arr);
   };
 
-  const handleGetNodeByPath = () => {
-    console.log(' editorRef.current.children----', editorRef.current.children);
-    const node = editorRef.current?.getNodeByPath([0]);
-    console.log(node);
-  };
-
   return (
     <>
       <PlateEditor
@@ -942,9 +936,6 @@ export default () => {
       </button>
       <button onClick={handleTestLocateByKey} style={{ marginRight: '25px', marginTop: '10px' }}>
         调试locateByKey
-      </button>
-      <button onClick={handleGetNodeByPath} style={{ marginRight: '25px', marginTop: '10px' }}>
-        根据path获取node
       </button>
     </>
   );
