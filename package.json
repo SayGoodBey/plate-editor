@@ -1,6 +1,6 @@
 {
   "name": "plate-editor",
-  "version": "0.1.51",
+  "version": "0.1.52",
   "description": "组件功能描述",
   "files": [
     "esm",
