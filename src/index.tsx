@@ -54,6 +54,7 @@ interface PlateEditorPropsType {
   rootId?: string; // 编辑器根容器id
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
+  insertImage?: boolean;
   uploadImage?: (v: string, files: FileList) => Promise<string | ArrayBuffer>;
 }
 
@@ -73,6 +74,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onChange,
     toolbar,
     uploadImage,
+    insertImage,
     onResizeContent,
     ...editableProps
   } = config;
@@ -112,7 +114,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           dynamicFontColor,
         },
       }),
-      createPasteHandlePlugin(),
+      createPasteHandlePlugin({ options: { insertImage } }),
     ],
     { components: plateUI },
   );
