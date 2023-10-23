@@ -32,7 +32,7 @@ const editorRefData = {
       attributes: {
         class: 'question check_error',
         'data-type': '1',
-        'data-uuid': '7357256542147903-1697115519084-2',
+        'data-uuid': '0723399914685747-1698060543425-2',
         'data-error': '答案不能为空',
       },
       className: 'question',
@@ -79,6 +79,48 @@ const editorRefData = {
                 },
               ],
             },
+            {
+              attributes: {
+                class: 'key key_A',
+              },
+              className: 'key key_A',
+              type: 'p',
+              children: [
+                {
+                  text: '',
+                },
+                {
+                  attributes: {
+                    class: 'title',
+                  },
+                  className: 'title',
+                  type: 'span',
+                  children: [
+                    {
+                      text: 'A.',
+                    },
+                  ],
+                },
+                {
+                  text: '',
+                },
+                {
+                  attributes: {
+                    class: 'content',
+                  },
+                  className: 'content',
+                  type: 'span',
+                  children: [
+                    {
+                      text: '某企业招聘,对应聘人员的面试,',
+                    },
+                  ],
+                },
+                {
+                  text: '',
+                },
+              ],
+            },
           ],
         },
       ],
@@ -95,12 +137,21 @@ const editorRefData = {
     {
       type: 'div',
       className: 'split_wrap question',
-      'data-uuid': '6593125752685283-1697115531760',
+      attributes: {
+        class: 'split_wrap question check_error',
+        'data-type': 1,
+        'data-error': '题干不能为空',
+      },
+      'data-uuid': '0554091728957804-1698060552338',
       'data-type': 1,
       children: [
         {
           type: 'div',
           className: 'questionWraper',
+          attributes: {
+            class: 'questionWraper',
+            'data-error': '题干不能为空',
+          },
           children: [
             {
               attributes: {
@@ -114,28 +165,13 @@ const editorRefData = {
                 },
                 {
                   attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'A.',
-                    },
-                  ],
-                },
-                {
-                  text: '',
-                },
-                {
-                  attributes: {
                     class: 'content',
                   },
                   className: 'content',
                   type: 'span',
                   children: [
                     {
-                      text: '某企业招聘,对应聘人员的面试,适合采用抽样调查',
+                      text: '适合采用抽样调查',
                     },
                   ],
                 },
@@ -261,7 +297,7 @@ const editorRefData = {
                   type: 'span',
                   children: [
                     {
-                      text: '神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查',
+                      text: '神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查',
                     },
                   ],
                 },
@@ -275,167 +311,13 @@ const editorRefData = {
       ],
     },
     {
-      attributes: {
-        class: 'qt_splite',
-      },
-      className: 'qt_splite',
-      type: 'p',
-      children: [
-        {
-          text: '',
-        },
-      ],
-    },
-    {
-      attributes: {
-        class: 'question check_error',
-        'data-type': '1',
-        'data-uuid': '9933600321777831-1697115519084-3',
-        'data-error': '答案不能为空',
-      },
-      className: 'question',
       type: 'div',
+      className: 'abandon-container',
       children: [
         {
-          attributes: {
-            class: 'questionWraper',
-            'data-error': '答案不能为空',
-          },
-          className: 'questionWraper',
           type: 'div',
+          className: '',
           children: [
-            {
-              attributes: {
-                class: 'qt_title',
-              },
-              className: 'qt_title',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '2.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '(单选题,0分)下列采用的调查方式正确的是22222(  )',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_A',
-              },
-              className: 'key key_A',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'A.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '某企业招聘,对应聘人员的面试,适合采用抽样调查',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_B',
-              },
-              className: 'key key_B',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'B.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '为了解全班同学每周体育锻炼的时间,适合采用抽样调查',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_C',
-              },
-              className: 'key key_C',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'C.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '为了解某市初二年级学生每天完成作业的用时量,适合采用普查',
-                    },
-                  ],
-                },
-              ],
-            },
             {
               attributes: {
                 class: 'key key_D',
@@ -444,16 +326,7 @@ const editorRefData = {
               type: 'p',
               children: [
                 {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'D.',
-                    },
-                  ],
+                  text: '',
                 },
                 {
                   attributes: {
@@ -463,208 +336,12 @@ const editorRefData = {
                   type: 'span',
                   children: [
                     {
-                      text: '神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      attributes: {
-        class: 'qt_splite',
-      },
-      className: 'qt_splite',
-      type: 'p',
-      children: [
-        {
-          text: '',
-        },
-      ],
-    },
-    {
-      attributes: {
-        class: 'question check_error',
-        'data-type': '1',
-        'data-uuid': '6367357758354693-1697115519084-4',
-        'data-error': '答案不能为空',
-      },
-      className: 'question',
-      type: 'div',
-      children: [
-        {
-          attributes: {
-            class: 'questionWraper',
-            'data-error': '答案不能为空',
-          },
-          className: 'questionWraper',
-          type: 'div',
-          children: [
-            {
-              attributes: {
-                class: 'qt_title',
-              },
-              className: 'qt_title',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '3.',
+                      text: ',适合采用普查',
                     },
                   ],
                 },
                 {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '(单选题,0分)下列采用的调查方式正确的是33333(  )',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_A',
-              },
-              className: 'key key_A',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'A.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '某企业招聘,对应聘人员的面试,适合采用抽样调查',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_B',
-              },
-              className: 'key key_B',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'B.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '为了解全班同学每周体育锻炼的时间,适合采用抽样调查',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_C',
-              },
-              className: 'key key_C',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'C.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '为了解某市初二年级学生每天完成作业的用时量,适合采用普查',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              attributes: {
-                class: 'key key_D',
-              },
-              className: 'key key_D',
-              type: 'p',
-              children: [
-                {
-                  attributes: {
-                    class: 'title',
-                  },
-                  className: 'title',
-                  type: 'span',
-                  children: [
-                    {
-                      text: 'D.',
-                    },
-                  ],
-                },
-                {
-                  attributes: {
-                    class: 'content',
-                  },
-                  className: 'content',
-                  type: 'span',
-                  children: [
-                    {
-                      text: '神舟十二号飞船发射前,工作人员对其各个零部件安全情况的检查,适合采用普查',
-                    },
-                  ],
+                  text: '',
                 },
               ],
             },
@@ -849,7 +526,11 @@ export default () => {
   };
 
   const handleTestLocateByKey = () => {
-    const arr = editorRef.current?.locateByKey({ class: { value: 'question', mode: 'contain' } }, editorRefData);
+    // 0554091728957804-1698060552338
+    const arr = editorRef.current?.locateByKey(
+      { 'data-uuid': { value: '0554091728957804-1698060552338' }, class: { value: 'question', mode: 'contain' } },
+      editorRefData,
+    );
     console.log(arr);
   };
 
