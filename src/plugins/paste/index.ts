@@ -42,7 +42,8 @@ const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => 
         }
         if (isEnable(editor)) {
           // 动态字体颜色处理
-          const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
+          const { dynamicFontColor } =
+            (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
           addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
           insertText(editor, text);
           return;

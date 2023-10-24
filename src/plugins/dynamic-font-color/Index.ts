@@ -45,7 +45,7 @@ const setEnableNormalizing = (enable: boolean) => {
  * @returns
  */
 export const isEnable = (editor: PlateEditor) => {
-  const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
+  const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
   return !!dynamicFontColor;
 };
 
@@ -79,7 +79,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
     onCompositionStart: (editor) => (event: any) => {
       console.log('onCompositionStart');
       if (!isEnable(editor)) return;
-      const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
+      const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
       // iOS在英文自动联想时，会触发onCompositionStart事件，此时，需要插入一个空文本节点
       addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
     },
@@ -89,7 +89,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
     onKeyDown: (editor) => (event: any) => {
       console.log('onKeyDown');
       if (!isEnable(editor)) return;
-      const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
+      const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
       // 当isCollapsed为false时，表示当前有选中的文本，此时，如果直接插入新节点，会导致选中的文本被替换掉
       // event.key.length说明时用户输入了一个字符，需要替换选中的文本，因此，需要插入一个空文本节点
       if (isCollapsed(editor.selection) || (event.key.length === 1 && noMetaKey(event))) {
@@ -104,7 +104,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
       event.isPropagationStopped = () => false;
       if (!isEnable(editor)) return;
       // console.log('onDOMBeforeInput', event.inputType, event.data, event.data.length)
-      const { dynamicFontColor } = editor.pluginsByKey[KEY_DYNAMIC_COLOR].options as DynamicFontColorPlugin;
+      const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
       // let child = getValueChild(editor.children, editor.selection?.anchor.path);
 
       if (event.inputType === 'insertReplacementText') {
@@ -146,7 +146,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
     };
 
     editor.onChange = (...args: any[]) => {
-      // console.log('DynamicFontColorPlugin-onChange', args);
+      console.log('DynamicFontColorPlugin-onChange', args);
       onChange(...args);
       setEnableNormalizing(true);
       // 内容改变后，需要手动执行normalize操作
