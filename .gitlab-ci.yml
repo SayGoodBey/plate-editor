@@ -10,7 +10,9 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - sonar-scanner
+    - sonar-scanner -Dsonar.login=$SONAR_TOKEN
   allow_failure: true
+  tags:
+    - im-classinfe-runner2
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
