@@ -146,7 +146,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
     };
 
     editor.onChange = (...args: any[]) => {
-      console.log('onChange');
+      // console.log('DynamicFontColorPlugin-onChange', args);
       onChange(...args);
       setEnableNormalizing(true);
       // 内容改变后，需要手动执行normalize操作

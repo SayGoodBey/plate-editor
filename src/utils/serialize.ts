@@ -3,43 +3,41 @@ import { parseHtmlDocument } from '@udecode/plate-common';
 let emptySpan = /<span .*>(\s|\uFEFF)*<\/span>/g; // 删除空的span标签，可能含有0宽字符
 export function serializeHtml(nodes: any[]): string {
   if (!nodes) return '';
-  return (
-    nodes
-      .map((node) => {
-        let { type, children, text, attributes = {}, url, color } = node;
-        let attributesStr = '';
-        if (text && color) {
-          if (attributes['style']) {
-            attributes['style'] = `${attributes['style']};color:${color};`;
-          } else {
-            attributes['style'] = `color:${color};`;
-          }
+  return nodes
+    .map((node) => {
+      let { type, children, text, attributes = {}, url, color } = node;
+      let attributesStr = '';
+      if (text && color) {
+        if (attributes['style']) {
+          attributes['style'] = `${attributes['style']};color:${color};`;
+        } else {
+          attributes['style'] = `color:${color};`;
         }
-        Object.keys(attributes).forEach((key) => {
-          attributesStr = `${attributesStr} ${key}="${attributes[key]}"`.trim();
-        });
-        if (!type && !text) {
-          return '';
+      }
+      Object.keys(attributes).forEach((key) => {
+        attributesStr = `${attributesStr} ${key}="${attributes[key]}"`.trim();
+      });
+      if (!type && !text) {
+        return '';
+      }
+      if (text) {
+        if (attributesStr) {
+          return `<span ${attributesStr}>${text}</span>`;
         }
-        if (text) {
-          if (attributesStr) {
-            return `<span ${attributesStr}>${text}</span>`;
-          }
-          return text;
-        }
-        if (type === 'img') {
-          return `<img src="${url}" "/>`;
-        }
-        if (type === 'formula') {
-          return `$${attributes.content}$`;
-        }
+        return text;
+      }
+      if (type === 'img') {
+        return `<img src="${url}" "/>`;
+      }
+      if (type === 'formula') {
+        return `$${attributes.content}$`;
+      }
 
-        return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
-      })
-      .join('')
-      // .replace(emptySpan, '')
-      .trim()
-  );
+      return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
+    })
+    .join('');
+  // .replace(emptySpan, '')
+  // .trim()
 }
 
 export function serializeContent(nodes: any[]): string {

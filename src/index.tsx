@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms, Node, Path } from 'slate';
+import { Transforms, Node, Path, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -114,20 +114,21 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount: showWordCount,
         },
       }),
-      createDynamicFontColorPlugin({
-        options: {
-          dynamicFontColor,
-        },
-      }),
+      dynamicFontColor
+        ? createDynamicFontColorPlugin({
+            options: {
+              dynamicFontColor,
+            },
+          })
+        : null,
       createPasteHandlePlugin({ options: { insertImage } }),
-    ],
+    ].filter((item) => item),
     { components: plateUI },
   );
 
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
-    // const data = serializeHtml(editorRef.current.children);
     onHtmlChange &&
       onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
@@ -140,22 +141,16 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         element: parseHtmlStr(initialValue).body,
         stripWhitespace: false,
       });
-      if (fragment.length === 1 && !fragment[0].type) {
-        fragment = [{ type: 'p', children: fragment }];
-      }
-      if (fragment[0] && fragment[0]?.type === 'span') {
+      if (fragment[0] && Text.isText(fragment[0])) {
         fragment = [{ type: 'p', children: fragment }];
       }
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
-      // editorRef.current.insertHtmlText = (text: string) => {
-      //   const result = deserializeHtml(editorRef.current, { element: parseHtmlStr(text).body });
-      //   editorRef.current.insertFragment(result);
-      // };
     }
   }, [initialValue]);
 
   useEffect(() => {
+    console.log('编辑器重新渲染了-----', plugins);
     setCount((count) => count + 1);
   }, [showWordCount]);
 

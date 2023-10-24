@@ -19,6 +19,7 @@ const WordCountElement: FC = (props: any) => {
   const { onChange } = editor;
 
   editor.onChange = (...args) => {
+    // console.log('wordcount-onchange', args);
     const stringNode = serialize(editor.children);
     const { length } = toArray(stringNode);
 

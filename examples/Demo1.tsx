@@ -365,7 +365,7 @@ const editorRefData = {
 };
 
 export default () => {
-  const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
+  const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
   const [bgColor, setBgColor] = useState('#fff'); // 设置背景颜色
   const [placeholder, setPlaceholder] = useState('请输入'); // 设置背景颜色
   const [maxLength, setMaxLength] = useState(100); // 设置最大输入长度
@@ -373,7 +373,9 @@ export default () => {
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
-  const [initialValue, setInitialValue] = useState('<p>23e23323</p>');
+  const [initialValue, setInitialValue] = useState(
+    '<p  >fsdfasdfsaf     </p><p  >fsdfasdfsdfsad.                  </p>',
+  );
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'
   //     <p style="color:red"><span style="color:blue">aaaa</span></p>
@@ -386,8 +388,8 @@ export default () => {
   // '<p>123<p><p data-uuid="1" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   // '<p>123<p><p data-uuid="1" id="test" class="question delete" style="color:yellow">我事要删除的元素2223232322233</p><p data-uuid="1" class="question" style="color:yellow;position:absolute;bottom:20px;">000090909022222我事要删除的元素2223232322233</p>',
   const onHtmlChange = (html: string, content: string) => {
-    // console.log('html :>> ', html);
-    // console.log('content :>> ', content);
+    console.log('html :>> ', html);
+    console.log('content :>> ', content);
     // setInitialValue(html);
   };
 
