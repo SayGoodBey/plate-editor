@@ -52,13 +52,10 @@ const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => 
         // 之前的默认处理逻辑
         let child = getValueChild(editor.children, editor.selection?.anchor.path);
 
-        Transforms.insertNodes(
-          editor as any,
-          {
-            ...child,
-            text,
-          } as any,
-        );
+        Transforms.insertNodes(editor as any, {
+          ...child,
+          text,
+        });
       },
     },
   })(val);
