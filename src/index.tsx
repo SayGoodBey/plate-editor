@@ -145,6 +145,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       }
       editorRef.current.children = fragment;
       editorRef.current.onChange();
+      const endPoint = editorRef.current.end([]);
+      editorRef.current.select(endPoint);
     } else {
       editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
       editorRef.current.onChange();
