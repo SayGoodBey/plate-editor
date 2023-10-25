@@ -457,7 +457,7 @@ export default () => {
   };
 
   const handleChangeInitial = () => {
-    setInitialValue('<p>哈哈哈哈</p>');
+    setInitialValue('');
   };
 
   const handleClear = () => {

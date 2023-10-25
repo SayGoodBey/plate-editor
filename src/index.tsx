@@ -145,6 +145,9 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       }
       editorRef.current.children = fragment;
       editorRef.current.onChange();
+    } else {
+      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+      editorRef.current.onChange();
     }
   }, [initialValue]);
 
