@@ -55,7 +55,8 @@ export function serializeContent(nodes: any[]): string {
       }
       return serializeContent(node.children);
     })
-    .join('');
+    .join('')
+    .replace(/\/n$/, ''); // 移除最后一个/n
 }
 
 export function parseHtmlStr(text: string) {
