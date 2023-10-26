@@ -177,6 +177,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node); // 获取node 对应dom
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
+    editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>

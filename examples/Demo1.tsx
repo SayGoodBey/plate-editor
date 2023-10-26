@@ -533,6 +533,17 @@ export default () => {
     );
     console.log(arr);
   };
+  const handleIsFocused = () => {
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
+  const handleFocus = () => {
+    editorRef.current.focus();
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
+  const handleBlur = () => {
+    editorRef.current.blur();
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
 
   return (
     <>
@@ -597,10 +608,10 @@ export default () => {
         style={{ marginRight: '25px', marginTop: '10px' }}
       />
       <input onBlur={replaceDom} placeholder="html 替换" style={{ marginRight: '25px', marginTop: '10px' }} />
-      <button onClick={() => editorRef.current.focus()} style={{ marginRight: '25px', marginTop: '10px' }}>
+      <button onClick={handleFocus} style={{ marginRight: '25px', marginTop: '10px' }}>
         focus
       </button>
-      <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
+      <button onClick={handleBlur} style={{ marginRight: '25px', marginTop: '10px' }}>
         blur
       </button>
       <button onClick={handleSetNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
@@ -617,6 +628,9 @@ export default () => {
       </button>
       <button onClick={handleTestLocateByKey} style={{ marginRight: '25px', marginTop: '10px' }}>
         调试locateByKey
+      </button>
+      <button onClick={handleIsFocused} style={{ marginRight: '25px', marginTop: '10px' }}>
+        查看编辑器是否聚焦
       </button>
     </>
   );
