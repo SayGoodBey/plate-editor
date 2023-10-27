@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
+import React, { useRef, forwardRef, useEffect, ReactNode, useState } from 'react';
 import { Transforms, Node, Path, Text, Editor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
@@ -92,7 +92,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
   }, []);
 
-  const [_, setCount] = React.useState(0);
+  const [_, setCount] = useState(0);
   const plugins = createPlugins(
     [
       ...basicElementsPlugins,
