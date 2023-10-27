@@ -62,6 +62,7 @@ interface PlateEditorPropsType {
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
   insertImage?: boolean;
   uploadImage?: (v: string, files: FileList) => Promise<string | ArrayBuffer>;
+  resetInitialValue?: number;
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
@@ -82,9 +83,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     uploadImage,
     insertImage,
     onResizeContent,
+    resetInitialValue,
     ...editableProps
   } = config;
-  React.useEffect(() => {
+  useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
@@ -133,7 +135,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     onHtmlChange?.(resultHtml, serializeContent(editorRef.current.children));
   };
 
-  // initialValue 修改的时候编辑器重新设置初始值
+  // initialValue 修改的时候编辑器重新设置初始值,现在更改成不是受控模式，频繁设置同一个初始值后面没生效,此处需要hack;
   useEffect(() => {
     if (initialValue) {
       console.log('initialValue===', initialValue);
@@ -152,7 +154,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
       editorRef.current.onChange();
     }
-  }, [initialValue]);
+  }, [initialValue, resetInitialValue]);
 
   useEffect(() => {
     console.log('编辑器重新渲染了-----修改的pluginOptions生效');
