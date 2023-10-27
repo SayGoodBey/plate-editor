@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms, Node, Path, Text } from 'slate';
+import { Transforms, Node, Path, Text, Editor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -20,6 +20,7 @@ import {
   getSelectedDOM,
   locateByKey,
   parseHtmlStr,
+  isEmpty,
 } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
@@ -128,11 +129,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
-    onHtmlChange &&
-      onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
+    const resultHtml = isEmpty(editorRef.current) ? '' : serializeHtml(editorRef.current.children);
+    onHtmlChange?.(resultHtml, serializeContent(editorRef.current.children));
   };
-  // initialValue 修改的时候编辑器重新设置初始值
 
+  // initialValue 修改的时候编辑器重新设置初始值
   useEffect(() => {
     if (initialValue) {
       console.log('initialValue===', initialValue);

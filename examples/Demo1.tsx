@@ -373,7 +373,7 @@ export default () => {
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
-  const [initialValue, setInitialValue] = useState('12231231');
+  const [initialValue, setInitialValue] = useState('');
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'
   //     <p style="color:red"><span style="color:blue">aaaa</span></p>
@@ -388,7 +388,7 @@ export default () => {
   const onHtmlChange = (html: string, content: string) => {
     console.log('html :>> ', html);
     console.log('content :>> ', content);
-    setInitialValue(html);
+    // setInitialValue(html);
   };
 
   const onChangeValue = (b: any) => {
@@ -544,6 +544,25 @@ export default () => {
     editorRef.current.blur();
     console.log('editorRef.current.isFocused', editorRef.current.isFocused());
   };
+  const getNodes = () => {
+    const [...node] = Array.from(
+      editorRef.current.nodes({
+        at: [],
+        mode: 'all',
+        match: (n) => {
+          console.log('n---', n, n.type);
+          const isEmpty = editorRef.current.isVoid(n);
+          console.log('isEmpty----', isEmpty);
+          return isEmpty;
+        },
+      }),
+    );
+
+    const stringText = editorRef.current.string([]);
+    console.log('a-----', node, '====stringText', stringText);
+    const isEmpty = !stringText && !node.length;
+    console.log('isEmpty--', isEmpty);
+  };
 
   return (
     <>
@@ -631,6 +650,9 @@ export default () => {
       </button>
       <button onClick={handleIsFocused} style={{ marginRight: '25px', marginTop: '10px' }}>
         查看编辑器是否聚焦
+      </button>
+      <button onClick={getNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
+        getNodes
       </button>
     </>
   );

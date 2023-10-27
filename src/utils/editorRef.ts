@@ -116,3 +116,17 @@ export function getSelectedDOM(editorRef: any) {
   }
   return null;
 }
+
+// 判断编辑器内容为空
+export function isEmpty(editorRef: any) {
+  const [...node] = Array.from(
+    editorRef.nodes({
+      at: [],
+      mode: 'all',
+      match: (n) => editorRef.isVoid(n),
+    }),
+  );
+
+  const stringText = editorRef.string([]);
+  return !stringText && !node.length;
+}
