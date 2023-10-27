@@ -90,7 +90,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   }, []);
 
   const [_, setCount] = React.useState(0);
-
   const plugins = createPlugins(
     [
       ...basicElementsPlugins,
@@ -111,7 +110,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       createWordCountPlugin({
         options: {
           maxLength: editableProps.maxLength,
-          showWordCount: showWordCount,
+          showWordCount,
         },
       }),
       dynamicFontColor
@@ -145,12 +144,17 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         fragment = [{ type: 'p', children: fragment }];
       }
       editorRef.current.children = fragment;
-      setCount((count) => count + 1);
+      editorRef.current.onChange();
+      const endPoint = editorRef.current.end([]);
+      editorRef.current.select(endPoint);
+    } else {
+      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+      editorRef.current.onChange();
     }
   }, [initialValue]);
 
   useEffect(() => {
-    console.log('编辑器重新渲染了-----', plugins);
+    console.log('编辑器重新渲染了-----修改的pluginOptions生效');
     setCount((count) => count + 1);
   }, [showWordCount]);
 
@@ -173,6 +177,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node); // 获取node 对应dom
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
+    editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
