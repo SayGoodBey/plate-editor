@@ -127,11 +127,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     ].filter((item) => item),
     { components: plateUI },
   );
-
+  const [resultHtml, setResultHtml] = useState('');
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
     const resultHtml = isEmpty(editorRef.current) ? '' : serializeHtml(editorRef.current.children);
+    setResultHtml(resultHtml);
     onHtmlChange?.(resultHtml, serializeContent(editorRef.current.children));
   };
 
@@ -155,6 +156,14 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       editorRef.current.onChange();
     }
   }, [initialValue, resetInitialValue]);
+
+  // 动态标记删除完后提示语不出现
+  useEffect(() => {
+    if (!resultHtml && dynamicFontColor) {
+      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+      editorRef.current.onChange();
+    }
+  }, [resultHtml, dynamicFontColor]);
 
   useEffect(() => {
     console.log('编辑器重新渲染了-----修改的pluginOptions生效');
