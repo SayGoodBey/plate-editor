@@ -55,6 +55,17 @@ const noMetaKey = (event: any) => {
 const isDeleteKey = (event) => {
   return event.keyCode === 8 || event.keyCode === 46;
 };
+// 是否是功能键
+const isFnKey = (event) => {
+  return (
+    event.ctrlKey ||
+    event.metaKey ||
+    event.altKey ||
+    event.shiftKey ||
+    event.metaKey ||
+    ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Escape', 'CapsLock'].includes(event.key)
+  );
+};
 
 /**
  * 插入一个颜色为dynamicFontColor的空文本节点
@@ -93,6 +104,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
       console.log('onKeyDown');
       if (!isEnable(editor)) return;
       if (isDeleteKey(event)) return;
+      if (isFnKey(event)) return;
       const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
       // 当isCollapsed为false时，表示当前有选中的文本，此时，如果直接插入新节点，会导致选中的文本被替换掉
       // event.key.length说明时用户输入了一个字符，需要替换选中的文本，因此，需要插入一个空文本节点
