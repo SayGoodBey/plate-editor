@@ -365,7 +365,7 @@ const editorRefData = {
 };
 
 export default () => {
-  const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
+  const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
   const [bgColor, setBgColor] = useState('#fff'); // 设置背景颜色
   const [placeholder, setPlaceholder] = useState('请输入'); // 设置背景颜色
   const [maxLength, setMaxLength] = useState(100); // 设置最大输入长度
@@ -373,9 +373,8 @@ export default () => {
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
-  const [initialValue, setInitialValue] = useState(
-    '<p  >fsdfasdfsaf     </p><p  >fsdfasdfsdfsad.                  </p>',
-  );
+  const [initialValue, setInitialValue] = useState('1');
+  const [resetInitialValue, setResetInitialValue] = useState(0);
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'
   //     <p style="color:red"><span style="color:blue">aaaa</span></p>
@@ -439,7 +438,7 @@ export default () => {
 
   const handleWordCountLength = () => {
     const length = editorRef.current?.getWordCount?.();
-    // console.log('length----', length);
+    console.log('length----', length);
   };
   const handleImageCountLength = () => {
     const length = editorRef.current?.getImageCount?.();
@@ -457,7 +456,8 @@ export default () => {
   };
 
   const handleChangeInitial = () => {
-    setInitialValue('<p>哈哈哈哈</p>');
+    setInitialValue('22323233');
+    setResetInitialValue((v) => v + 1);
   };
 
   const handleClear = () => {
@@ -535,6 +535,36 @@ export default () => {
     );
     console.log(arr);
   };
+  const handleIsFocused = () => {
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
+  const handleFocus = () => {
+    editorRef.current.focus();
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
+  const handleBlur = () => {
+    editorRef.current.blur();
+    console.log('editorRef.current.isFocused', editorRef.current.isFocused());
+  };
+  const getNodes = () => {
+    const [...node] = Array.from(
+      editorRef.current.nodes({
+        at: [],
+        mode: 'all',
+        match: (n) => {
+          console.log('n---', n, n.type);
+          const isEmpty = editorRef.current.isVoid(n);
+          console.log('isEmpty----', isEmpty);
+          return isEmpty;
+        },
+      }),
+    );
+
+    const stringText = editorRef.current.string([]);
+    console.log('a-----', node, '====stringText', stringText);
+    const isEmpty = !stringText && !node.length;
+    console.log('isEmpty--', isEmpty);
+  };
 
   return (
     <>
@@ -548,6 +578,7 @@ export default () => {
         autoFocus
         maxLength={maxLength}
         readOnly={readOnly}
+        resetInitialValue={resetInitialValue}
         onHtmlChange={onHtmlChange}
         onChange={onChangeValue}
         onLoaded={onLoaded}
@@ -599,10 +630,10 @@ export default () => {
         style={{ marginRight: '25px', marginTop: '10px' }}
       />
       <input onBlur={replaceDom} placeholder="html 替换" style={{ marginRight: '25px', marginTop: '10px' }} />
-      <button onClick={() => editorRef.current.focus()} style={{ marginRight: '25px', marginTop: '10px' }}>
+      <button onClick={handleFocus} style={{ marginRight: '25px', marginTop: '10px' }}>
         focus
       </button>
-      <button onClick={() => editorRef.current.blur()} style={{ marginRight: '25px', marginTop: '10px' }}>
+      <button onClick={handleBlur} style={{ marginRight: '25px', marginTop: '10px' }}>
         blur
       </button>
       <button onClick={handleSetNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
@@ -619,6 +650,12 @@ export default () => {
       </button>
       <button onClick={handleTestLocateByKey} style={{ marginRight: '25px', marginTop: '10px' }}>
         调试locateByKey
+      </button>
+      <button onClick={handleIsFocused} style={{ marginRight: '25px', marginTop: '10px' }}>
+        查看编辑器是否聚焦
+      </button>
+      <button onClick={getNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
+        getNodes
       </button>
     </>
   );

@@ -1,5 +1,5 @@
-import React, { useRef, forwardRef, useEffect, ReactNode } from 'react';
-import { Transforms, Node, Path, Text } from 'slate';
+import React, { useRef, forwardRef, useEffect, ReactNode, useState } from 'react';
+import { Transforms, Node, Path, Text, Editor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -20,6 +20,7 @@ import {
   getSelectedDOM,
   locateByKey,
   parseHtmlStr,
+  isEmpty,
 } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
@@ -64,6 +65,7 @@ interface PlateEditorPropsType {
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
   insertImage?: boolean;
   uploadImage?: (v: string, files: FileList) => Promise<string | ArrayBuffer>;
+  resetInitialValue?: number;
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
@@ -84,16 +86,16 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     uploadImage,
     insertImage,
     onResizeContent,
+    resetInitialValue,
     ...editableProps
   } = config;
-  React.useEffect(() => {
+  useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
   }, []);
 
-  const [_, setCount] = React.useState(0);
-
+  const [_, setCount] = useState(0);
   const plugins = createPlugins(
     [
       ...basicElementsPlugins,
@@ -114,7 +116,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       createWordCountPlugin({
         options: {
           maxLength: editableProps.maxLength,
-          showWordCount: showWordCount,
+          showWordCount,
         },
       }),
       dynamicFontColor
@@ -128,15 +130,16 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     ].filter((item) => item),
     { components: plateUI },
   );
-
+  const [resultHtml, setResultHtml] = useState('');
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
-    onHtmlChange &&
-      onHtmlChange(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
+    const resultHtml = isEmpty(editorRef.current) ? '' : serializeHtml(editorRef.current.children);
+    setResultHtml(resultHtml);
+    onHtmlChange?.(resultHtml, serializeContent(editorRef.current.children));
   };
-  // initialValue 修改的时候编辑器重新设置初始值
 
+  // initialValue 修改的时候编辑器重新设置初始值,现在更改成不是受控模式，频繁设置同一个初始值后面没生效,此处需要hack;
   useEffect(() => {
     if (initialValue) {
       console.log('initialValue===', initialValue);
@@ -149,12 +152,25 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       }
       console.log('fragment :>> ', fragment);
       editorRef.current.children = fragment;
-      setCount((count) => count + 1);
+      editorRef.current.onChange();
+      const endPoint = editorRef.current.end([]);
+      editorRef.current.select(endPoint);
+    } else {
+      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+      editorRef.current.onChange();
     }
-  }, [initialValue]);
+  }, [initialValue, resetInitialValue]);
+
+  // 动态标记删除完后提示语不出现
+  useEffect(() => {
+    if (!resultHtml && dynamicFontColor) {
+      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+      editorRef.current.onChange();
+    }
+  }, [resultHtml, dynamicFontColor]);
 
   useEffect(() => {
-    console.log('编辑器重新渲染了-----', plugins);
+    console.log('编辑器重新渲染了-----修改的pluginOptions生效');
     setCount((count) => count + 1);
   }, [showWordCount]);
 
@@ -177,6 +193,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeDom = (node: Node) => ReactEditor.toDOMNode(editorRef.current, node); // 获取node 对应dom
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
+    editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>

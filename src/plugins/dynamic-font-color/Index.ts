@@ -52,6 +52,9 @@ export const isEnable = (editor: PlateEditor) => {
 const noMetaKey = (event: any) => {
   return !event.metaKey && !event.ctrlKey;
 };
+const isDeleteKey = (event) => {
+  return event.keyCode === 8 || event.keyCode === 46;
+};
 
 /**
  * 插入一个颜色为dynamicFontColor的空文本节点
@@ -89,6 +92,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
     onKeyDown: (editor) => (event: any) => {
       console.log('onKeyDown');
       if (!isEnable(editor)) return;
+      if (isDeleteKey(event)) return;
       const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
       // 当isCollapsed为false时，表示当前有选中的文本，此时，如果直接插入新节点，会导致选中的文本被替换掉
       // event.key.length说明时用户输入了一个字符，需要替换选中的文本，因此，需要插入一个空文本节点
@@ -118,12 +122,14 @@ const createDynamicFontColorPlugin = createPluginFactory({
           } as any,
           distance: range[0].endOffset - range[0].startOffset,
         });
+        console.log('insertReplacementText====');
         addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
         insertText(editor, event.dataTransfer.getData('text/plain'));
       } else if (event.inputType === 'insertText') {
         if (event.data && event.data.trim()) {
           event.isPropagationStopped = () => true;
           event.preventDefault();
+          console.log('insertText====');
           addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
           insertText(editor, event.data);
         }
