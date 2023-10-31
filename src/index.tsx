@@ -134,6 +134,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   const isFirstRender = useRef(true);
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
+    console.log('编辑器--onchange-----');
     onChange?.(value, generateEventHandle(element, editorRef.current));
     const resultHtml = isEmpty(editorRef.current) ? '' : serializeHtml(editorRef.current.children);
     setResultHtml(resultHtml);
