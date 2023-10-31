@@ -131,6 +131,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     { components: plateUI },
   );
   const [resultHtml, setResultHtml] = useState('');
+  const isFirstRender = useRef(true);
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     onChange?.(value, generateEventHandle(element, editorRef.current));
@@ -141,8 +142,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   // initialValue 修改的时候编辑器重新设置初始值,现在更改成不是受控模式，频繁设置同一个初始值后面没生效,此处需要hack;
   useEffect(() => {
+    console.log('initialValue=======', initialValue);
     if (initialValue) {
-      console.log('initialValue===', initialValue);
       let fragment = deserializeHtml(editorRef.current, {
         element: parseHtmlStr(initialValue).body,
         stripWhitespace: false,
@@ -163,6 +164,10 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   // 动态标记删除完后提示语不出现
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (!resultHtml && dynamicFontColor) {
       editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
       editorRef.current.onChange();
