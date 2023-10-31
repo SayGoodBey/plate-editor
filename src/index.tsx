@@ -24,19 +24,22 @@ import {
 import { plateUI, FloatingToolbar } from './components';
 import styles from './index.module.css';
 
-const defaultConfig = {
+const defaultConfig = ({ readOnly }) => ({
   maxLength: 2000,
   spellCheck: false,
   style: {
     outline: 'none',
     color: '',
   },
-  renderPlaceholder: ({ attributes, children }) => (
-    <span {...attributes} style={{ color: '#b1b1b1', position: 'absolute', pointerEvents: 'none' }}>
-      {children}
-    </span>
-  ),
-};
+  renderPlaceholder: ({ attributes, children }) => {
+    if (readOnly) return null;
+    return (
+      <span {...attributes} style={{ color: '#b1b1b1', position: 'absolute', pointerEvents: 'none' }}>
+        {children}
+      </span>
+    );
+  },
+});
 
 interface PlateEditorPropsType {
   placeholder?: string;
@@ -65,7 +68,7 @@ interface PlateEditorPropsType {
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
-  const config = { ...defaultConfig, ...props };
+  const config = { ...defaultConfig(props), ...props };
   let {
     rootClassName = '',
     rootId = '',
@@ -144,6 +147,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       if (fragment[0] && Text.isText(fragment[0])) {
         fragment = [{ type: 'p', children: fragment }];
       }
+      console.log('fragment :>> ', fragment);
       editorRef.current.children = fragment;
       setCount((count) => count + 1);
     }
