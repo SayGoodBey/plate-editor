@@ -35,9 +35,8 @@ export function serializeHtml(nodes: any[]): string {
 
       return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
     })
-    .join('');
-  // .replace(emptySpan, '')
-  // .trim()
+    .join('')
+    .replace(/\n/g, '<br>'); // android 不支持/n  粘贴的内容 /n统一转br
 }
 
 export function serializeContent(nodes: any[]): string {
