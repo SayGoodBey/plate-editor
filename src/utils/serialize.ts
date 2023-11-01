@@ -36,7 +36,8 @@ export function serializeHtml(nodes: any[]): string {
       return `<${type}  ${attributesStr}>${serializeHtml(children)}</${type}>`;
     })
     .join('')
-    .replace(/\n/g, '<br>'); // android 不支持/n  粘贴的内容 /n统一转br
+    .replace(/\n/g, '<br>') // android 不支持/n  粘贴的内容 /n统一转br
+    .replace(/\s+/g, '&nbsp;'); // android 空格转nbsp;
 }
 
 export function serializeContent(nodes: any[]): string {

@@ -373,7 +373,9 @@ export default () => {
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
   const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
   const editorRef = useRef<any>();
-  const [initialValue, setInitialValue] = useState('1');
+  const [initialValue, setInitialValue] = useState(
+    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16666666    777777',
+  );
   const [resetInitialValue, setResetInitialValue] = useState(0);
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'
