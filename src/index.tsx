@@ -131,7 +131,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     { components: plateUI },
   );
   const [resultHtml, setResultHtml] = useState('');
-  const isFirstRender = useRef(true);
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
     console.log('编辑器--onchange-----');
@@ -165,10 +164,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
 
   // 动态标记删除完后提示语不出现
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
     if (!resultHtml && dynamicFontColor) {
       editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
       editorRef.current.onChange();
