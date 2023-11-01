@@ -163,17 +163,17 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     }
   }, [initialValue, resetInitialValue]);
 
-  // 动态标记删除完后提示语不出现
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    if (!resultHtml && dynamicFontColor) {
-      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
-      editorRef.current.onChange();
-    }
-  }, [resultHtml, dynamicFontColor]);
+  // // 动态标记删除完后提示语不出现
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //     return;
+  //   }
+  //   if (!resultHtml && dynamicFontColor) {
+  //     editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
+  //     editorRef.current.onChange();
+  //   }
+  // }, [resultHtml, dynamicFontColor]);
 
   useEffect(() => {
     console.log('编辑器重新渲染了-----修改的pluginOptions生效');
