@@ -74,16 +74,18 @@ const isFnKey = (event) => {
  */
 export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
+  const { anchor } = editor.selection;
   const isEmpty = editor.string([]) === '';
+  const isParagraphHead = anchor.offset === 0 && anchor.path[1] === 0; // 在段落头部插入中文时，会插入到red zero节点之前，此时，需要插入一个空文本节点
   // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
-  if (child?.color !== color || isEmpty) {
+  if (child?.color !== color || isEmpty || isParagraphHead) {
     console.log('insert zero');
     setEnableNormalizing(false);
     editor.insertNodes({
       ...child,
       text: '',
-      color: color,
-    } as any);
+      color,
+    });
   }
 };
 
