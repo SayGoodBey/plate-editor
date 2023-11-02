@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useEffect, ReactNode, useState } from 'react';
-import { Transforms, Node, Path, Text, Editor } from 'slate';
+import { Node, Path, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
@@ -130,19 +130,17 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     ].filter((item) => item),
     { components: plateUI },
   );
-  const [resultHtml, setResultHtml] = useState('');
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
+    console.log('编辑器--onchange-----');
     onChange?.(value, generateEventHandle(element, editorRef.current));
-    const resultHtml = isEmpty(editorRef.current) ? '' : serializeHtml(editorRef.current.children);
-    setResultHtml(resultHtml);
-    onHtmlChange?.(resultHtml, serializeContent(editorRef.current.children));
+    onHtmlChange?.(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
 
   // initialValue 修改的时候编辑器重新设置初始值,现在更改成不是受控模式，频繁设置同一个初始值后面没生效,此处需要hack;
   useEffect(() => {
+    console.log('initialValue=======', initialValue);
     if (initialValue) {
-      console.log('initialValue===', initialValue);
       let fragment = deserializeHtml(editorRef.current, {
         element: parseHtmlStr(initialValue).body,
         stripWhitespace: false,
@@ -160,14 +158,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       editorRef.current.onChange();
     }
   }, [initialValue, resetInitialValue]);
-
-  // 动态标记删除完后提示语不出现
-  useEffect(() => {
-    if (!resultHtml && dynamicFontColor) {
-      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
-      editorRef.current.onChange();
-    }
-  }, [resultHtml, dynamicFontColor]);
 
   useEffect(() => {
     console.log('编辑器重新渲染了-----修改的pluginOptions生效');

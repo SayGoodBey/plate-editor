@@ -8,6 +8,7 @@
 import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
 import { Path } from 'slate';
+import { isEmpty as isEmptyFn } from '../../utils';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 
@@ -115,6 +116,14 @@ const createDynamicFontColorPlugin = createPluginFactory({
         addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
       }
     },
+    onKeyUp: (editor) => (event: any) => {
+      // console.log('isEmptyFn(editor)----', isEmptyFn(editor));
+      // 判断内容是空的话删除内容，有一个spanElement placeholder判定不显示
+      if (isEmptyFn(editor)) {
+        editor.children = [{ type: 'p', children: [{ text: '' }] }];
+        editor.onChange();
+      }
+    },
     onDOMBeforeInput: (editor) => (event: any) => {
       console.log('onDOMBeforeInput', event.inputType);
 
@@ -159,7 +168,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
 
     // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
     editor.normalizeNode = (entry) => {
-      console.log('normalizeNode', enableNormalizing);
+      // console.log('normalizeNode', enableNormalizing);
       if (enableNormalizing) {
         normalizeNode(entry);
       }
