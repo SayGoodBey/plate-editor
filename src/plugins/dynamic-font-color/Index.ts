@@ -8,7 +8,7 @@
 import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
 import { Path } from 'slate';
-import { isEmpty as isEmptyFn } from '../../utils';
+import { isDeleteKey } from '../../utils';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 
@@ -53,9 +53,7 @@ export const isEnable = (editor: PlateEditor) => {
 const noMetaKey = (event: any) => {
   return !event.metaKey && !event.ctrlKey;
 };
-const isDeleteKey = (event) => {
-  return event.keyCode === 8 || event.keyCode === 46;
-};
+
 // 是否是功能键
 const isFnKey = (event) => {
   return (
@@ -74,8 +72,6 @@ const isFnKey = (event) => {
  * @param color
  */
 export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
-  console.log(' editor.selection?.anchor.path--', editor.selection?.anchor.path);
-  console.log('editor.children---', editor.children);
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
   const { anchor } = editor.selection;
   const isEmpty = editor.string([]) === '';
@@ -116,14 +112,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
       if (isCollapsed(editor.selection) || (event.key.length === 1 && noMetaKey(event))) {
         // 大部分键盘的keydown事件，都需要插入一个空文本节点
         addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
-      }
-    },
-    onKeyUp: (editor) => (event: any) => {
-      // console.log('isEmptyFn(editor)----', isEmptyFn(editor));
-      // 判断内容是空的话删除内容，有一个spanElement placeholder判定不显示
-      if (isEmptyFn(editor)) {
-        editor.children = [{ type: 'p', children: [{ text: '' }] }];
-        editor.onChange();
       }
     },
     onDOMBeforeInput: (editor) => (event: any) => {

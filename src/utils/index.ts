@@ -54,3 +54,17 @@ export function styleStringToObject(styleString: string) {
 
   return styleObj;
 }
+
+export const isDeleteKey = (event) => {
+  return event.keyCode === 8 || event.keyCode === 46;
+};
+
+// 判断内容是指定 的空内容格式 [{ type: 'p', children: [{ text: '' }] }]
+export const editorIsEmpty = (editor) => {
+  return (
+    editor.children?.length === 1 &&
+    editor.children[0]?.type === 'p' &&
+    editor.children[0]?.children?.length === 1 &&
+    editor.children[0].children[0]?.text === ''
+  );
+};
