@@ -74,6 +74,8 @@ const isFnKey = (event) => {
  * @param color
  */
 export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
+  console.log(' editor.selection?.anchor.path--', editor.selection?.anchor.path);
+  console.log('editor.children---', editor.children);
   const child = getValueChild(editor.children, editor.selection?.anchor.path);
   const { anchor } = editor.selection;
   const isEmpty = editor.string([]) === '';
