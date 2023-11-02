@@ -1,6 +1,18 @@
 import { parseHtmlDocument } from '@udecode/plate-common';
 
 let emptySpan = /<span .*>(\s|\uFEFF)*<\/span>/g; // 删除空的span标签，可能含有0宽字符
+
+const regex = /(<[^>]*>)|([^<]*)/g; // 匹配尖括号内外内容
+
+const replacer = (match, group1, group2) => {
+  if (group1) {
+    // 尖括号内内容
+    return group1;
+  } else {
+    // 尖括号外内容
+    return group2.replace(/\s+/g, '&nbsp;');
+  }
+};
 export function serializeHtml(nodes: any[]): string {
   if (!nodes) return '';
   return nodes
@@ -37,7 +49,7 @@ export function serializeHtml(nodes: any[]): string {
     })
     .join('')
     .replace(/\n/g, '<br>') // android 不支持/n  粘贴的内容 /n统一转br
-    .replace(/\s/g, '&nbsp;'); // android 空格转nbsp;
+    .replace(regex, replacer); // android 空格转nbsp,标签内的不转换
 }
 
 export function serializeContent(nodes: any[]): string {
