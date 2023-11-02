@@ -10,7 +10,7 @@ const replacer = (match, group1, group2) => {
     return group1;
   } else {
     // 尖括号外内容
-    return group2.replace(/\s+/g, '&nbsp;');
+    return group2.replace(/\s/g, '&nbsp;');
   }
 };
 export function serializeHtml(nodes: any[]): string {
