@@ -3,6 +3,7 @@ import { Node, Path, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { Plate, PlateProvider, createPlugins, deserializeHtml } from '@udecode/plate-core';
 import { createFontColorPlugin, createFontSizePlugin } from '@udecode/plate-font';
+import packJson from '../package.json';
 import {
   basicElementsPlugins,
   createImagePlugin,
@@ -93,12 +94,15 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   useEffect(() => {
     if (dynamicFontColor) {
       window.dynamicFontColor = dynamicFontColor;
+      console.log('设置了window.dynamicFontColor:>>', dynamicFontColor);
     }
   }, [dynamicFontColor]);
   useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
+
+    console.log(`%cplate-editor-version>>>    ${packJson?.version}`, 'color:red');
   }, []);
 
   const [_, setCount] = useState(0);
