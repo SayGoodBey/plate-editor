@@ -91,6 +91,11 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     ...editableProps
   } = config;
   useEffect(() => {
+    if (dynamicFontColor) {
+      window.dynamicFontColor = dynamicFontColor;
+    }
+  }, [dynamicFontColor]);
+  useEffect(() => {
     // FIXME: 是否有可能 children[0] 为null
     const element = elementRef.current.children[0];
     onLoaded && onLoaded(generateEventHandle(element, editorRef.current));
@@ -120,13 +125,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount,
         },
       }),
-      dynamicFontColor
-        ? createDynamicFontColorPlugin({
-            options: {
-              dynamicFontColor,
-            },
-          })
-        : null,
+      createDynamicFontColorPlugin({
+        options: {
+          dynamicFontColor,
+        },
+      }),
+
       createPasteHandlePlugin({ options: { insertImage } }),
       createKeyUpPlugin(),
     ].filter((item) => item),

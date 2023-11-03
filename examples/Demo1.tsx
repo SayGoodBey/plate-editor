@@ -365,15 +365,17 @@ const editorRefData = {
 };
 
 export default () => {
-  const [dynamicFontColor, setDynamicFontColor] = useState('red'); // 设置字体颜色
+  const [dynamicFontColor, setDynamicFontColor] = useState(''); // 设置字体颜色
   const [bgColor, setBgColor] = useState('#fff'); // 设置背景颜色
   const [placeholder, setPlaceholder] = useState('请输入'); // 设置背景颜色
   const [maxLength, setMaxLength] = useState(100); // 设置最大输入长度
   const [readOnly, setReadOnly] = useState(false); // 设置是否只读
   const [styleHeight, setStyleHeight] = useState(''); // 设置边框高度
-  const [showWordCount, setShowWordCount] = useState(false); // 设置是否显示字数统计
+  const [showWordCount, setShowWordCount] = useState(true); // 设置是否显示字数统计
   const editorRef = useRef<any>();
-  const [initialValue, setInitialValue] = useState('<p><span style="color:#DF3B08;">发反反复复</span></p>');
+  const [initialValue, setInitialValue] = useState(
+    '<p><span style="color:#232323;">发反反复复</span></p><p><span>XXXXXXXXXX</span></p>',
+  );
   const [resetInitialValue, setResetInitialValue] = useState(0);
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
   // '<p>哈哈<span>XX $\\frac{a}{m}\uff1e\\frac{b}{m}$ XXX </span>哈哈哈</p>'

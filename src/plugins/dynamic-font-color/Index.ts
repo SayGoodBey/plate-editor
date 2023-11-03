@@ -47,7 +47,7 @@ const setEnableNormalizing = (enable: boolean) => {
  */
 export const isEnable = (editor: PlateEditor) => {
   const { dynamicFontColor } = (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
-  return !!dynamicFontColor;
+  return !!dynamicFontColor || window.dynamicFontColor;
 };
 
 const noMetaKey = (event: any) => {
