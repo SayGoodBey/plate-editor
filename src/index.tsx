@@ -162,8 +162,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       const endPoint = editorRef.current.end([]);
       editorRef.current.select(endPoint);
     } else {
-      editorRef.current.children = [{ type: 'p', children: [{ text: '' }] }];
-      editorRef.current.onChange();
+      clear(editorRef.current);
     }
   }, [initialValue, resetInitialValue]);
 
