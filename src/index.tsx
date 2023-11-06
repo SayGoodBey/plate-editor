@@ -24,24 +24,22 @@ import {
   isEmpty,
 } from './utils';
 import { plateUI, FloatingToolbar } from './components';
-import styles from './index.module.css';
+import './index.css';
 
-const defaultConfig = ({ readOnly }) => ({
-  maxLength: 2000,
-  spellCheck: false,
-  style: {
-    outline: 'none',
-    color: '',
-  },
-  renderPlaceholder: ({ attributes, children }) => {
-    if (readOnly) return null;
-    return (
-      <span {...attributes} style={{ color: '#b1b1b1', position: 'absolute', pointerEvents: 'none' }}>
-        {children}
-      </span>
-    );
-  },
-});
+const defaultConfig = ({ readOnly }) => {
+  const config = {
+    maxLength: 2000,
+    spellCheck: false,
+    style: {
+      outline: 'none',
+      color: '',
+    },
+  };
+  if (readOnly) {
+    config.renderPlaceholder = () => null;
+  }
+  return config;
+};
 
 interface PlateEditorPropsType {
   placeholder?: string;
@@ -192,7 +190,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
   }, []);
   return (
-    <div id={rootId} ref={elementRef} className={`${styles.rootEditor} ${rootClassName}`}>
+    <div id={rootId} ref={elementRef} className={`rootEditor ${rootClassName}`}>
       <PlateProvider editorRef={editorRef} plugins={plugins} onChange={onChangeData}>
         <Plate editableProps={editableProps}>
           {/* https://platejs.org/docs/components/floating-toolbar */}

@@ -4,3 +4,7 @@
   position: relative;
   box-sizing: border-box;
 }
+
+span[data-slate-placeholder='true'] {
+  color: '#b1b1b1' !important;
+}
