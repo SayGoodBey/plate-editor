@@ -374,7 +374,7 @@ export default () => {
   const [showWordCount, setShowWordCount] = useState(true); // 设置是否显示字数统计
   const editorRef = useRef<any>();
   const [initialValue, setInitialValue] = useState(
-    '<p><span style="color:#232323;">发反反复复</span></p><p><span>XXXXXXXXXX</span></p>',
+    '<p>哈哈哈你不接世世代代<span  style="color:#df3b08;">很快就会加快</span></p><p><span  style="color:#df3b08;"></span>撒发撒的发生的发发生的发撒发撒</p><p>啊时代发<span style="color:#df3b08;">发大发撒发生发的&nbsp;时代发生发</span></p><p><span style="color:#df3b08;">发大是对v发生的发发</span></p>',
   );
   const [resetInitialValue, setResetInitialValue] = useState(0);
   // '<span style="color: #232323;">旧版本写的作业001</span><span style="color: #df3b08;">旧版本批阅</span><span style="color: #232323;"><br />旧版本写的作业01313</span><span style="color: #df3b08;">旧版批阅02</span>',
