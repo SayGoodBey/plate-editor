@@ -9,14 +9,15 @@ export function clear(editorRef: any) {
       children: [{ text: '' }],
     },
   ];
-  Transforms.removeNodes(editorRef, {
+  Transforms.delete(editorRef, {
     at: {
       anchor: Editor.start(editorRef, []),
       focus: Editor.end(editorRef, []),
     },
-    mode: 'highest',
   });
-  Transforms.insertNodes(editorRef, initialEditorValue);
+  if (editorRef.children?.length === 0) {
+    Transforms.insertNodes(editorRef, initialEditorValue);
+  }
 }
 
 function* walkPreOrder(node: Node & { children?: Node[] }): any {
