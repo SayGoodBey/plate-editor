@@ -9,7 +9,7 @@ export function clear(editorRef: any) {
       children: [{ text: '' }],
     },
   ];
-  Transforms.delete(editorRef, {
+  editorRef.removeNodes({
     at: {
       anchor: Editor.start(editorRef, []),
       focus: Editor.end(editorRef, []),
