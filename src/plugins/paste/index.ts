@@ -45,17 +45,8 @@ const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => 
           const { dynamicFontColor } =
             (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
           addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
-          insertText(editor, text);
-          return;
         }
-        console.log('走默认的复制');
-        // 之前的默认处理逻辑
-        let child = getValueChild(editor.children, editor.selection?.anchor.path);
-
-        Transforms.insertNodes(editor as any, {
-          ...child,
-          text,
-        });
+        editor.insertTextData(event.clipboardData);
       },
     },
   })(val);
