@@ -191,6 +191,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
     editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
+    editorRef.elementRef = elementRef;
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`rootEditor ${rootClassName}`}>
