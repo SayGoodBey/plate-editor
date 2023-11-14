@@ -13,7 +13,7 @@ const serialize = (nodes: Node[]): string => {
 };
 
 const WordCountElement: FC = (props: any) => {
-  const editor = usePlateEditorState();
+  const editor = usePlateEditorState() || {};
   const [valueLength, setValueLength] = useState(0);
   const { maxLength, showWordCount } = getPluginOptions<WordCountPlugin>(editor, PLUGIN_WORD_COUNT);
   const { onChange } = editor;
