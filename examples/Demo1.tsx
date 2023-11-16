@@ -562,9 +562,7 @@ export default () => {
     );
 
     const stringText = editorRef.current.string([]);
-    console.log('a-----', node, '====stringText', stringText);
     const isEmpty = !stringText && !node.length;
-    console.log('isEmpty--', isEmpty);
   };
 
   return (
