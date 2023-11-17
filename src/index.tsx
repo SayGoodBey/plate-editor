@@ -140,7 +140,6 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   );
   const onChangeData = (value: any) => {
     const [element] = elementRef.current.children;
-    console.log('编辑器--onchange-----');
     onChange?.(value, generateEventHandle(element, editorRef.current));
     onHtmlChange?.(serializeHtml(editorRef.current.children), serializeContent(editorRef.current.children));
   };
@@ -157,17 +156,19 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
         fragment = [{ type: 'p', children: fragment }];
       }
       console.log('fragment :>> ', fragment);
-      editorRef.current.children = fragment;
+      editorRef.current.children = fragment.map((item) => ({
+        ...item,
+        children: [{ text: '' }, ...item.children, { text: '', color: dynamicFontColor }],
+      }));
       editorRef.current.onChange();
       const endPoint = editorRef.current.end([]);
       editorRef.current.select(endPoint);
     } else {
       clear(editorRef.current);
     }
-  }, [initialValue, resetInitialValue]);
+  }, [initialValue, resetInitialValue, dynamicFontColor]);
 
   useEffect(() => {
-    console.log('编辑器重新渲染了-----修改的pluginOptions生效');
     setCount((count) => count + 1);
   }, [showWordCount]);
 

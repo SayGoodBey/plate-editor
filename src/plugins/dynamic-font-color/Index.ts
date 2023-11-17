@@ -71,21 +71,14 @@ const isFnKey = (event) => {
  * @param editor
  * @param color
  */
-export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color?: string) => {
-  const child = getValueChild(editor.children, editor.selection?.anchor.path);
-  const { anchor } = editor.selection || {};
-  const isEmpty = editor.string([]) === '';
-  const isParagraphHead = anchor?.offset === 0 && anchor?.path?.[1] === 0; // 在段落头部插入中文时，会插入到red zero节点之前，此时，需要插入一个空文本节点
-  // 一定要判断当前node的颜色与dynamicFontColor是否不同，否则，会重复插入空文本节点，导致slate报错
-  if (child?.color !== color || isEmpty || isParagraphHead) {
-    console.log('insert zero');
-    setEnableNormalizing(false);
-    editor.insertNodes({
-      ...child,
-      text: '',
-      color,
-    });
-  }
+export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color: string) => {
+  console.log('try to insert zero');
+
+  setEnableNormalizing(false);
+  editor.insertNodes({
+    text: '',
+    color,
+  });
 };
 
 const createDynamicFontColorPlugin = createPluginFactory({
@@ -136,19 +129,16 @@ const createDynamicFontColorPlugin = createPluginFactory({
           distance: range[0].endOffset - range[0].startOffset,
         });
         console.log('insertReplacementText====');
-        addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
         insertText(editor, event.dataTransfer.getData('text/plain'));
       } else if (event.inputType === 'insertText') {
         if (event.data && event.data.trim()) {
           event.isPropagationStopped = () => true;
           event.preventDefault();
           console.log('insertText====');
-          addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
           insertText(editor, event.data);
         }
       } else if (event.inputType === 'insertCompositionText') {
         console.log('insertCompositionText', event.data);
-        addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
       }
     },
   },
@@ -158,21 +148,24 @@ const createDynamicFontColorPlugin = createPluginFactory({
 
     // 重写normalizeNode方法，根据开关状态，决定是否执行normalize操作
     editor.normalizeNode = (entry) => {
-      // console.log('normalizeNode', enableNormalizing);
+      // console.log('normalizeNode', enableNormalizing, entry);
       if (enableNormalizing) {
         normalizeNode(entry);
       }
     };
 
     editor.onChange = (...args: any[]) => {
-      console.log('DynamicFontColorPlugin-onChange', args);
       onChange(...args);
       setEnableNormalizing(true);
       // 内容改变后，需要手动执行normalize操作
-      editor.normalizeNode([editor, []]);
+      normalizeNode([editor, []]);
     };
     return editor;
   },
 });
 
 export { createDynamicFontColorPlugin };
+
+// 1. onKeyDown 中文不触发
+// 2. 可能插入到零款span里面
+// 3. 确认需要插入的地址
