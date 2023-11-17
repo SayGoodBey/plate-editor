@@ -47,7 +47,7 @@ export const basicElementsPlugins = createPlugins([
 
   createPluginFactory({
     key: ELEMENT_SPAN,
-    isElement: true,
+    isElement: false,
     isInline: true,
     deserializeHtml: {
       rules: [

@@ -155,11 +155,12 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       if (fragment[0] && Text.isText(fragment[0])) {
         fragment = [{ type: 'p', children: fragment }];
       }
+      editorRef.current.children = fragment;
       console.log('fragment :>> ', fragment);
-      editorRef.current.children = fragment.map((item) => ({
-        ...item,
-        children: [{ text: '' }, ...item.children, { text: '', color: dynamicFontColor }],
-      }));
+      // editorRef.current.children = fragment.map((item) => ({
+      //   ...item,
+      //   children: [{ text: '' }, ...item.children, { text: '', color: dynamicFontColor }],
+      // }));
       editorRef.current.onChange();
       const endPoint = editorRef.current.end([]);
       editorRef.current.select(endPoint);
