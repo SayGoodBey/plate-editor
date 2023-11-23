@@ -560,9 +560,6 @@ export default () => {
         },
       }),
     );
-
-    const stringText = editorRef.current.string([]);
-    const isEmpty = !stringText && !node.length;
   };
 
   return (
