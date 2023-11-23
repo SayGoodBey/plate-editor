@@ -19,7 +19,6 @@ const getValueChild = (value: any, path?: Path) => {
 
 const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => {
   const insertImage = val.options?.insertImage;
-  console.log('insertImage :>> ', insertImage);
   return createPluginFactory({
     key: KEY_PASTE_HANDLE,
     handlers: {

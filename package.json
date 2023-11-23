@@ -9,15 +9,20 @@
     "dist"
   ],
   "main": "dist/index.umd.es5.development.js",
-  "module": "dist/index.umd.es5.development.js",
   "types": "esm/index.d.ts",
   "exports": {
     ".": {
-      "default": {
-        "default": "./dist/index.umd.es5.development.js"
-      }
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js",
+      "es2017": "./es2017/index.js",
+      "default": "./dist/index.umd.es5.development.js"
     },
-    "./*": "./*"
+    "./dist/index.css": {
+      "import": "./esm/index.css",
+      "require": "./cjs/index.css",
+      "es2017": "./es2017/index.css",
+      "default": "./dist/index.umd.es5.development.css"
+    }
   },
   "sideEffects": [
     "dist/*",
@@ -27,7 +32,7 @@
   ],
   "scripts": {
     "start": "ice-pkg start",
-    "build": "ice-pkg build --analyzer",
+    "build": "ice-pkg build",
     "prepublishOnly": "npm run build",
     "eslint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./",
     "eslint:fix": "npm run eslint -- --fix",
@@ -61,11 +66,9 @@
     "@types/lodash.toarray": "^4.4.7",
     "eslint": "^8.0.0",
     "prettier": "3.0.1",
-    "stylelint": "^15.0.0"
-  },
-  "peerDependencies": {
-    "react": "^17 || ^18",
-    "react-dom": "^17 || ^18"
+    "stylelint": "^15.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "publishConfig": {
     "access": "public"
