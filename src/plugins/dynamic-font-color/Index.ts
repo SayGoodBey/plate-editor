@@ -72,8 +72,8 @@ const isFnKey = (event) => {
  * @param color
  */
 export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color: string) => {
+  if (!color) return;
   console.log('try to insert zero');
-
   setEnableNormalizing(false);
   editor.insertNodes({
     text: '',

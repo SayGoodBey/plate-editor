@@ -66,12 +66,14 @@ interface PlateEditorPropsType {
   insertImage?: boolean;
   uploadImage?: (v: string, files: FileList) => Promise<string | ArrayBuffer>;
   resetInitialValue?: number;
+  disabledFontColor?: boolean; // TODO: 测验传递这个参数，后续需要根据这个配置设置span是不是element
 }
 
 const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => {
   const elementRef = useRef<any>(null);
   const config = { ...defaultConfig(props), ...props };
   let {
+    disabledFontColor = false,
     rootClassName = '',
     rootId = '',
     showWordCount,
@@ -104,6 +106,13 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
   }, []);
 
   const [_, setCount] = useState(0);
+  const dynamicFontColorPlugin = disabledFontColor
+    ? undefined
+    : createDynamicFontColorPlugin({
+        options: {
+          dynamicFontColor,
+        },
+      });
   const plugins = createPlugins(
     [
       ...basicElementsPlugins,
@@ -127,12 +136,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
           showWordCount,
         },
       }),
-      createDynamicFontColorPlugin({
-        options: {
-          dynamicFontColor,
-        },
-      }),
-
+      dynamicFontColorPlugin,
       createPasteHandlePlugin({ options: { insertImage } }),
       createKeyUpPlugin(),
     ].filter((item) => item),
