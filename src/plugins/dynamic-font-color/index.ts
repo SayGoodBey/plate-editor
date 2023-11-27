@@ -7,34 +7,14 @@
 
 import { createPluginFactory, PlateEditor, insertText, isCollapsed } from '@udecode/plate-common';
 import { DynamicFontColorPlugin } from './types';
-import { Path } from 'slate';
 import { isDeleteKey } from '../../utils';
 
 export const KEY_DYNAMIC_COLOR = 'dynamic_font_color';
 
-/**
- * 根据path，获取child
- * @param value
- * @param path
- * @returns
- */
-const getValueChild = (value: any, path?: Path) => {
-  if (!path) {
-    return null;
-  }
-  let child = value[path[0]];
-  for (let i = 1; i < path.length; i++) {
-    child = child.children[path[i]];
-  }
-  return child;
-};
-
 let enableNormalizing = true;
 
 const isWindows = () => {
-  // return true;
   return /Win/i.test(navigator.userAgent);
-
   // return window.navigator.platform.indexOf('Win') > -1;
 };
 
@@ -97,7 +77,7 @@ export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color: str
         text: '',
         color,
       },
-      { at: anchor.path },
+      { at: [anchor.path[0]] },
     );
   }
 };
