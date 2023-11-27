@@ -1,21 +1,9 @@
-import { createPluginFactory, insertText } from '@udecode/plate-common';
-import { Path, Transforms } from 'slate';
-import { isEnable, addEmptyTextNodeWithDynamicColor, KEY_DYNAMIC_COLOR } from '../dynamic-font-color';
-import { DynamicFontColorPlugin } from '../dynamic-font-color/types';
+import { createPluginFactory } from '@udecode/plate-common';
+import { isEnable, addEmptyTextNodeWithDynamicColor, KEY_DYNAMIC_COLOR } from '../dynamic-font-color-2';
+import { DynamicFontColorPlugin } from '../dynamic-font-color-2/types';
 import { isImageUrl } from '../image/utils/isImageUrl';
 
 export const KEY_PASTE_HANDLE = 'paste_handle';
-
-const getValueChild = (value: any, path?: Path) => {
-  if (!path) {
-    return null;
-  }
-  let child = value[path[0]];
-  for (let i = 1; i < path.length; i++) {
-    child = child.children[path[i]];
-  }
-  return child;
-};
 
 const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => {
   const insertImage = val.options?.insertImage;

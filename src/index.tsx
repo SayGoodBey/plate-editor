@@ -22,7 +22,6 @@ import {
   getSelectedDOM,
   locateByKey,
   parseHtmlStr,
-  isEmpty,
 } from './utils';
 import { plateUI, FloatingToolbar } from './components';
 import './index.css';
