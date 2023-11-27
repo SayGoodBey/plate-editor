@@ -159,7 +159,6 @@ const createDynamicFontColorPlugin = createPluginFactory({
           insertText(editor, event.data);
         }
       } else if (event.inputType === 'insertCompositionText') {
-        event.isPropagationStopped = () => true;
         console.log('insertCompositionText', event.data);
       }
     },
