@@ -31,6 +31,13 @@ const getValueChild = (value: any, path?: Path) => {
 
 let enableNormalizing = true;
 
+const isWindows = () => {
+  // return true;
+  return /Win/i.test(navigator.userAgent);
+
+  // return window.navigator.platform.indexOf('Win') > -1;
+};
+
 /**
  * normalize 开关。
  * @param enable
@@ -75,10 +82,24 @@ export const addEmptyTextNodeWithDynamicColor = (editor: PlateEditor, color: str
   if (!color) return;
   console.log('try to insert zero');
   setEnableNormalizing(false);
+  const { anchor } = editor.selection;
+
   editor.insertNodes({
     text: '',
     color,
   });
+
+  if (anchor.offset === 0 && anchor.path[1] === 0 && isWindows()) {
+    console.log('insert in head ');
+    // 在windows上，如果光标在第一个位置，需要插入一个空的文本节点，否则，光标会跳到上一行
+    editor.insertNode(
+      {
+        text: '',
+        color,
+      },
+      { at: anchor.path },
+    );
+  }
 };
 
 const createDynamicFontColorPlugin = createPluginFactory({
@@ -138,6 +159,7 @@ const createDynamicFontColorPlugin = createPluginFactory({
           insertText(editor, event.data);
         }
       } else if (event.inputType === 'insertCompositionText') {
+        event.isPropagationStopped = () => true;
         console.log('insertCompositionText', event.data);
       }
     },
