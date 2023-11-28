@@ -14,7 +14,6 @@ const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => 
         event.preventDefault();
         event.stopPropagation();
         console.log('=================plain===paste=============');
-
         const { files } = event.clipboardData;
         const text = event.clipboardData.getData('text/plain');
 
@@ -33,7 +32,12 @@ const createPasteHandlePlugin = (val: { options: { insertImage: boolean } }) => 
             (editor.pluginsByKey[KEY_DYNAMIC_COLOR]?.options as DynamicFontColorPlugin) || {};
           addEmptyTextNodeWithDynamicColor(editor, dynamicFontColor);
         }
-        editor.insertTextData(event.clipboardData);
+        const isSlate = event.clipboardData.getData('application/x-slate-fragment');
+        if (isSlate) {
+          editor.insertData(event.clipboardData);
+        } else {
+          editor.insertTextData(event.clipboardData);
+        }
       },
     },
   })(val);
