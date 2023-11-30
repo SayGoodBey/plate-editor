@@ -10,7 +10,7 @@ import {
   createWordCountPlugin,
   createDynamicFontColorPlugin,
   createPasteHandlePlugin,
-  createKeyUpPlugin,
+  createKeyEventPlugin,
 } from './plugins';
 import {
   serializeContent,
@@ -137,7 +137,7 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
       }),
       dynamicFontColorPlugin,
       createPasteHandlePlugin({ options: { insertImage } }),
-      createKeyUpPlugin(),
+      createKeyEventPlugin(),
     ].filter((item) => item),
     { components: plateUI },
   );

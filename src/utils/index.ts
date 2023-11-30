@@ -68,3 +68,5 @@ export const editorIsEmpty = (editor) => {
     editor.children[0].children[0]?.text === ''
   );
 };
+
+export const isAndroid = /Android/i.test(navigator.userAgent);
