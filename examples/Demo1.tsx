@@ -561,7 +561,14 @@ export default () => {
       }),
     );
   };
-
+  const getText = () => {
+    const v = editorRef.current?.getText();
+    console.log('getText :>> ', v);
+  };
+  const getContent = () => {
+    const v = editorRef.current?.getContent();
+    console.log('getContent :>> ', v);
+  };
   return (
     <>
       <PlateEditor
@@ -652,6 +659,12 @@ export default () => {
       </button>
       <button onClick={getNodes} style={{ marginRight: '25px', marginTop: '10px' }}>
         getNodes
+      </button>
+      <button onClick={getText} style={{ marginRight: '25px', marginTop: '10px' }}>
+        getText
+      </button>
+      <button onClick={getContent} style={{ marginRight: '25px', marginTop: '10px' }}>
+        getContent
       </button>
     </>
   );

@@ -196,6 +196,8 @@ const PlateEditor = forwardRef<any, PlateEditorPropsType>((props, editorRef) => 
     editorRef.current.getNodeText = (node: Node) => Node.string(node);
     editorRef.current.Path = Path;
     editorRef.current.isFocused = () => ReactEditor.isFocused(editorRef.current);
+    editorRef.current.getText = () => serializeContent(editorRef.current.children);
+    editorRef.current.getContent = () => serializeHtml(editorRef.current.children);
   }, []);
   return (
     <div id={rootId} ref={elementRef} className={`rootEditor ${rootClassName}`}>
